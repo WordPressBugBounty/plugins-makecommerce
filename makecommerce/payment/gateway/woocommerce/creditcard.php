@@ -12,7 +12,8 @@ trait Creditcard {
     public function receipt_page( $orderId ) {
 
         $order = wc_get_order( $orderId );
-        if ( substr( $order->get_meta( '_makecommerce_preselected_method', true ), 0, 5 ) == 'card_' && $order->get_status() == 'pending' ) {
+
+        if ( substr( $order->get_meta( '_makecommerce_preselected_method', true ), 0, 5 ) == 'card_' && in_array( $order->get_status(), ['pending', 'active'] ) ) {
 
             echo "<br>".__( 'The order is still awaiting your payment', 'wc_makecommerce_domain' )."<br>";
             echo $this->generateCardForm( $order );
@@ -28,7 +29,7 @@ trait Creditcard {
 
         $order = wc_get_order( $orderId );
 
-        $has_subscription = function_exists( 'wcs_order_contains_subscription' ) && wcs_order_contains_subscription( $order );
+        $has_subscription = function_exists( 'wcs_order_contains_subscription' ) && wcs_order_contains_subscription( $order ) || $order->get_status() === 'active';
         $transactionId = $order->get_meta( '_makecommerce_transaction_id', true );
 
         $idReference = $order->get_order_number();

@@ -12,7 +12,7 @@ trait Smartpost {
 
     public $carrier = "Smartpost";
     public $carrier_id = "smartpost";
-    public $carrier_title = "Smartpost";
+    public $carrier_title = "SmartPosti";
     public $service_name = "eservice.smartpost.ee";
     public $international_number_format = true;
 
@@ -44,7 +44,7 @@ trait Smartpost {
     public function initialize_smartpost_api_field() {
 
         $this->form_fields['api_key'] = array(
-            'title'            =>  __( 'SmartPost API Key', 'wc_makecommerce_domain' ),
+            'title'            =>  __( 'SmartPosti API Key', 'wc_makecommerce_domain' ),
             'type'             => 'text',
             'default'          => ''
         );
@@ -57,23 +57,26 @@ trait Smartpost {
      * 
      * @since 3.3.0
      */
-    public function v3_2_2_api_key_migration() {
+    public static function v3_2_2_api_key_migration() {
+        foreach( ['courier', 'parcelmachine'] as $method ) {
 
-        $optionName = 'woocommerce_' . $this->id . '_settings';
+            $optionName = 'woocommerce_' . $method . '_smartpost_settings';
 
-        $options = get_option( $optionName );
-        // If api key is not already set or the value of it is empty
-        if ( empty( $options['api_key'] ) ) {
-            // If the service password is set and it is not empty
-            if ( !empty( $options['service_password'] ) ) {
-                $options['api_key'] = $options['service_password'];
+            $options = get_option( $optionName );
+
+            // If api key is not already set or the value of it is empty
+            if ( empty( $options['api_key'] ) ) {
+                // If the service password is set and it is not empty
+                if ( ! empty( $options['service_password'] ) ) {
+                    $options['api_key'] = $options['service_password'];
+                }
             }
-        }
-        // Regardless of the api_key, delete the user and password
-        unset( $options['service_password'] );
-        unset( $options['service_user'] );
+            // Regardless of the api_key, delete the user and password
+            unset( $options['service_password'] );
+            unset( $options['service_user'] );
 
-        update_option( $optionName, $options );
+            update_option( $optionName, $options );
+        }
     }
 
 }

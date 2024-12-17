@@ -153,7 +153,7 @@ abstract class ParcelMachine extends \MakeCommerce\Shipping\Method {
         $machines = \MakeCommerce\Shipping::mk_get_machines( $ext, $country, $aptopts );
 
         //sort machines
-        $machines = self::sort_machines( $machines, $options['prioritization'] );
+        $machines = self::sort_machines( $machines, $options['prioritization'] ?? 'yes' );
 
         // Create new class and placeholder for searchable parcel machines
         $placeholder = __( '-- select parcel machine --', 'wc_makecommerce_domain' );
@@ -178,7 +178,7 @@ abstract class ParcelMachine extends \MakeCommerce\Shipping\Method {
                     <option value="">' . $placeholder . '</option>
         ';
 
-        $html .= self::create_parcelmachine_html( $machines, $options['short_office_names'] );
+        $html .= self::create_parcelmachine_html( $machines, $options['short_office_names'] ?? 'no' );
 
         $html .= '
                     </select>

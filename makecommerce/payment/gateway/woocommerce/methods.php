@@ -45,7 +45,15 @@ class Methods {
         $manual_renewals = false;
         $has_subscriptions = false;
         if ( class_exists( '\WC_Subscriptions_Cart' ) ) {
-            if ( \WC_Subscriptions_Cart::cart_contains_subscription() ) {
+            // On change payment method, check for subscription
+            $subscription_order = false;
+            if ( isset( $_GET['change_payment_method'] ) ) {
+                $post_type = get_post_type( $_GET['change_payment_method'] );
+                if ( $post_type == 'shop_subscription' ) {
+                    $subscription_order = true;
+                }
+            }
+            if ( \WC_Subscriptions_Cart::cart_contains_subscription() || $subscription_order ) {
                 $has_subscriptions = true;
 
                 if ( class_exists( '\WC_Subscriptions_Admin' ) 
@@ -78,7 +86,13 @@ class Methods {
                         }
                     }
                 } elseif ( $method->type == 'card' ) {
-                    $cards[] = $method;
+                    if ( $has_subscriptions && !$manual_renewals ) {
+                        if ( in_array($method->name, ['visa', 'mastercard'] ) ) {
+                            $cards[] = $method;
+                        }
+                    } else {
+                        $cards[] = $method;
+                    }
                 } elseif( $method->type == 'payLater' ) {
                     if ( !$has_subscriptions ) {
                         $paylater[] = $paylater_grouped[$method->country][] = $method;

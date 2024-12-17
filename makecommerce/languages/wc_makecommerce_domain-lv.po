@@ -942,7 +942,7 @@ msgid "Please be aware that changing the credentials to API key will affect gene
 msgstr "Lūdzu, ņemiet vērā, ka akreditācijas datu maiņa uz API atslēgu ietekmēs adrešu kartes ģenerēšanu visiem iepriekšējiem sūtījumiem. Pirms migrēšanas uz jaunu API, lūdzu, izveidojiet visas nepieciešamās adrešu kartes jau izveidotajiem sūtījumiem."
 
 msgid "Order total and transaction amount did not match! Please contact us at"
-msgstr "Pasūtījuma kopsumma un darījuma summa nesakrita! Lūdzu, sazinieties ar mums "
+msgstr "Pasūtījuma kopsumma un darījuma summa nesakrita! Lūdzu, sazinieties ar tehnisko atbalstu."
 
 msgid "support@maksekeskus.ee"
 msgstr "support@makecommerce.lv"
@@ -954,13 +954,22 @@ msgid "Amount that was paid"
 msgstr "Summa, kas tika samaksāta"
 
 msgid "use the Shipping+ service"
-msgstr "izmantojiet pakalpojumu Piegāde+"
+msgstr "izmantot Piegāde+ pakalpojumu"
 
 msgid "Request failed: missing credentials"
-msgstr "Pieprasījums neizdevās: trūkst akreditācijas datu"
+msgstr "Pieprasījums neizdevās: trūkst API atslēgas"
 
 msgid "Request failed: invalid sender or destination data"
 msgstr "Pieprasījums neizdevās: nederīgi sūtītāja vai galamērķa dati"
 
 msgid "Remove country selection and display all methods"
-msgstr "Noņemiet valsts izvēlni un parādiet visas metodes"
+msgstr "Noņemt valsts izvēlni un parādīt visas metodes"
+
+msgid "SmartPosti Parcel Machine"
+msgstr "SmartPosti pakomāts"
+
+msgid "enable SmartPosti parcel machines shipping method"
+msgstr "ieslēgt SmartPosti pakomātu piegādes"
+
+msgid "SmartPosti API Key"
+msgstr "SmartPosti API atslēga"

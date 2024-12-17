@@ -37,11 +37,17 @@ trait Subscription {
             return true;
         }
 
-        $order_id = \WC_Subscriptions_Renewal_Order::get_parent_order_id( $order );
+        $payment_token = $order->get_meta( '_makecommerce_payment_token', true );
+        $payment_token_valid_until = $order->get_meta( '_makecommerce_payment_token_valid_until', true );
 
-        $parent_order = wc_get_order( $order_id );
-        $payment_token = $parent_order->get_meta( '_makecommerce_payment_token', true );
-        $payment_token_valid_until = $parent_order->get_meta( '_makecommerce_payment_token_valid_until', true );
+        // Subscription order token missing, try parent order
+        if ( empty( $payment_token ) || empty( $payment_token_valid_until ) ) {
+            $parent_id = \WC_Subscriptions_Renewal_Order::get_parent_order_id( $order );
+            $parent_order = wc_get_order( $parent_id );
+
+            $payment_token = $parent_order->get_meta( '_makecommerce_payment_token', true );
+            $payment_token_valid_until = $parent_order->get_meta( '_makecommerce_payment_token_valid_until', true );
+        }
 
         error_log( $payment_token.'=>'. $payment_token_valid_until.'=>'. $order->get_status() );
 

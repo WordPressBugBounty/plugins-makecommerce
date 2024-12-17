@@ -2,8 +2,8 @@
 Contributors: MakeCommerce
 Tags: woocommerce, payment, maksekeskus, shipping, banklink, creditcard, estonia, latvia, lithuania, pangalink, kaardimaksed, omniva, smartPOST, WPML , eesti, swedbank, seb, lhv, citadele, nordea, pocopay
 Requires at least: 5.6.1
-Tested up to: 6.6.1
-Stable tag: 3.5.3
+Tested up to: 6.7.1
+Stable tag: 3.5.4
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -79,6 +79,16 @@ https://makecommerce.net/integration-modules/MakeCommerce-WooCommerce-Payment-pl
 -
 
 == Changelog ==
+
+= 3.5.4 2024-12-17 =
+* Feature - Support for changing a subscription order's payment method
+* Tweak - Renamed Smartpost to SmartPosti
+* Fix - Removed object initialization for a migration script
+* Fix - Check for unset array keys
+* Fix - AP/GP shown for recurring subscription payments
+* Fix - Blocks checkout orders without a selected parcel machine
+* Fix - Classic checkout layout check
+* Fix - Translation files hooked incorrectly
 
 = 3.5.3 2024-08-21 =
 * Tweak - Additional settings support for Blocks checkout

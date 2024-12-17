@@ -966,3 +966,12 @@ msgstr "Запрос не выполнен: неверные данные отп
 
 msgid "Remove country selection and display all methods"
 msgstr "Удалить выбор страны и отобразить все методы"
+
+msgid "SmartPosti Parcel Machine"
+msgstr "Посылочный автомат SmartPosti"
+
+msgid "enable SmartPosti parcel machines shipping method"
+msgstr "включить метод доставки посылочных автоматов SmartPosti"
+
+msgid "SmartPosti API Key"
+msgstr "API-ключ SmartPosti"

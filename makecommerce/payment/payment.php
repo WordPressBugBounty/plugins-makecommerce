@@ -225,9 +225,10 @@ class Payment {
 			$returnUrl = $order->get_checkout_order_received_url();
 		}
 
+		// Disregard with subscription method change as amounts do not match (0 vs order total)
 		// Only check sums if $totalAmount is set
 		// Trx total and order total did not match
-		if ( isset( $totalAmount ) && $totalAmount != $order->get_total() ) {
+		if ( $order->get_status() !== 'active' && isset( $totalAmount ) && $totalAmount != $order->get_total() ) {
 
 			if ( $paymentStatus == 'COMPLETED' ) {
 				$notes[] = sprintf('%s: %s.',
@@ -276,8 +277,18 @@ class Payment {
 			$returnUrl = wc_get_checkout_url();
 		}
 
+		// Avoid duplicate method changes for subscriptions
+		$check_status = true;
+
+		if ( !empty( $data['token']['id'] ) && !empty( $data['token']['multiuse'] ) ) {
+			// Order is a subscription and saved token is different from response token
+			if ( $order->get_meta( '_makecommerce_payment_token', true) !== $data['token']['id'] ) {
+				$check_status = false;
+			}
+		}
+
 		//check if we already processed this status in the past.
-		if ( $order->get_meta( '_makecommerce_payment_processed_status', true ) == $paymentStatus ) {
+		if ( $check_status && $order->get_meta( '_makecommerce_payment_processed_status', true ) == $paymentStatus ) {
 			return $returnUrl;
 		}
 

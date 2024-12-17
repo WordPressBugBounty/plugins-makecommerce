@@ -964,3 +964,12 @@ msgstr "Užklausa nepavyko: neteisingi siuntėjo arba paskirties duomenys"
 
 msgid "Remove country selection and display all methods"
 msgstr "Pašalinkite šalies pasirinkimą ir rodykite visus mokėjimo būdus"
+
+msgid "SmartPosti Parcel Machine"
+msgstr "SmartPost siuntų terminalas"
+
+msgid "enable SmartPosti parcel machines shipping method"
+msgstr "įjungti SmartPost siuntų terminalų siuntimo būdą"
+
+msgid "SmartPosti API Key"
+msgstr "SmartPost API raktas"

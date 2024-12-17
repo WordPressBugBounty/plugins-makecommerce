@@ -9,7 +9,7 @@
  * Plugin Name: 	      MakeCommerce
  * Plugin URI:      	  https://makecommerce.net/
  * Description:	    	  Adds MakeCommerce payment gateway and Itella/Omniva/DPD parcel machine shipping methods to WooCommerce checkout
- * Version:     	      3.5.3
+ * Version:     	      3.5.4
  * Author:        		  Maksekeskus AS
  * Author URI:        	  https://makecommerce.net/
  * License:               GPL-2.0+
@@ -31,7 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Start at version 3.0.0 and use SemVer - https://semver.org
  */
-define( 'MAKECOMMERCE_VERSION', '3.5.3' );
+define( 'MAKECOMMERCE_VERSION', '3.5.4' );
 define( 'MAKECOMMERCE_PLUGIN_ID', 'makecommerce' );
 
 //table name for banklinks

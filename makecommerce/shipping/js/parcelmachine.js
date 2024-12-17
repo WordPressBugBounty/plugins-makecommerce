@@ -28,7 +28,8 @@ jQuery(function(){
 		var checkout_width = jQuery('.woocommerce-checkout').width();
 		var parcel_row = jQuery('.parcel_machine_checkout');
 		// Get the parent table class
-		var default_layout = jQuery(parcel_row).closest('table').attr('class') == 'shop_table woocommerce-checkout-review-order-table';
+		var default_layout = jQuery(parcel_row).closest('table').hasClass('shop_table') &&
+			jQuery(parcel_row).closest('table').hasClass('woocommerce-checkout-review-order-table');
 		// Get the width of the correct select box
 		parcel_row.find('.parcel-machine-select-box').each(function() {
 			select_box_width = jQuery(this).width() > 1 ? jQuery(this).width() : select_box_width;

@@ -31,6 +31,8 @@ function addParcelMachineFields(method) {
 
     parent.fadeTo(1, 0.2);
 
+    jQuery('.wc-block-components-checkout-place-order-button').prop('disabled', true);
+
     jQuery.ajax({
         url: '/wp-admin/admin-ajax.php',
         type: 'post',
@@ -63,9 +65,6 @@ function addParcelMachineFields(method) {
                 selectBox.addClass('mc-machine-unselected');
                 parent.find('.parcel-machine-select-box').addClass('mc-machine-unselected');
 
-                // Disable checkout button
-                jQuery('.wc-block-components-checkout-place-order-button').prop('disabled', true);
-
                 // When selection is made, remove border and enable button
                 selectBox.on('change', function() {
                     jQuery(this).removeClass('mc-machine-unselected');
@@ -79,7 +78,7 @@ function addParcelMachineFields(method) {
             }
         },
         error: function (error) {
-            //Nothing here yet
+            jQuery('.wc-block-components-checkout-place-order-button').prop('disabled', false);
         },
     });
 }
@@ -144,17 +143,7 @@ function setChosenShippingMethods() {
     setShippingMethods(newMethods);
 }
 
-/**
- * Hook which is run every time a shipping method is selected
- * Runs when
- * the checkout loads,
- * the country is changed and methods change,
- * and when the customer selects another method
- *
- * @since 3.5.0
- */
-wpHooks.addAction( 'experimental__woocommerce_blocks-checkout-set-selected-shipping-rate', 'makecommerce', function() {
-
+function setupShippingRates() {
     jQuery('p[id*="parcelmachine_"]').remove();
     jQuery('.smartpost-courier-text').remove();
 
@@ -169,6 +158,19 @@ wpHooks.addAction( 'experimental__woocommerce_blocks-checkout-set-selected-shipp
             addCourierFields(method);
         }
     });
+}
+
+/**
+ * Hook which is run every time a shipping method is selected
+ * Runs when
+ * the checkout loads,
+ * the country is changed and methods change,
+ * and when the customer selects another method
+ *
+ * @since 3.5.0
+ */
+wpHooks.addAction( 'experimental__woocommerce_blocks-checkout-set-selected-shipping-rate', 'makecommerce', function() {
+    setupShippingRates();
 });
 
 /**
@@ -198,4 +200,47 @@ wpHooks.addAction( 'experimental__woocommerce_blocks-checkout-submit', 'makecomm
             mc_shipping_data: values
         }
     });
+});
+
+/**
+ * Need to run the setup because the rates hook is not triggered at load anymore
+ * @since patch
+ */
+jQuery(window).load(function() {
+    setupShippingRates();
+
+    const orderButton = jQuery('.wc-block-components-checkout-place-order-button');
+
+    // Callback function to execute when mutations are observed
+    const callback = (mutationList) => {
+        for (const mutation of mutationList) {
+            if (mutation.type === "attributes" && mutation.attributeName === "disabled") {
+                // Button not disabled, check if machine / time is selected
+                if (!orderButton.prop('disabled')) {
+                    setChosenShippingMethods();
+                    let method = getShippingMethods()[0];
+
+                    let chosenVal = jQuery('.wc-block-components-shipping-rates-control__package').find('select[id="' + method + '"]').val();
+
+                    if (method.includes('parcelmachine_') && chosenVal !== undefined && !chosenVal) {
+                        observer.disconnect();
+                        // No machine selected, disable the button again
+                        orderButton.prop('disabled', true);
+
+                        observer.observe(orderButton[0], config);
+                    }
+                }
+            }
+        }
+    };
+    const config = {
+        attributes: true,
+        attributeFilter: ['disabled'],
+    };
+
+    const observer = new MutationObserver(callback);
+
+    if (orderButton.length > 0 && orderButton[0] instanceof Node) {
+        observer.observe(orderButton[0], config);
+    }
 });

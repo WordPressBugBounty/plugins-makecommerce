@@ -2,32 +2,36 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: MakeCommerce 3.5.2\n"
+"Project-Id-Version: MakeCommerce 3.5.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/makecommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-08-13T09:32:02+00:00\n"
+"POT-Creation-Date: 2024-12-16T09:27:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wc_makecommerce_domain\n"
 
 #. Plugin Name of the plugin
+#: makecommerce.php
 msgid "MakeCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
+#: makecommerce.php
 msgid "https://makecommerce.net/"
 msgstr ""
 
 #. Description of the plugin
+#: makecommerce.php
 msgid "Adds MakeCommerce payment gateway and Itella/Omniva/DPD parcel machine shipping methods to WooCommerce checkout"
 msgstr ""
 
 #. Author of the plugin
+#: makecommerce.php
 msgid "Maksekeskus AS"
 msgstr ""
 
@@ -182,11 +186,11 @@ msgid "<a href=\"%s\">module settings</a>"
 msgstr ""
 
 #: api/api.php:359
-msgid "Smartpost Parcel Machine"
+msgid "SmartPosti Parcel Machine"
 msgstr ""
 
 #: api/api.php:360
-msgid "enable Smartpost parcel machines shipping method"
+msgid "enable SmartPosti parcel machines shipping method"
 msgstr ""
 
 #: api/api.php:367
@@ -300,21 +304,21 @@ msgstr ""
 msgid "Could not create refund: payment is still being processed, try to refund later"
 msgstr ""
 
-#: payment/gateway/subscription.php:76
+#: payment/gateway/subscription.php:82
 msgid "Unable to renew subscription"
 msgstr ""
 
-#: payment/gateway/subscription.php:78
+#: payment/gateway/subscription.php:84
 msgid "Renewal payment was declined"
 msgstr ""
 
-#: payment/gateway/subscription.php:82
-#: payment/payment.php:319
+#: payment/gateway/subscription.php:88
+#: payment/payment.php:330
 msgid "Transaction ID"
 msgstr ""
 
-#: payment/gateway/subscription.php:83
-#: payment/payment.php:320
+#: payment/gateway/subscription.php:89
+#: payment/payment.php:331
 msgid "Payment option"
 msgstr ""
 
@@ -336,45 +340,45 @@ msgstr ""
 msgid "Please select suitable payment option!"
 msgstr ""
 
-#: payment/gateway/woocommerce/creditcard.php:17
+#: payment/gateway/woocommerce/creditcard.php:18
 msgid "The order is still awaiting your payment"
 msgstr ""
 
-#: payment/gateway/woocommerce/creditcard.php:64
+#: payment/gateway/woocommerce/creditcard.php:65
 msgid "Pay for subscription"
 msgstr ""
 
-#: payment/gateway/woocommerce/creditcard.php:65
+#: payment/gateway/woocommerce/creditcard.php:66
 msgid "This order contains subscriptions"
 msgstr ""
 
-#: payment/gateway/woocommerce/creditcard.php:66
+#: payment/gateway/woocommerce/creditcard.php:67
 msgid "I agree that my card will be recurringly billed by this store"
 msgstr ""
 
-#: payment/gateway/woocommerce/creditcard.php:93
+#: payment/gateway/woocommerce/creditcard.php:94
 msgid "Pay with credit card"
 msgstr ""
 
-#: payment/gateway/woocommerce/creditcard.php:94
+#: payment/gateway/woocommerce/creditcard.php:95
 msgid "Please wait, processing payment..."
 msgstr ""
 
-#: payment/gateway/woocommerce/methods.php:172
+#: payment/gateway/woocommerce/methods.php:186
 msgid "The payment methods list for MakeCommerce payment module is empty."
 msgstr ""
 
-#: payment/gateway/woocommerce/methods.php:173
-#: payment/gateway/woocommerce/methods.php:189
+#: payment/gateway/woocommerce/methods.php:187
+#: payment/gateway/woocommerce/methods.php:203
 msgid "Go to the settings to update them"
 msgstr ""
 
-#: payment/gateway/woocommerce/methods.php:188
+#: payment/gateway/woocommerce/methods.php:202
 msgid "You have changed the environment for MakeCommerce payment module. The payment methods list has been loaded for a different environment."
 msgstr ""
 
-#: payment/gateway/woocommerce/methods.php:504
-#: payment/gateway/woocommerce/methods.php:532
+#: payment/gateway/woocommerce/methods.php:518
+#: payment/gateway/woocommerce/methods.php:546
 msgid "No payment methods for selected country"
 msgstr ""
 
@@ -572,19 +576,19 @@ msgstr ""
 msgid "Payment transaction expired"
 msgstr ""
 
-#: payment/payment.php:234
+#: payment/payment.php:235
 msgid "Order total and transaction amount did not match! Please contact us at"
 msgstr ""
 
-#: payment/payment.php:235
+#: payment/payment.php:236
 msgid "support@maksekeskus.ee"
 msgstr ""
 
-#: payment/payment.php:238
+#: payment/payment.php:239
 msgid "Transaction ID that was assigned to this order"
 msgstr ""
 
-#: payment/payment.php:242
+#: payment/payment.php:243
 msgid "Amount that was paid"
 msgstr ""
 
@@ -628,7 +632,7 @@ msgid " can only be used with Estonian, Latvian and Lithuanian numbers that are 
 msgstr ""
 
 #: shipping/method/common/smartpost.php:47
-msgid "SmartPost API Key"
+msgid "SmartPosti API Key"
 msgstr ""
 
 #: shipping/method/courier/courier.php:30

@@ -11,7 +11,7 @@ class WooCommerce extends Gateway {
     use Creditcard;
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
-    public $version = '3.5.3';
+    public $version = '3.5.4';
     
     public $payment_return_url;
     public $payment_return_url_m2m;
@@ -594,13 +594,8 @@ class WooCommerce extends Gateway {
 
         // Smartpost API migration for upgrading versions that are below 3.3.0
         if ( version_compare( $mc_version, '3.3.0', '<' ) ) {
-            // Got to migrate the API key 
-            $parcel = new \MakeCommerce\Shipping\Method\ParcelMachine\Smartpost();
-            $cou = new \MakeCommerce\Shipping\Method\Courier\Smartpost();
-
             // Run the migration function
-            $parcel->v3_2_2_api_key_migration();
-            $cou->v3_2_2_api_key_migration();
+            \MakeCommerce\Shipping\Method\ParcelMachine\Smartpost::v3_2_2_api_key_migration();
         }
 
 		if ( $mc_version != $version ) {

@@ -797,7 +797,10 @@ msgstr "LP Express"
 msgid "enable LP Express parcel machine shipping method"
 msgstr "luba LP Expressi pakiautomaadi tarneviis"
 
-msgid "Pay <b>%s EUR per month</b> for 12 months<br>\n                        <br>\n                        <i>Borrowing rate %s&#37;, credit amount %s€, contract conclusion fee %s€, total amount payable %s€, annual interest rate %s&#37;\n                        Calculation is only informative.</i>"
+msgid "Pay <b>%s EUR per month</b> for 12 months<br>
+\n                        <br>
+\n                        <i>Borrowing rate %s&#37;, credit amount %s€, contract conclusion fee %s€, total amount payable %s€, annual interest rate %s&#37;
+\n                        Calculation is only informative.</i>"
 msgstr "Maksa 12 kuu vältel <b>%s EUR kuus</b><br> <br> <i>Laenuintress %s&#37;, krediidisumma %s€, lepingu sõlmimise tasu %s€, kogu makstav summa %s€, aastane intressimäär %s&#37; Arvutus on informatiivne</i>"
 
 msgid " can be used with a Lithuanian phone number only. Please specify your phone number with Lithuanian access code (e.g. +370xxxxxxxx)"
@@ -964,3 +967,12 @@ msgstr "Päring ebaõnnestus: saatja või sihtkoha andmed on valed"
 
 msgid "Remove country selection and display all methods"
 msgstr "Eemalda riigi valik ja kuva kõik meetodid"
+
+msgid "SmartPosti Parcel Machine"
+msgstr "SmartPosti pakiautomaat"
+
+msgid "enable SmartPosti parcel machines shipping method"
+msgstr "luba SmartPosti pakiautomaatide saatmisviis"
+
+msgid "SmartPosti API Key"
+msgstr "SmartPosti API võti"

@@ -356,8 +356,8 @@ class API {
 				'id' => 'mk_transport_apt_smartpost',
 				'type' => 'checkbox',
 				'default' => 'yes',
-				'title' => __('Smartpost Parcel Machine', 'wc_makecommerce_domain'),
-				'desc' => __('enable Smartpost parcel machines shipping method', 'wc_makecommerce_domain').' ('. sprintf(__('<a href="%s">module settings</a>', 'wc_makecommerce_domain'), admin_url('admin.php?page=wc-settings&tab=shipping&section=parcelmachine_smartpost')).')',
+				'title' => __('SmartPosti Parcel Machine', 'wc_makecommerce_domain'),
+				'desc' => __('enable SmartPosti parcel machines shipping method', 'wc_makecommerce_domain').' ('. sprintf(__('<a href="%s">module settings</a>', 'wc_makecommerce_domain'), admin_url('admin.php?page=wc-settings&tab=shipping&section=parcelmachine_smartpost')).')',
 				'class' => '',
 			],
 			[
