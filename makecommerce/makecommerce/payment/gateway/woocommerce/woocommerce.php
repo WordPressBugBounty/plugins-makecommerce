@@ -12,7 +12,7 @@ class WooCommerce extends Gateway {
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
 
-    public $version = '4.0.0';
+    public $version = '4.0.1';
     
     public $payment_return_url;
     public $payment_return_url_m2m;
@@ -102,9 +102,9 @@ class WooCommerce extends Gateway {
                 add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
             }
             wp_enqueue_script( 'jquery');
-            wp_enqueue_style( 'makecommerce', plugins_url( '/css/makecommerce.css', __FILE__ ), array(), $this->version );
+            wp_enqueue_style( 'makecommerce', "https://static.maksekeskus.ee/modules/woocommerce/css/makecommerce.css", array(), $this->version );
 
-            wp_enqueue_style('makecommerce-bootstrap', plugins_url( '/css/bootstrap-mk-scoped.css', __FILE__ ));
+            wp_enqueue_style('makecommerce-bootstrap', "https://static.maksekeskus.ee/modules/woocommerce/css/bootstrap-mk-scoped.css");
 
             //enqueue scripts for payment methods checkout
             add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );

@@ -359,7 +359,7 @@ class Dashboard
     public function enqueue_dashboard_scripts($hook)
     {
         if ($hook === 'toplevel_page_makecommerce_dashboard') {
-            wp_enqueue_style('makecommerce-iframe-style', plugin_dir_url(__FILE__) . 'css/iframe.css');
+            wp_enqueue_style('makecommerce-iframe-style', "https://static.maksekeskus.ee/modules/woocommerce/css/iframe.css");
             wp_enqueue_script('bootstrap-bundle', plugin_dir_url(__DIR__) . 'assets/bootstrap.bundle.min.js', [], '5.3.3', true);
             wp_enqueue_script('mc-shop-credentials', plugin_dir_url(__FILE__) . 'js/mc-shop-credentials.js', ['bootstrap-bundle'], null, true);
             wp_enqueue_script('mc-module-config', plugin_dir_url(__FILE__) . 'js/mc-module-config.js', ['bootstrap-bundle'], null, true);

@@ -14,8 +14,6 @@ final class MakeCommerceShippingBlocks {
         add_action( 'woocommerce_blocks_checkout_block_registration', [ $this, 'register_checkout_block' ] );
         add_action( 'woocommerce_store_api_checkout_update_order_from_request', [ $this, 'update_order_shipping_meta' ], 10, 2 );
         add_action( 'woocommerce_thankyou', [$this, 'pickup_point_details'] );
-
-        add_action( 'woocommerce_store_api_cart_errors', [ $this, 'validate_phone' ], 10, 2 );
     }
 
 
@@ -53,38 +51,6 @@ final class MakeCommerceShippingBlocks {
                 'readonly'    => true,
             ],
         ];
-    }
-
-    /**
-     * Checks that phone number is not empty AND the chosen shipping rate ID starts with 'mc_'.
-     * Adds an error if both conditions are met.
-     *
-     * @param \WP_Error $errors A WP_Error object for storing validation errors.
-     * @param \WC_Cart  $cart   The WooCommerce cart object.
-     * @since 4.0.0
-     */
-    public function validate_phone( $errors, $cart ) {
-        $billing_phone = $cart->get_customer()->get_billing_phone();
-
-        if ( empty( $billing_phone ) ) {
-
-            $chosen_shipping_method_id = null;
-            if ( WC()->session && WC()->session->get( 'chosen_shipping_methods' ) ) {
-                $chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
-                if ( ! empty( $chosen_methods[0] ) ) {
-                    $chosen_shipping_method_id = $chosen_methods[0];
-                }
-            }
-            
-            // 3. Check if a shipping method is chosen and its ID starts with 'mc_'
-            if ( $chosen_shipping_method_id && str_starts_with( $chosen_shipping_method_id, 'mc_' ) ) {
-                $errors->add(
-                    'missing_phone_mc_shipping',
-                    __( 'Phone number is required for the chosen shipping method.', 'wc_makecommerce_domain' ),
-                    [ 'field' => 'billing_phone' ]
-                );
-            }
-        }
     }
 
     /**

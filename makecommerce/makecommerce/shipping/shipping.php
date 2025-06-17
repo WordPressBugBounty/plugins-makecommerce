@@ -506,16 +506,17 @@ class Shipping {
      */
     public function enqueue_scripts()
     {
-        wp_enqueue_style('pickup-point-style', plugins_url('css/pickup-point.css', __FILE__), [], null);
+        wp_enqueue_style('pickup-point-style', "https://static.maksekeskus.ee/modules/woocommerce/css/pickup-point.css");
 
         MakeCommerce::mc_enqueue_script(
             'MC_PARCELMACHINE_JS',
-            dirname(__FILE__) . '/js/pickuppoint.js',
+            "https://static.maksekeskus.ee/modules/woocommerce/js/pickuppoint.js",
             [
                 'placeholder' => __('Select pickup point', 'wc_makecommerce_domain'),
                 'loadingPlaceholder' => __('Loading pickup points...', 'wc_makecommerce_domain')
             ],
-            ['jquery']
+            ['jquery'],
+            true
         );
     }
 

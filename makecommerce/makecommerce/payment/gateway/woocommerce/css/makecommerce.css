@@ -1,9 +1,9 @@
-.payment-method-selected {
+.makecommerce-payment-methods.payment-method-selected {
     border: 2px #32CB64 solid;
     box-shadow: none;
 }
 
-.payment-method-selected > .check {
+.makecommerce-payment-methods.payment-method-selected > .check {
     display: block;
     width: 16px;
     height: 16px;
@@ -11,6 +11,10 @@
     position: absolute;
     top: -8px;
     right: -8px;
+}
+
+.payment-method-selected.payment-method.payment-control{
+    padding: 0px 0px 0px 0px !important;
 }
 
 

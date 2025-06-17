@@ -3,7 +3,7 @@ Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
 Tested up to: 6.8.1
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,10 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.1 2025-06-17 =
+* Tweak - CSS files moved to CDN
+* Fix - Phone number validation removal on Blocks checkout
 
 = 4.0.0 2025-06-17 =
 * New - Major update, migration to different shipping service. Legacy version still available with backwards compatible changes. Switching optional

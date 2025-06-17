@@ -1287,7 +1287,7 @@ msgstr "Suma, kuri buvo sumokėta"
 #: shipping/method/parcelmachine/dpd.php:32
 #: shipping/method/parcelmachine/omniva.php:32
 msgid "use the Shipping+ service"
-msgstr "naudotis paslauga Shipping+."
+msgstr "naudotis paslauga Pristatymas+."
 
 #: shipping/shipping.php:486
 msgid "Request failed: missing credentials"
@@ -1320,7 +1320,7 @@ msgstr "Prideda „MakeCommerce“ mokėjimo vartus ir pristatymo būdus prie �
 
 #: api/api.php:225
 msgid "New MakeCommerce Shipping+ module"
-msgstr "Naujasis MakeCommerce Shipping+ modulis"
+msgstr "Naujasis MakeCommerce Pristatymas+ modulis"
 
 #: api/api.php:226
 msgid "This switch is permanent and can not be reverted"
@@ -1328,11 +1328,11 @@ msgstr "Šis perjungimas yra negrįžtamas ir jo negalima atšaukti"
 
 #: api/api.php:230
 msgid "Enable Shipping+"
-msgstr "Įjungti Shipping+"
+msgstr "Įjungti Pristatymas+"
 
 #: api/api.php:469
 msgid "New MakeCommerce Shipping+ module is available."
-msgstr "Prieinamas naujasis MakeCommerce Shipping+ modulis"
+msgstr "Prieinamas naujasis MakeCommerce Pristatymas+ modulis"
 
 #: api/api.php:471
 #: api/api.php:473
