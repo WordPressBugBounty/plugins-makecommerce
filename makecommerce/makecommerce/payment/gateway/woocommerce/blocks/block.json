@@ -1,0 +1,10 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "makecommerce/mc-payment-blocks",
+  "version": "0.1.0",
+  "title": "MakeCommerce Payment Blocks",
+  "category": "woocommerce",
+  "textdomain": "wc_makecommerce_domain",
+  "editorScript": "file:./build/index.js"
+}

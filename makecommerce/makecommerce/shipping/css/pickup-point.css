@@ -1,0 +1,8 @@
+.mcSelectContainer .select2-selection__rendered {
+  text-align: left;
+  width: 100%;
+}
+
+.mcShippingSelectDropdown {
+  max-width: 600px;
+}

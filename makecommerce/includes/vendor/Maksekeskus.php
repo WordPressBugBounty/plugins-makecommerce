@@ -918,7 +918,8 @@ class Maksekeskus
             "platform_version" => WC_VERSION,
             "map_enabled" => filter_var( get_option( 'mc_parcel_machine_map' ), FILTER_VALIDATE_BOOLEAN ),
             "geocoding_enabled" => filter_var( get_option( 'mc_map_geocoding' ), FILTER_VALIDATE_BOOLEAN ),
-            "hpos_enabled" => filter_var( get_option( 'woocommerce_custom_orders_table_enabled' ), FILTER_VALIDATE_BOOLEAN )
+            "hpos_enabled" => filter_var( get_option( 'woocommerce_custom_orders_table_enabled' ), FILTER_VALIDATE_BOOLEAN ),
+            "legacy" => true
         );
 
         return $request_body;

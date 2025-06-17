@@ -1,0 +1,432 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MakeCommerce 3.0.10\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/makecommerce\n"
+"POT-Creation-Date: 2022-06-28T08:12:23+00:00\n"
+"PO-Revision-Date: 2022-06-28 11:34+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.1\n"
+"X-Domain: wc_makecommerce_domain\n"
+
+msgid "Shop ID"
+msgstr "Veikala ID"
+
+#: admin/dashboard.php:245
+msgid "Failed to load Iframe. Please try again later."
+msgstr "Neizdevās ielādēt Iframe. Lūdzu, mēģiniet vēlāk vēlreiz."
+
+#: admin/dashboard.php:348
+msgid "Unable to verify %s credentials"
+msgstr "Neizdevās pārbaudīt %s piekļuves datus"
+
+#: api/api.php:82
+msgid "Payment method (MC)"
+msgstr "Maksājumu metode (MC)"
+
+#: shipping/blocks/mc-shipping-blocks-blocks-integration.php:73
+msgid "Select pickup point"
+msgstr "Izvēlēties pakomātu"
+
+#: shipping/blocks/mc-shipping-blocks.php:52
+msgid "Selected Pickup Point ID"
+msgstr "Izvēlētā pakomāta ID"
+
+#: shipping/blocks/mc-shipping-blocks.php:57
+msgid "Selected Shipping Method"
+msgstr "Izvēlētā piegādes metode"
+
+#: shipping/blocks/mc-shipping-blocks.php:109
+#: shipping/blocks/mc-shipping-blocks.php:127
+msgid "Shipping Details"
+msgstr "Piegādes informācija"
+
+#: shipping/blocks/mc-shipping-blocks.php:111
+#: shipping/order.php:106
+msgid "Courier"
+msgstr "Kurjers"
+
+#: shipping/blocks/mc-shipping-blocks.php:129
+msgid "Pickup point"
+msgstr "Pakomāts"
+
+#: shipping/method/method.php:85
+msgid "Unable to retrieve MakeCommerce shipping rates. Credentials are invalid or access is denied."
+msgstr "Neizdevās iegūt MakeCommerce piegādes cenas. Norādītie piekļuves dati ir nederīgi vai piekļuve ir liegta."
+
+#: shipping/method/method.php:87
+msgid "Unable to retrieve MakeCommerce shipping rates. Please try again later."
+msgstr "Neizdevās iegūt MakeCommerce piegādes cenas. Lūdzu, mēģiniet vēlāk vēlreiz."
+
+#: shipping/order.php:63
+#: shipping/order.php:68
+msgid "Chosen shipping method"
+msgstr "Izvēlētā piegādes metode"
+
+#: shipping/shipping.php:408
+msgid "-- select pickup point --"
+msgstr "– izvēlieties pakomātu –"
+
+#: shipping/shipping.php:409
+msgid "Loading pickup points..."
+msgstr "Notiek pakomātu ielāde…"
+
+#: admin/templates/credentials.twig:8
+msgid "An account is required to continue, you can find the credentials under <br>Settings->API Settings in our\n        <a href=\"https://merchant.maksekeskus.ee\" target=\"_blank\">merchant portal</a>!"
+msgstr "Lai turpinātu, nepieciešams konts. Pieslēgšanās datus Jūs atradīsiet sadaļā <br>Iestatījumi → API iestatījumi mūsu\n        "
+"<a href=\"https://merchant.maksekeskus.ee/login.html?locale=lv\" target=\"_blank\">tirgotāja portālā</a>!"
+
+#: admin/templates/credentials.twig:12
+msgid "Sign Up"
+msgstr "Reģistrēties"
+
+#: admin/templates/credentials.twig:31
+#: admin/templates/credentialsPopup.twig:26
+msgid "Submit"
+msgstr "Iesniegt"
+
+#: admin/templates/credentialsContent.twig:29
+msgid "Valid shop ID is required."
+msgstr "Nepieciešams derīgs veikala ID."
+
+#: admin/templates/credentialsContent.twig:34
+msgid "Secret key"
+msgstr "Slepenā atslēga"
+
+#: admin/templates/credentialsContent.twig:42
+msgid "Valid secret key is required."
+msgstr "Nepieciešama derīga slepenā atslēga."
+
+#: admin/templates/credentialsContent.twig:47
+msgid "Public key"
+msgstr "Publiskā atslēga"
+
+#: admin/templates/credentialsContent.twig:55
+msgid "Valid public key is required."
+msgstr "Nepieciešama derīga publiskā atslēga."
+
+#: admin/templates/credentialsPopup.twig:8
+msgid "Shop Credentials"
+msgstr "Veikala API atslēgas"
+
+#: admin/templates/onlyPayments.twig:10
+msgid "All set up to accept payments with MakeCommerce!"
+msgstr "Viss sagatavots, lai pieņemtu maksājumus ar MakeCommerce!"
+
+#: admin/templates/onlyPayments.twig:15
+msgid "Configure products"
+msgstr "Konfigurēt pakalpojumus"
+
+#: admin/templates/productSelection.twig:9
+msgid "Thank You for choosing MakeCommerce!"
+msgstr "Paldies, ka izvēlējāties MakeCommerce!"
+
+#: admin/templates/productSelection.twig:11
+msgid "Before we continue, which one of our products would you like to use?"
+msgstr "Pirms turpinām – kuru no mūsu pakalpojumiem Jūs vēlaties izmantot?"
+
+#: admin/templates/productSelection.twig:13
+msgid "Don't worry, you can still change this later"
+msgstr "Neuztraucieties — Jūs šo varēsiet mainīt vēlāk"
+
+#: admin/templates/productSelection.twig:18
+msgid "Which one of our products would you like to use?"
+msgstr "Kuru no mūsu pakalpojumiem Jūs vēlaties izmantot?"
+
+#: admin/templates/productSelection.twig:47
+msgid "Collect payments"
+msgstr "Pieņemt maksājumus"
+
+#: admin/templates/productSelection.twig:49
+msgid "Collect payments from your customers using the most convenient payment\n                                    method"
+msgstr "Piedāvājiet saviem klientiem iespēju norēķināties ar viņiem ērtāko maksājumu metodi"
+
+#: admin/templates/productSelection.twig:54
+#: admin/templates/productSelection.twig:90
+msgid "More information"
+msgstr "Papildus informācija"
+
+#: admin/templates/productSelection.twig:84
+msgid "Deliver products"
+msgstr "Piegādāt preces"
+
+#: admin/templates/productSelection.twig:86
+msgid "Send your products using the most popular shipping methods available in your country."
+msgstr "Izvēlieties pieprasītākos un uzticamākos piegādes veidus savu preču nosūtīšanai."
+
+#: admin/templates/productSelection.twig:102
+msgid "Setup"
+msgstr "Uzstādīt"
+
+#: admin/templates/productSelection.twig:106
+msgid "Save"
+msgstr "Saglabāt"
+
+#: admin/templates/productSelection.twig:116
+msgid "Switch back to old module"
+msgstr "Pārslēgties atpakaļ uz veco moduli"
+
+#: makecommerce/payment/gateway/gateway.php:119
+#: makecommerce/payment/gateway/woocommerce/woocommerce.php:55
+msgid "Bank-links or credit card"
+msgstr "Maksāt ar interneta banku vai kartēm"
+
+#: payment/gateway/woocommerce/woocommerce.php:410
+msgid "Bank-links"
+msgstr "Maksāt ar interneta banku"
+
+#: payment/gateway/woocommerce/woocommerce.php:412
+msgid "Credit card"
+msgstr "Kredītkarte"
+
+#: admin/templates/productSelection.twig:49
+msgid "Collect payments from your customers using the most convenient payment method"
+msgstr "Iekasējiet maksājumus no saviem klientiem, izmantojot ērtāko maksāšanas metodi"
+
+#: api/api.php:71
+msgid "You have enabled MakeCommerce module but it seems that you don't have CURL enabled. This way MakeCommerce unfortunately does not work!"
+msgstr "Jūs esat iespējojis MakeCommerce moduli, bet izskatās, ka jums nav iespējots CURL. Šādi MakeCommerce modulis diemžēl nedarbojas!"
+
+#: api/api.php:169
+msgid "The MakeCommerce plugin is almost ready, but it needs to be configured before it can function properly."
+msgstr "MakeCommerce spraudnis ir gandrīz gatavs, taču tas ir jākonfigurē, lai tas varētu pareizi darboties."
+
+#: api/api.php:170
+msgid "Click here to configure the plugin"
+msgstr "Noklikšķiniet šeit, lai konfigurētu spraudni"
+
+#: includes/i18n.php:58
+msgid "Estonia"
+msgstr "Igaunija"
+
+#: includes/i18n.php:61
+msgid "Latvia"
+msgstr "Latvija"
+
+#: includes/i18n.php:64
+msgid "Lithuania"
+msgstr "Lietuva"
+
+#: includes/i18n.php:67
+msgid "Finland"
+msgstr "Somija"
+
+#: includes/i18n.php:70
+msgid "International"
+msgstr "Starptautisks"
+
+#: includes/makecommerce.php:258
+msgid "Please check that you have configured correctly MakeCommerce API accesses"
+msgstr "Lūdzu, pārbaudiet, vai ir pareizi konfigurētas MakeCommerce API piekļuves"
+
+#: makecommerce.php:75
+msgid "Cannot initiate MakeCommerce, a class and/or namespace called \"MakeCommerce\" is already in use somewhere else..."
+msgstr "Nevar sākt MakeCommerce, klase un / vai nosaukums “MakeCommerce” jau tiek izmantots kaut kur citur"
+
+#: makecommerce.php:121
+msgid "Cannot initiate MakeCommerce, there seems to be no WooCommerce present or active..."
+msgstr "Nevar uzsākt MakeCommerce, jo WooCommerce nav aktīvs"
+
+#. translators: %s: Amount of refund
+#: payment/gateway/refund.php:31
+msgid "Refund completed for amount %s"
+msgstr "Atmaksa pabeigta par summu %s"
+
+#. translators: %s: Amount of partial refund
+#: payment/gateway/refund.php:38
+msgid "Partial refund completed for amount %s"
+msgstr "Daļēja atmaksa par summu %s"
+
+#: payment/gateway/refund.php:49
+msgid "Could not create refund: payment is still being processed, try to refund later"
+msgstr "Nevarēja izveidot atmaksu: maksājums joprojām tiek apstrādāts, mēģiniet veikt atmaksu vēlāk"
+
+#: payment/gateway/subscription.php:80
+msgid "Unable to renew subscription"
+msgstr "Nevar atjaunot abonementu"
+
+#: payment/gateway/subscription.php:82
+msgid "Renewal payment was declined"
+msgstr "Atjaunošanas maksājums tika noraidīts"
+
+#: payment/gateway/subscription.php:86
+msgid "Transaction ID"
+msgstr "Darījuma ID"
+
+#: payment/gateway/subscription.php:87
+msgid "Payment option"
+msgstr "Maksājuma iespēja"
+
+#: payment/gateway/woocommerce/blocks/woocommerceblocks.php:107
+#: payment/gateway/woocommerce/woocommerce.php:161
+msgid "Please select suitable payment option!"
+msgstr "Lūdzu, izvēlieties vēlamo maksājuma veidu!"
+
+#: payment/gateway/woocommerce/creditcard.php:18
+msgid "The order is still awaiting your payment"
+msgstr "Pasūtījums joprojām gaida Jūsu maksājumu"
+
+#: payment/gateway/woocommerce/creditcard.php:65
+msgid "Pay for subscription"
+msgstr "Maksājiet par abonementu"
+
+#: payment/gateway/woocommerce/creditcard.php:66
+msgid "This order contains subscriptions"
+msgstr "Šis pasūtījums satur abonementus"
+
+#: payment/gateway/woocommerce/creditcard.php:67
+msgid "I agree that my card will be recurringly billed by this store"
+msgstr "Piekrītu, ka šajā veikalā ar manu karti tiks atkārtoti iekasēti rēķini"
+
+#: payment/gateway/woocommerce/creditcard.php:94
+msgid "Pay with credit card"
+msgstr "Maksājiet ar kredītkarti"
+
+#: payment/gateway/woocommerce/creditcard.php:95
+msgid "Please wait, processing payment..."
+msgstr "Lūdzu, uzgaidiet, notiek maksājuma apstrāde ..."
+
+#: payment/gateway/woocommerce/methods.php:347
+#: payment/gateway/woocommerce/blocks/src/components/selectors/BankLinkSelector.js:8
+msgid "Bank payments"
+msgstr "Bankas maksājumi"
+
+#: payment/gateway/woocommerce/methods.php:371
+#: payment/gateway/woocommerce/blocks/src/components/selectors/PayLaterSelector.js:8
+msgid "Pay later"
+msgstr "Maksā vēlāk"
+
+#: payment/gateway/woocommerce/methods.php:373
+#: payment/gateway/woocommerce/methods.php:402
+msgid "No payment methods for selected country"
+msgstr "Atlasītajai valstij nav maksāšanas metožu"
+
+#: payment/gateway/woocommerce/methods.php:399
+#: payment/gateway/woocommerce/blocks/src/components/selectors/CreditCardSelector.js:8
+msgid "Cards"
+msgstr "Kartes"
+
+#: payment/gateway/woocommerce/woocommerce.php:250
+msgid "An error occured when trying to process payment!"
+msgstr "Mēģinot apstrādāt maksājumu, radās kļūda!"
+
+#: payment/payment.php:140
+msgid "Payment failed"
+msgstr "Maksājums nav izdevies"
+
+#: payment/payment.php:143
+msgid "Payment transaction cancelled"
+msgstr "Maksājuma darījums atcelts"
+
+#: payment/payment.php:146
+msgid "Payment transaction expired"
+msgstr "Transakcijas termiņš ir beidzies"
+
+#: payment/payment.php:229
+msgid "Order total and transaction amount did not match! Please contact us at"
+msgstr "Pasūtījuma kopsumma un darījuma summa nesakrita! Lūdzu, sazinieties ar tehnisko atbalstu."
+
+#: payment/payment.php:230
+msgid "support@maksekeskus.ee"
+msgstr "support@makecommerce.lv"
+
+#: payment/payment.php:233
+msgid "Transaction ID that was assigned to this order"
+msgstr "Šim pasūtījumam piešķirtais darījuma ID"
+
+#: payment/payment.php:237
+msgid "Amount that was paid"
+msgstr "Samaksātā summa"
+
+#: shipping/blocks/mc-shipping-blocks.php:105
+#: shipping/blocks/mc-shipping-blocks.php:123
+#: shipping/order.php:83
+#: shipping/order.php:150
+#: shipping/order.php:154
+msgid "MakeCommerce Shipping Details"
+msgstr "MakeCommerce piegādes informācija"
+
+#: shipping/label.php:74
+msgid "Print parcel label"
+msgstr "Drukāt adrešu karti"
+
+#: shipping/label.php:101
+msgid "Label fetch failed: "
+msgstr "Etiķetes izgūšana neizdevās: "
+
+#: shipping/label.php:108
+msgid "No PDF content received."
+msgstr "Nav saņemts PDF saturs."
+
+#: shipping/method/method.php:150
+msgid "Unable to retrieve MakeCommerce shipping rates. "
+msgstr "Nevarēja izgūt MakeCommerce piegādes cenas. "
+
+#: shipping/method/method.php:167
+msgid "<strong>Parcel machine</strong> is a required field."
+msgstr "<strong>Pakomāts</strong> ir obligāts lauks."
+
+#: shipping/order.php:71
+#: shipping/order.php:73
+#: shipping/order.php:88
+#: shipping/order.php:91
+msgid "Chosen shipping method:"
+msgstr "Izvēlētā piegādes metode:"
+
+#: shipping/order.php:77
+#: shipping/order.php:79
+#: shipping/order.php:96
+#: shipping/order.php:99
+#: shipping/order.php:197
+msgid "Shipment tracking info:"
+msgstr "Sūtījuma izsekošanas informācija:"
+
+#: shipping/order.php:143
+msgid "Unable to display shipment details<br> This MakeCommerce shipment was created with v3.4 or lower plugin"
+msgstr "Nevar parādīt sūtījuma informāciju <br> Šī MakeCommerce sūtījuma versija tika izveidota ar spraudni 3.4 vai vecāku versiju."
+
+#: payment/gateway/woocommerce/blocks/block.json
+msgctxt "block title"
+msgid "MakeCommerce Payment Blocks"
+msgstr "MakeCommerce maksājumu bloki"
+
+#: admin/templates/credentials.twig:8
+msgid "An account is required to continue, you can find the credentials under"
+msgstr "Lai turpinātu, ir nepieciešams konts; akreditācijas datus varat atrast sadaļā"
+
+#: admin/templates/credentials.twig:10
+msgid "Settings->API Settings in our"
+msgstr "Iestatījumi->API iestatījumi mūsu"
+
+#: admin/templates/credentials.twig:12
+msgid "merchant portal"
+msgstr "tirgotāju portāls"
+
+#: admin/templates/onlyPayments.twig:15
+msgid "configuration"
+msgstr "konfigurācija"
+
+#: admin/templates/productSelection.twig:51
+msgid "https://makecommerce.net/service/bank-payments/"
+msgstr "https://makecommerce.net/service/bank-payments/"
+
+#: admin/templates/productSelection.twig:86
+msgid "https://makecommerce.net/service/payments-shipping/"
+msgstr "https://makecommerce.lv/service/maksajumi-piegades/"
+
+#: admin/templates/wizardFooter.twig:4
+msgid "Terms"
+msgstr "Noteikumi"
+
+#: admin/templates/wizardFooter.twig:6
+msgid "Support"
+msgstr "Atbalsts"
+
+#: shipping/blocks/mc-shipping-blocks.php:83
+msgid "Phone number is required for the chosen shipping method."
+msgstr "Izvēlētajai piegādes metodei ir nepieciešams tālruņa numurs"

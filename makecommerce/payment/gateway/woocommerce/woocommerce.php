@@ -11,7 +11,7 @@ class WooCommerce extends Gateway {
     use Creditcard;
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
-    public $version = '3.5.4';
+    public $version = '4.0.0';
     
     public $payment_return_url;
     public $payment_return_url_m2m;

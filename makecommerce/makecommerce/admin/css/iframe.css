@@ -1,0 +1,21 @@
+#wpcontent {
+    padding-left: 0 !important;
+    /* Default admin bar height 32px, dynamically overwritten by JS */
+    height: calc(100vh - 32px);
+    overflow: hidden !important;
+}
+
+#wpbody-content{
+    padding-bottom: 0 !important;
+}
+
+#mcIframe {
+    width: 100%;
+    height: 100vh;
+    border: none;
+    overflow: hidden;
+}
+
+#wpfooter {
+    display: none !important;
+}

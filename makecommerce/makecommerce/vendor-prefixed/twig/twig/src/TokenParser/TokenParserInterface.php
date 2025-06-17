@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of Twig.
+ *
+ * (c) Fabien Potencier
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
+
+namespace MakeCommercePrefix\Twig\TokenParser;
+
+use MakeCommercePrefix\Twig\Error\SyntaxError;
+use MakeCommercePrefix\Twig\Node\Node;
+use MakeCommercePrefix\Twig\Parser;
+use MakeCommercePrefix\Twig\Token;
+
+/**
+ * Interface implemented by token parsers.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
+ */
+interface TokenParserInterface
+{
+    /**
+     * Sets the parser associated with this token parser.
+     */
+    public function setParser(Parser $parser): void;
+
+    /**
+     * Parses a token and returns a node.
+     *
+     * @return Node
+     *
+     * @throws SyntaxError
+     */
+    public function parse(Token $token);
+
+    /**
+     * Gets the tag name associated with this token parser.
+     *
+     * @return string
+     */
+    public function getTag();
+}

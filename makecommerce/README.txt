@@ -1,26 +1,25 @@
 === MakeCommerce for WooCommerce ===
 Contributors: MakeCommerce
-Tags: woocommerce, payment, maksekeskus, shipping, banklink, creditcard, estonia, latvia, lithuania, pangalink, kaardimaksed, omniva, smartPOST, WPML , eesti, swedbank, seb, lhv, citadele, nordea, pocopay
-Requires at least: 5.6.1
-Tested up to: 6.7.1
-Stable tag: 3.5.4
-Requires PHP: 7.4
+Tags: woocommerce, payment, shipping, banklink, creditcard
+Requires at least: 6.8.1
+Tested up to: 6.8.1
+Stable tag: 4.0.0
+Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Payment Gateway for Estonian, Latvian, Lithuanian and Finnish bank-links and Visa/MasterCard payments with single contract (by Maksekeskus). And more...
+Payment Gateway for Estonian, Latvian, Lithuanian and Finnish banks and Visa/MasterCard payments with single contract (by Maksekeskus). And more...
 
 
 == Description ==
 MakeCommerce is a payment service provider for e-commerce businesses in the Baltics and Finland.
 It is the international brand of Maksekeskus AS.
 
-The MakeCommerce plugin enables Estonian, Latvian, Lithuanian and Finnish bank payments, credit card payments, Revolut and N26 payments, and buy-now-pay-later (BNPL) payment options.
-In addition, it can be used to register parcel machine deliveries with Omniva, DPD, Itella SmartPost and LP Express.
+The MakeCommerce plugin enables to accept Estonian, Latvian, Lithuanian and Finnish bank payments, credit card payments, Revolut and N26 payments, and buy-now-pay-later (BNPL) payment options.
+In addition, it can also be used to send out shipments via the most popular carriers in the Baltics, including Omniva, DPD, SmartPosti, Venipak, Unisend and others.
 
-In order to use the services please sign up at https://makecommerce.net/ and then configure the module by entering API credentials given to your shop after sign-up.
-(You can also test out the module without signup, using test-shop credentials).
+To start using the services, please sign up at https://merchant.maksekeskus.ee/sign-up.html?locale=en and then complete the setup guide in the plugin.
 
-No multiple bank contracts needed, all you need is one bank account.
+No multiple bank contracts needed, all you need is one bank account for your regular payouts.
 
 Installing the plugin is free of charge.
 A transaction fee is charged by MakeCommerce separately.
@@ -29,56 +28,40 @@ See our pricing at https://makecommerce.net/pricing/.
 Overview of functionality:
 
 * Bank-links of all major banks in Estonia, Latvia, Lithuania, Finland
-* Credit-card payments (Visa, Mastercard) through MakeCommerce PCI DSS compliant card dialog (removes compliancy requirement from merchant)
+* Credit-card payments (Visa, Mastercard, Apple Pay, Google Pay) through MakeCommerce PCI DSS compliant card dialog (removes compliancy requirement from merchant)
 * Pay later payments
 * Recurring payments with credit cards for subscriptions
-* Customisable payment methods presentation  
 * Payment country selector independent of billing/shipping address
 * Make full or partial refunds right within shop Admin (order view)
-* Omniva, Smartpost, DPD & LP Express automated parcel terminals as shipment methods
-* Omniva, Smartpost & DPD courier service as shipment method
-* Automatic registration of shipments into Omniva, Smartpost, DPD & LP Express systems
-* Printing Omniva/Smartpost/DPD/LP Express parcel labels right within shop Admin (orders view)
-* Shipping methods support Shipping Zones
-* Supports multilingual shops (WPML and Polylang). The plugin is fully translated to English, Russian, Estonian, Latvian and Lithuanian
-* Supports WooCommerce PDF Invoices, Packing Slips, Delivery Notes & Shipping Labels
+* Omniva, Smartpost, DPD, Venipak & Unisend/LP Express automated parcel terminals as shipment methods
+* Omniva, Smartpost, Venipak & DPD courier service as shipment method
+* Automatic registration of shipments
+* Printing parcel labels right within shop Admin
+* Supports multilingual shops (WPML and Polylang). The plugin is fully translated to English, Estonian, Latvian and Lithuanian
 * Supports WordPress multi-site
 
 
 == Installation ==
 1. Install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Configure MakeCommerce API settings (Woocommerce->Settings->Advanced->MakeCommerce API access)
-4. Fine-tune and activate your payment settings (Woocommerce->Settings->Payments->MakeCommerce)
-5. Configure and activate shipping methods:
-  * Woocommerce->Settings->Shipping->Omniva Parcel Machine by MC
-  * Woocommerce->Settings->Shipping->Smartpost Parcel Machine by MC
-  * Woocommerce->Settings->Shipping->DPD Parcel Machine by MC
-  * Woocommerce->Settings->Shipping->LP Express Parcel Machine by MC
-  * Woocommerce->Settings->Shipping->Omniva Courier by MC
-  * Woocommerce->Settings->Shipping->Smartpost Courier by MC
-  * Woocommerce->Settings->Shipping->DPD Courier by MC
-
-
+3. Navigate to our module and complete setup process
 
 See more on:
-https://makecommerce.net/integration-modules/MakeCommerce-WooCommerce-Payment-plugin/
-
+https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 
 == Screenshots ==
 
-1. presentation of payment methods in checkout dialog
-5. easy way to refund
-10. the plugin adds to shipping methods to the shop
-11. the plugin provides dropdowns of Parcel Terminals on checkout page
-14. you can print package labels right from the shop admin view
-15. you can mark some product as 'not suitable' for parcel terminal delivery
-21. for multilingual shops you can adjust translations
-
-
--
+30. plugin setup page
+31. shipping+ plugin view
+32. presentation of payment methods in checkout (block themes)
+33. presentation of payment methods in checkout (classic themes)
+34. example checkout view
+35. example order view
 
 == Changelog ==
+
+= 4.0.0 2025-06-17 =
+* New - Major update, migration to different shipping service. Legacy version still available with backwards compatible changes. Switching optional
 
 = 3.5.4 2024-12-17 =
 * Feature - Support for changing a subscription order's payment method

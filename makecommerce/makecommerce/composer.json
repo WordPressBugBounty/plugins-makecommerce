@@ -1,0 +1,38 @@
+{
+  "name": "makecommerce/module-woocommerce",
+  "description": "MakeCommerce Woocommerce",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/maksekeskus/php-shipping-sdk.git"
+    }
+  ],
+  "require": {
+    "maksekeskus/php-shipping-sdk": "1.5.1",
+    "twig/twig": "^3.11.0"
+  },
+  "require-dev": {
+    "brianhenryie/strauss": "^0.19.2"
+  },
+  "scripts": {
+    "prefix-namespaces": [
+      "strauss"
+    ],
+    "post-install-cmd": [
+      "composer dump-autoload",
+      "@prefix-namespaces"
+    ],
+    "post-update-cmd": [
+      "composer dump-autoload",
+      "@prefix-namespaces"
+    ]
+  },
+  "extra": {
+    "strauss": {
+      "target_directory": "vendor-prefixed",
+      "namespace_prefix": "MakeCommercePrefix\\",
+      "classmap_prefix": "MakeCommercePrefix_",
+      "constant_prefix": "MCPREFIX_"
+    }
+  }
+}

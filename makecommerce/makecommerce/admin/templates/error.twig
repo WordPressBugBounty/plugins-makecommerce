@@ -1,0 +1,16 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="pt-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{{ s3_path }}mc.svg" alt="" width="72" height="57">
+        <h2>MakeCommerce</h2>
+    </div>
+
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-danger text-center w-75" role="alert">
+                {{ mc_error }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,402 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-17T07:30:58+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wc_makecommerce_domain\n"
+
+#: admin/dashboard.php:216
+msgid "Failed to load Iframe. Please try again later."
+msgstr ""
+
+#. translators: %s: Environment name
+#: admin/dashboard.php:321
+#, php-format
+msgid "Unable to verify %s credentials"
+msgstr ""
+
+#: api/api.php:71
+msgid "You have enabled MakeCommerce module but it seems that you don't have CURL enabled. This way MakeCommerce unfortunately does not work!"
+msgstr ""
+
+#: api/api.php:84
+msgid "Payment method (MC)"
+msgstr ""
+
+#: api/api.php:169
+msgid "The MakeCommerce plugin is almost ready, but it needs to be configured before it can function properly."
+msgstr ""
+
+#: api/api.php:170
+msgid "Click here to configure the plugin"
+msgstr ""
+
+#: includes/i18n.php:58
+msgid "Estonia"
+msgstr ""
+
+#: includes/i18n.php:61
+msgid "Latvia"
+msgstr ""
+
+#: includes/i18n.php:64
+msgid "Lithuania"
+msgstr ""
+
+#: includes/i18n.php:67
+msgid "Finland"
+msgstr ""
+
+#: includes/i18n.php:70
+msgid "International"
+msgstr ""
+
+#: includes/makecommerce.php:258
+msgid "Please check that you have configured correctly MakeCommerce API accesses"
+msgstr ""
+
+#: makecommerce.php:75
+msgid "Cannot initiate MakeCommerce, a class and/or namespace called \"MakeCommerce\" is already in use somewhere else..."
+msgstr ""
+
+#: makecommerce.php:121
+msgid "Cannot initiate MakeCommerce, there seems to be no WooCommerce present or active..."
+msgstr ""
+
+#. translators: %s: Amount of refund
+#: payment/gateway/refund.php:31
+#, php-format
+msgid "Refund completed for amount %s"
+msgstr ""
+
+#. translators: %s: Amount of partial refund
+#: payment/gateway/refund.php:38
+#, php-format
+msgid "Partial refund completed for amount %s"
+msgstr ""
+
+#: payment/gateway/refund.php:49
+msgid "Could not create refund: payment is still being processed, try to refund later"
+msgstr ""
+
+#: payment/gateway/subscription.php:80
+msgid "Unable to renew subscription"
+msgstr ""
+
+#: payment/gateway/subscription.php:82
+msgid "Renewal payment was declined"
+msgstr ""
+
+#: payment/gateway/subscription.php:86
+msgid "Transaction ID"
+msgstr ""
+
+#: payment/gateway/subscription.php:87
+msgid "Payment option"
+msgstr ""
+
+#: payment/gateway/woocommerce/blocks/woocommerceblocks.php:107
+#: payment/gateway/woocommerce/woocommerce.php:161
+msgid "Please select suitable payment option!"
+msgstr ""
+
+#: payment/gateway/woocommerce/creditcard.php:18
+msgid "The order is still awaiting your payment"
+msgstr ""
+
+#: payment/gateway/woocommerce/creditcard.php:65
+msgid "Pay for subscription"
+msgstr ""
+
+#: payment/gateway/woocommerce/creditcard.php:66
+msgid "This order contains subscriptions"
+msgstr ""
+
+#: payment/gateway/woocommerce/creditcard.php:67
+msgid "I agree that my card will be recurringly billed by this store"
+msgstr ""
+
+#: payment/gateway/woocommerce/creditcard.php:94
+msgid "Pay with credit card"
+msgstr ""
+
+#: payment/gateway/woocommerce/creditcard.php:95
+msgid "Please wait, processing payment..."
+msgstr ""
+
+#: payment/gateway/woocommerce/methods.php:347
+#: payment/gateway/woocommerce/blocks/build/index.js:1
+#: payment/gateway/woocommerce/blocks/src/components/selectors/BankLinkSelector.js:8
+msgid "Bank payments"
+msgstr ""
+
+#: payment/gateway/woocommerce/methods.php:371
+#: payment/gateway/woocommerce/blocks/build/index.js:1
+#: payment/gateway/woocommerce/blocks/src/components/selectors/PayLaterSelector.js:8
+msgid "Pay later"
+msgstr ""
+
+#: payment/gateway/woocommerce/methods.php:373
+#: payment/gateway/woocommerce/methods.php:402
+msgid "No payment methods for selected country"
+msgstr ""
+
+#: payment/gateway/woocommerce/methods.php:399
+#: payment/gateway/woocommerce/blocks/build/index.js:1
+#: payment/gateway/woocommerce/blocks/src/components/selectors/CreditCardSelector.js:8
+msgid "Cards"
+msgstr ""
+
+#: payment/gateway/woocommerce/woocommerce.php:250
+msgid "An error occured when trying to process payment!"
+msgstr ""
+
+#: payment/gateway/woocommerce/woocommerce.php:410
+msgid "Bank-links"
+msgstr ""
+
+#: payment/gateway/woocommerce/woocommerce.php:412
+msgid "Credit card"
+msgstr ""
+
+#: payment/payment.php:140
+msgid "Payment failed"
+msgstr ""
+
+#: payment/payment.php:143
+msgid "Payment transaction cancelled"
+msgstr ""
+
+#: payment/payment.php:146
+msgid "Payment transaction expired"
+msgstr ""
+
+#: payment/payment.php:229
+msgid "Order total and transaction amount did not match! Please contact us at"
+msgstr ""
+
+#: payment/payment.php:230
+msgid "support@maksekeskus.ee"
+msgstr ""
+
+#: payment/payment.php:233
+msgid "Transaction ID that was assigned to this order"
+msgstr ""
+
+#: payment/payment.php:237
+msgid "Amount that was paid"
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks-blocks-integration.php:73
+#: shipping/shipping.php:515
+msgid "Select pickup point"
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks.php:46
+msgid "Selected Pickup Point ID"
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks.php:51
+msgid "Selected Shipping Method"
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks.php:83
+msgid "Phone number is required for the chosen shipping method."
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks.php:144
+#: shipping/blocks/mc-shipping-blocks.php:162
+#: shipping/order.php:83
+#: shipping/order.php:150
+#: shipping/order.php:154
+msgid "MakeCommerce Shipping Details"
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks.php:146
+#: shipping/order.php:161
+#: shipping/order.php:164
+msgid "Courier"
+msgstr ""
+
+#: shipping/blocks/mc-shipping-blocks.php:164
+#: shipping/order.php:183
+#: shipping/order.php:188
+msgid "Pickup point"
+msgstr ""
+
+#: shipping/label.php:74
+msgid "Print parcel label"
+msgstr ""
+
+#: shipping/label.php:101
+msgid "Label fetch failed: "
+msgstr ""
+
+#: shipping/label.php:108
+msgid "No PDF content received."
+msgstr ""
+
+#: shipping/method/method.php:150
+msgid "Unable to retrieve MakeCommerce shipping rates. "
+msgstr ""
+
+#: shipping/method/method.php:167
+msgid "<strong>Parcel machine</strong> is a required field."
+msgstr ""
+
+#: shipping/order.php:71
+#: shipping/order.php:73
+#: shipping/order.php:88
+#: shipping/order.php:91
+msgid "Chosen shipping method:"
+msgstr ""
+
+#: shipping/order.php:77
+#: shipping/order.php:79
+#: shipping/order.php:96
+#: shipping/order.php:99
+#: shipping/order.php:197
+msgid "Shipment tracking info:"
+msgstr ""
+
+#: shipping/order.php:143
+msgid "Unable to display shipment details<br> This MakeCommerce shipment was created with v3.4 or lower plugin"
+msgstr ""
+
+#: shipping/shipping.php:516
+msgid "Loading pickup points..."
+msgstr ""
+
+#: payment/gateway/woocommerce/blocks/block.json
+msgctxt "block title"
+msgid "MakeCommerce Payment Blocks"
+msgstr ""
+
+#: admin/templates/credentials.twig:8
+msgid "An account is required to continue, you can find the credentials under"
+msgstr ""
+
+#: admin/templates/credentials.twig:10
+msgid "Settings->API Settings in our"
+msgstr ""
+
+#: admin/templates/credentials.twig:12
+msgid "merchant portal"
+msgstr ""
+
+#: admin/templates/credentials.twig:16
+msgid "Sign Up"
+msgstr ""
+
+#: admin/templates/credentials.twig:35
+#: admin/templates/credentialsPopup.twig:26
+msgid "Submit"
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:21
+msgid "Shop ID"
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:29
+msgid "Valid shop ID is required."
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:34
+msgid "Secret key"
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:42
+msgid "Valid secret key is required."
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:47
+msgid "Public key"
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:55
+msgid "Valid public key is required."
+msgstr ""
+
+#: admin/templates/credentialsPopup.twig:8
+msgid "Shop Credentials"
+msgstr ""
+
+#: admin/templates/onlyPayments.twig:10
+msgid "All set up to accept payments with MakeCommerce!"
+msgstr ""
+
+#: admin/templates/onlyPayments.twig:15
+msgid "configuration"
+msgstr ""
+
+#: admin/templates/productSelection.twig:9
+msgid "Thank You for choosing MakeCommerce!"
+msgstr ""
+
+#: admin/templates/productSelection.twig:11
+msgid "Before we continue, which one of our products would you like to use?"
+msgstr ""
+
+#: admin/templates/productSelection.twig:13
+msgid "Don't worry, you can still change this later"
+msgstr ""
+
+#: admin/templates/productSelection.twig:18
+msgid "Which one of our products would you like to use?"
+msgstr ""
+
+#: admin/templates/productSelection.twig:47
+msgid "Collect payments"
+msgstr ""
+
+#: admin/templates/productSelection.twig:49
+msgid "Collect payments from your customers using the most convenient payment method"
+msgstr ""
+
+#: admin/templates/productSelection.twig:51
+msgid "https://makecommerce.net/service/bank-payments/"
+msgstr ""
+
+#: admin/templates/productSelection.twig:52
+#: admin/templates/productSelection.twig:87
+msgid "More information"
+msgstr ""
+
+#: admin/templates/productSelection.twig:82
+msgid "Deliver products"
+msgstr ""
+
+#: admin/templates/productSelection.twig:84
+msgid "Send your products using the most popular shipping methods available in your country."
+msgstr ""
+
+#: admin/templates/productSelection.twig:86
+msgid "https://makecommerce.net/service/payments-shipping/"
+msgstr ""
+
+#: admin/templates/productSelection.twig:99
+msgid "Setup"
+msgstr ""
+
+#: admin/templates/productSelection.twig:103
+msgid "Save"
+msgstr ""
+
+#: admin/templates/productSelection.twig:113
+msgid "Switch back to old module"
+msgstr ""
+
+#: admin/templates/wizardFooter.twig:4
+msgid "Terms"
+msgstr ""
+
+#: admin/templates/wizardFooter.twig:6
+msgid "Support"
+msgstr ""

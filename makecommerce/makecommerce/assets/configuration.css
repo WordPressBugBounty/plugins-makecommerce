@@ -1,0 +1,105 @@
+.toggle.custom,
+.toggle-on.custom,
+.toggle-off.custom {
+    border-radius: 10rem;
+}
+
+.toggle.custom .btn {
+    margin-right: 21px;
+    border-radius: 30px;
+    width: 20px;
+}
+
+.btn.btn-secondary.btn-xs.toggle-off {
+    margin-right: 21px;
+    border-radius: 30px;
+    width: 20px;
+    background-color: white !important;
+}
+
+.btn-success.btn-success.btn-xs.toggle-on {
+    background-color: transparent;
+}
+
+.toggle-on .btn {
+    margin-right: 21px;
+    border-radius: 30px;
+    width: 20px;
+}
+
+.card {
+    padding: initial !important;
+    max-width: inherit !important;
+}
+
+.carrier-thumbnail {
+    height: 16px;
+    position: absolute;
+    margin-left: -26px;
+    margin-top: 3px;
+}
+
+.carrier-credential-thumbnail {
+    height: 16px;
+}
+
+
+.price-item {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    font-size: 14px;
+}
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.container {
+    max-width: 960px;
+}
+
+.pricing-header {
+    max-width: 700px;
+}
+
+.card-deck .card {
+    min-width: 220px;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+
+.form-switch .form-check-input:focus {
+    --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2386b7fe'/%3e%3c/svg%3e")
+}
+
+.form-switch .form-check-input:checked {
+    background-position: right center;
+    --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e")
+}
+
+.form-switch.form-check-reverse {
+    padding-right: 2.5em;
+    padding-left: 0
+}
+
+.form-switch.form-check-reverse .form-check-input {
+    margin-right: -2.5em;
+    margin-left: 0
+}

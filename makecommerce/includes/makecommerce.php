@@ -152,6 +152,9 @@ class MakeCommerce {
             $this->loader->add_action( 'admin_notices', $api, 'api_info_missing' );
         }
 
+        //Add admin notice about Shipping+
+        $this->loader->add_action( 'admin_notices', $api, 'shipping_api_notice' );
+
 		//if API type is updated then refresh the cache
 		$this->loader->add_action( 'update_option_mk_api_type', $api, 'mk_delete_api_cache' );
 		
@@ -176,6 +179,13 @@ class MakeCommerce {
 		$this->loader->add_filter( 'plugin_action_links_makecommerce/makecommerce.php', $api, 'add_plugin_settings_link' );
 
 		$this->loader->add_filter( 'woocommerce_admin_field_api_javascript_ui', $api, 'api_javascript_ui' );
+
+        // Shipping plus confirmation page in Admin panel and related hooks to it
+        $this->loader->add_action('admin_enqueue_scripts', $api, 'enqueue_shipping_plus_assets');
+        $this->loader->add_action('admin_menu', $api, 'add_shipping_plus_admin_page');
+        $this->loader->add_action( 'admin_head', $api, 'remove_shipping_confirm_menu', 15 );
+        $this->loader->add_action( 'admin_head', $api, 'hide_shipping_admin_notices' );
+        $this->loader->add_action( 'admin_init', $api, 'save_shipping_plus_confirmation' );
 	}
 
 	/**

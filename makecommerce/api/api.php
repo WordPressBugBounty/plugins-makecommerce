@@ -220,6 +220,16 @@ class API {
 		 */
 		return [
 			[ 'type' => 'title', 'desc' => \MakeCommerce::get_logo_html() ],
+            [
+                'type'  => 'title',
+                'title' => __('MakeCommerce Shipping+ is now available', 'wc_makecommerce_domain'),
+                'desc'  => sprintf(
+                    __('You\'re still using the legacy version — <a href="%s">click here to switch to the new module</a>', 'wc_makecommerce_domain'),
+                    admin_url('admin.php?page=makecommerce_shipping_plus')
+                ),
+                'id'    => 'mk_api_settings'
+            ],
+            ['type' => 'sectionend', 'id' => 'mk_api_settings'],
 			[
 				'type' => 'title', 
 				'title' => __('MakeCommerce API access credentials', 'wc_makecommerce_domain'), 
@@ -445,5 +455,117 @@ class API {
             </p>
         </div>
         <?php
+    }
+
+
+    public function shipping_api_notice()
+    {
+        ?>
+        <div class="notice notice-success">
+            <p>
+                <strong><?php echo __('MakeCommerce Shipping+ is now available', 'wc_makecommerce_domain'); ?> </strong> <br/>
+                <?php echo __("You're still using the legacy version —", 'wc_makecommerce_domain'); ?>
+                <a href="<?php echo admin_url('admin.php?page=makecommerce_shipping_plus'); ?>"><?php echo __('click here to switch to the new module', 'wc_makecommerce_domain'); ?></a>
+            </p>
+        </div>
+        <?php
+    }
+
+    // Separate Admin page for Shipping+ confirmation, when user checks shipping+ in old version
+    public function enqueue_shipping_plus_assets($hook): void
+    {
+        if ($hook !== 'admin_page_makecommerce_shipping_plus') {
+            return;
+        }
+
+        wp_enqueue_style(
+            'makecommerce-bootstrap',
+            plugin_dir_url(__DIR__) . 'makecommerce/assets/bootstrap.5.3.3.min.css'
+        );
+
+        wp_enqueue_script(
+            'makecommerce-bootstrap',
+            plugin_dir_url(__DIR__) . 'makecommerce/assets/bootstrap.bundle.min.js',
+            [],
+            null,
+            true
+        );
+    }
+    public function add_shipping_plus_admin_page()
+    {
+        add_submenu_page(
+            'shipping_plus',
+            'Shipping+ Confirmation',
+            'Shipping+ Confirmation',
+            'manage_options',
+            'makecommerce_shipping_plus',
+            [$this, 'render_shipping_plus_page']
+        );
+    }
+
+    public function remove_shipping_confirm_menu(): void {
+        remove_submenu_page( 'shipping_plus', 'makecommerce_shipping_plus' );
+    }
+
+    public function render_shipping_plus_page()
+    {
+        $file = plugin_dir_path(__FILE__) . 'templates/shipping_confirm.php';
+
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            echo '<div class="wrap"><h1>Page not found</h1></div>';
+        }
+    }
+
+    public function hide_shipping_admin_notices(): void
+    {
+        $screen = get_current_screen();
+
+        if ($screen && $screen->id === 'admin_page_makecommerce_shipping_plus') {
+            remove_all_actions('admin_notices');
+            remove_all_actions('all_admin_notices');
+        }
+    }
+
+    public function save_shipping_plus_confirmation(): void
+    {
+        if (
+            isset($_POST['accept_shipping']) &&
+            $_GET['page'] === 'makecommerce_shipping_plus'
+        ) {
+            update_option('mc_shipping_plus_confirmed', 'yes');
+            update_option('mc_shipping_plus', 'yes');
+            $this->mc_shipping_plus_creds_migration();
+            wp_redirect(admin_url('admin.php?page=makecommerce_dashboard'));
+            exit;
+        }
+    }
+
+    /**
+     * Run credentials migration when 'mc_shipping_plus' is turned on
+     *
+     * @return void
+     */
+    private function mc_shipping_plus_creds_migration(): void
+    {
+        $migration_map = [
+            'mc_shop_id' => 'mk_shop_id',
+            'mc_secret_key' => 'mk_private_key',
+            'mc_public_key' => 'mk_public_key',
+            'mc_test_shop_id' => 'mk_test_shop_id',
+            'mc_test_secret_key' => 'mk_test_private_key',
+            'mc_test_public_key' => 'mk_test_public_key',
+            'mc_api_mode' => 'mk_api_mode',
+        ];
+
+        foreach ($migration_map as $new_key => $old_key) {
+            $new_value = get_option($new_key, null);
+            $old_value = get_option($old_key, null);
+
+            if (($new_value === '' || $new_value === null) && $old_value !== null && $old_value !== '') {
+                update_option($new_key, $old_value);
+            }
+        }
     }
 }

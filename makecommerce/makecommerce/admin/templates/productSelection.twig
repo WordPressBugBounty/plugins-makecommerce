@@ -1,0 +1,119 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="pt-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{{ s3_path }}mc.svg" alt="" width="72" height="57">
+        <h2>MakeCommerce</h2>
+        {% if setupSelection %}
+            <p class="lead">
+                {{ __('Thank You for choosing MakeCommerce!', 'wc_makecommerce_domain') }}
+                <br>
+                {{ __('Before we continue, which one of our products would you like to use?', 'wc_makecommerce_domain') }}
+                <br>
+                <small>{{ __("Don't worry, you can still change this later", 'wc_makecommerce_domain') }}</small>
+            </p>
+        {% else %}
+            <p class="lead">
+                <br>
+                {{ __('Which one of our products would you like to use?', 'wc_makecommerce_domain') }}
+            </p>
+        {% endif %}
+    </div>
+
+    <form method="post" novalidate>
+        <div class="row">
+            <div class="col-8 offset-2">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ s3_path }}payments.png" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="form-check form-switch float-end ">
+                                    <div class="d-flex flex-column align-items-end">
+                                        <label for="payments"></label>
+                                        <input type="checkbox" data-toggle="toggle"
+                                               data-onlabel=" "
+                                               data-offlabel=" " data-onstyle="success"
+                                               data-size="xs"
+                                               data-width="50"
+                                               data-height="15"
+                                               data-style="custom"
+                                               id="payments" name="payments"
+                                               {% if payments != 'off' %}checked{% endif %}/>
+                                    </div>
+                                </div>
+                                <h5 class="card-title">{{ __('Collect payments', 'wc_makecommerce_domain') }}</h5>
+                                <p class="card-text">
+                                    {{ __('Collect payments from your customers using the most convenient payment method', 'wc_makecommerce_domain') }}
+                                    </p>
+                                <p class="card-text"><small class="text-muted"><a href="{{ __('https://makecommerce.net/service/bank-payments/', 'wc_makecommerce_domain') }}" target="_blank" class="card-link">
+                                            {{ __('More information', 'wc_makecommerce_domain') }}</a></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-8 offset-2">
+                <div class="card mb-3 " style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ s3_path }}shipping.png" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="form-check form-switch float-end">
+                                    <div class="d-flex flex-column align-items-end">
+                                        <label for="shipping"></label>
+                                        <input type="checkbox" data-toggle="toggle"
+                                               data-onlabel=" "
+                                               data-offlabel=" " data-onstyle="success"
+                                               data-size="xs"
+                                               data-width="50"
+                                               data-height="15"
+                                               data-style="custom"
+                                               id="shipping" name="shipping"
+                                               {% if shipping != 'off' %}checked{% endif %}/>
+                                    </div>
+                                </div>
+
+                                <h5 class="card-title">{{ __('Deliver products', 'wc_makecommerce_domain') }}</h5>
+                                <p class="card-text">
+                                    {{ __('Send your products using the most popular shipping methods available in your country.', 'wc_makecommerce_domain') }}
+                                </p>
+                                <p class="card-text"><small class="text-muted"><a href="{{ __('https://makecommerce.net/service/payments-shipping/', 'wc_makecommerce_domain') }}" target="_blank" class="card-link">
+                                            {{ __('More information', 'wc_makecommerce_domain') }}</a></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+        <div class="offset-3 col-6 g-5">
+            {% if setupSelection %}
+                <button class="w-100 btn btn-primary btn-lg" type="submit" name="setup_selection" value="mc_product">
+                    {{ __('Setup', 'wc_makecommerce_domain') }}
+                </button>
+            {% else %}
+                <button class="w-100 btn btn-primary btn-lg" type="submit" name="product_selection" value="mc_product">
+                    {{ __('Save', 'wc_makecommerce_domain') }}
+                </button>
+            {% endif %}
+        </div>
+
+        {% if not newInstall %}
+            <div class="col-8 offset-2 text-center mt-3">
+                <form method="post" novalidate>
+                    <button type="submit" name="switch" value="switch_to_old"
+                            class="btn btn-link p-0 m-0 align-baseline" style="font-size: 0.9rem; text-decoration: underline;">
+                        {{ __('Switch back to old module', 'wc_makecommerce_domain') }}
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

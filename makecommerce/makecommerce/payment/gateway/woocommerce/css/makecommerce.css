@@ -1,0 +1,27 @@
+.payment-method-selected {
+    border: 2px #32CB64 solid;
+    box-shadow: none;
+}
+
+.payment-method-selected > .check {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url(../images/check.svg) no-repeat 0 0;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+
+/*!* Style the logo image on checkout *!*/
+.woocommerce-checkout label[for="payment_method_makecommerce"] img {
+    height: 20px;
+}
+
+.mc-payment-logo {
+    height: 30px !important;
+    max-height: 100%;
+}
+
+
