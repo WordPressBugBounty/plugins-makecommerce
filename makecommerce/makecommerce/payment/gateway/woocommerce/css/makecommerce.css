@@ -1,22 +1,21 @@
-.makecommerce-payment-methods.payment-method-selected {
+.makecommerce-payment-methods .payment-method-selected {
     border: 2px #32CB64 solid;
     box-shadow: none;
 }
 
-.makecommerce-payment-methods.payment-method-selected > .check {
+.makecommerce-payment-methods .payment-method-selected > .check {
     display: block;
     width: 16px;
     height: 16px;
-    background: url(../images/check.svg) no-repeat 0 0;
+    background: url("https://static.maksekeskus.ee/img/woocommerce/check.svg") no-repeat 0 0;
     position: absolute;
     top: -8px;
     right: -8px;
 }
 
-.payment-method-selected.payment-method.payment-control{
+.makecommerce-payment-methods .payment-method .payment-control{
     padding: 0px 0px 0px 0px !important;
 }
-
 
 /*!* Style the logo image on checkout *!*/
 .woocommerce-checkout label[for="payment_method_makecommerce"] img {
@@ -26,6 +25,5 @@
 .mc-payment-logo {
     height: 30px !important;
     max-height: 100%;
+    position: static !important;
 }
-
-

@@ -308,8 +308,8 @@ class Dashboard
         try {
             $client = $this->get_client();
             $client->connectShop(
-                'userAgent',
-                'myIP',
+                $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+                get_site_url() ?? $_SERVER['REMOTE_ADDR'],
                 get_site_url() . '/wp-admin/post.php?post={id}&action=edit'
             );
             update_option('mc_credentials_error', '');

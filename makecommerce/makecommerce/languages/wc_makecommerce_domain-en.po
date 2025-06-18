@@ -427,3 +427,11 @@ msgstr "Support"
 #: shipping/blocks/mc-shipping-blocks.php:83
 msgid "Phone number is required for the chosen shipping method."
 msgstr "Phone number is required for the chosen shipping method"
+
+#: shipping/product.php:61
+msgid "Does not fit parcel machine"
+msgstr "Does not fit parcel machine"
+
+#: shipping/product.php:62
+msgid "When this is checked, parcel machine shipping option is not available for a cart with this product"
+msgstr "When this is checked, parcel machine shipping option is not available for a cart with this product"

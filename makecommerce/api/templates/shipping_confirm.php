@@ -74,12 +74,6 @@
                         </li>
                         <li class="list-group-item d-flex" style="border: none !important;">
                             <div class="ms-2">
-                                <div class="fw-bold"><?php _e('“Does not fit parcel machine” handled more smartly', 'wc_makecommerce_domain'); ?></div>
-                                <?php _e('This is now based on package weight and dimensions — no need for manual tagging.', 'wc_makecommerce_domain'); ?>
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex" style="border: none !important;">
-                            <div class="ms-2">
                                 <div class="fw-bold"><?php _e('Free shipping and coupon logic evolving', 'wc_makecommerce_domain'); ?></div>
                                 <?php _e('Settings for free shipping from a certain amount and coupon combinations will return soon in a new, improved interface.', 'wc_makecommerce_domain'); ?>
                             </div>

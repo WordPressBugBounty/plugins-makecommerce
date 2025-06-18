@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Start at version 3.0.0 and use SemVer - https://semver.org
  */
-define( 'MAKECOMMERCE_VERSION', '4.0.1' );
+define( 'MAKECOMMERCE_VERSION', '4.0.2' );
 define( 'MAKECOMMERCE_PLUGIN_ID', 'makecommerce' );
 
 //table name for banklinks
@@ -27,11 +27,12 @@ register_deactivation_hook( __FILE__, 'deactivate_makecommerce' );
 
 add_action( 'before_woocommerce_init', function() {
     if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+        $plugin_main_file = plugin_dir_path( __DIR__ ) . 'makecommerce.php';
         // Declare HPOS compatibility - true / false
-        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', $plugin_main_file, true );
 
         // Declare Blocks compatibility - true / false
-        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', $plugin_main_file, true );
     }
 } );
 

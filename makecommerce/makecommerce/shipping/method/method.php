@@ -135,20 +135,42 @@ class Method extends WC_Shipping_Method
             }
 
             foreach ($rates as $method => $carriers) {
+                // If does not fit and is pickuppoint, then do not add shipping rate
+                if ($method === 'pickuppoint' && !$this->fits_parcel_machine($package)) {
+                    continue;
+                }
+
                 foreach ($carriers as $carrier) {
                     $this->add_rate([
-                        'id' => 'mc_' . $method . '_' . $carrier->carrier,
-                        'label' => $carrier->title,
-                        'cost' => $carrier->price / 100,
-                        'taxes' => '',
-                        'calc_tax' => 'per_order'
+                        'id'        => 'mc_' . $method . '_' . $carrier->carrier,
+                        'label'     => $carrier->title,
+                        'cost'      => $carrier->price / 100,
+                        'taxes'     => '',
+                        'calc_tax'  => 'per_order',
                     ]);
                 }
+
             }
 
         } catch (\Exception $e) {
             $this->logger->error(__('Unable to retrieve MakeCommerce shipping rates. ' . json_encode($e->getMessage()), 'wc_makecommerce_domain'), $this->log_context);
         }
+    }
+
+    /**
+     * Checks if there is a product that doesn't fit in parcelmachine
+     *
+     * @since 3.0.0
+     */
+    private function fits_parcel_machine( $package ) {
+
+        foreach ( $package['contents'] as $line ) {
+            if ( get_post_meta( $line['product_id'], '_no_parcel_machine', true ) === 'yes' ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

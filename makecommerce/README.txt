@@ -3,7 +3,7 @@ Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
 Tested up to: 6.8.1
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,10 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.2 2025-06-18 =
+* Feature - Added support for "Does not fit" parcel machine checkbox
+* Fix - WooCommerce HPOS compatibility
 
 = 4.0.1 2025-06-17 =
 * Tweak - CSS files moved to CDN

@@ -430,3 +430,11 @@ msgstr "Atbalsts"
 #: shipping/blocks/mc-shipping-blocks.php:83
 msgid "Phone number is required for the chosen shipping method."
 msgstr "Izvēlētajai piegādes metodei ir nepieciešams tālruņa numurs"
+
+#: shipping/product.php:61
+msgid "Does not fit parcel machine"
+msgstr "Neder pakomātam"
+
+#: shipping/product.php:62
+msgid "When this is checked, parcel machine shipping option is not available for a cart with this product"
+msgstr "Kad šis ir atzīmēts, piegādes veids pakomāts nebūs pieejams pirkuma grozam, kas saturēs šo produktu"
