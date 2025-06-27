@@ -1,9 +1,4 @@
 <?php
-/**
- * @license BSD-3-Clause
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace MakeCommercePrefix\Twig\Node\Expression\FunctionNode;
 

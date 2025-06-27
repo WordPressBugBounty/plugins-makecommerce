@@ -7,14 +7,13 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
 
 use MakeCommercePrefix\Twig\Error\SyntaxError;
 use MakeCommercePrefix\Twig\Node\Node;
+use MakeCommercePrefix\Twig\Node\Nodes;
 use MakeCommercePrefix\Twig\Node\SetNode;
 use MakeCommercePrefix\Twig\Token;
 
@@ -36,11 +35,11 @@ final class SetTokenParser extends AbstractTokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-        $names = $this->parser->getExpressionParser()->parseAssignmentExpression();
+        $names = $this->parseAssignmentExpression();
 
         $capture = false;
         if ($stream->nextIf(Token::OPERATOR_TYPE, '=')) {
-            $values = $this->parser->getExpressionParser()->parseMultitargetExpression();
+            $values = $this->parseMultitargetExpression();
 
             $stream->expect(Token::BLOCK_END_TYPE);
 
@@ -71,5 +70,18 @@ final class SetTokenParser extends AbstractTokenParser
     public function getTag(): string
     {
         return 'set';
+    }
+
+    private function parseMultitargetExpression(): Nodes
+    {
+        $targets = [];
+        while (true) {
+            $targets[] = $this->parser->parseExpression();
+            if (!$this->parser->getStream()->nextIf(Token::PUNCTUATION_TYPE, ',')) {
+                break;
+            }
+        }
+
+        return new Nodes($targets);
     }
 }

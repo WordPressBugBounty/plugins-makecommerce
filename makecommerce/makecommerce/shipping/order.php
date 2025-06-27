@@ -63,6 +63,10 @@ class Order extends \MakeCommerce\Shipping
         $country       = $order->get_shipping_country();
         $method        = $order->get_shipping_method();
 
+        if (empty($country) ) {
+            $country = self::get_shipping_country();
+        }
+
         if ( $plain_text ) {
             echo "=== MakeCommerce Shipping Details ===\n";
 
@@ -136,6 +140,10 @@ class Order extends \MakeCommerce\Shipping
         $tracking_link = $order->get_meta( '_mc_tracking_link', true );
         $shipment_id   = $order->get_meta( '_mc_shipment_id', true );
         $country       = $order->get_shipping_country();
+
+        if (empty($country)) {
+            $country = self::get_shipping_country();
+        }
 
         if ( empty( $carrier ) ) {
             $old_machine = $order->get_meta( '_parcel_machine', true );

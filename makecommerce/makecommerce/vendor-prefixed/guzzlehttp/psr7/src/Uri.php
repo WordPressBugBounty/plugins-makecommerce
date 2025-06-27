@@ -1,9 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 declare(strict_types=1);
 
@@ -112,7 +107,7 @@ class Uri implements UriInterface, \JsonSerializable
     {
         // If IPv6
         $prefix = '';
-        if (preg_match('%^(.*://\[[0-9:a-f]+\])(.*?)$%', $url, $matches)) {
+        if (preg_match('%^(.*://\[[0-9:a-fA-F]+\])(.*?)$%', $url, $matches)) {
             /** @var array{0:string, 1:string, 2:string} $matches */
             $prefix = $matches[1];
             $url = $matches[2];

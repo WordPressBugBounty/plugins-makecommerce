@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Util;
@@ -136,7 +134,7 @@ final class CallableArgumentsExtractor
                 } else {
                     $originalKey = $extractedArgumentNameMap[$key];
                     if ($originalKey !== $this->toSnakeCase($originalKey)) {
-                        trigger_deprecation('twig/twig', '3.15', \sprintf('Using "snake_case" for variadic arguments is required for a smooth upgrade with Twig 4.0; rename "%s" to "%s" in "%s" at line %d.', $originalKey, $this->toSnakeCase($originalKey), $this->node->getSourceContext()->getName(), $this->node->getTemplateLine()));
+                        makecommerceprefix_trigger_deprecation('twig/twig', '3.15', \sprintf('Using "snake_case" for variadic arguments is required for a smooth upgrade with Twig 4.0; rename "%s" to "%s" in "%s" at line %d.', $originalKey, $this->toSnakeCase($originalKey), $this->node->getSourceContext()->getName(), $this->node->getTemplateLine()));
                     }
                     $arbitraryArguments->addElement($value, new ConstantExpression($this->toSnakeCase($originalKey), $this->node->getTemplateLine()));
                     // I Twig 4.0, don't convert the key:

@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression;
@@ -29,7 +27,7 @@ class FilterExpression extends CallExpression
     public function __construct(Node $node, TwigFilter|ConstantExpression $filter, Node $arguments, int $lineno)
     {
         if (!$node instanceof AbstractExpression) {
-            trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance to the "node" argument of "%s" is deprecated ("%s" given).', AbstractExpression::class, static::class, \get_class($node));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance to the "node" argument of "%s" is deprecated ("%s" given).', AbstractExpression::class, static::class, $node::class);
         }
 
         if ($filter instanceof TwigFilter) {
@@ -38,7 +36,7 @@ class FilterExpression extends CallExpression
         } else {
             $name = $filter->getAttribute('value');
             $filterName = $filter;
-            trigger_deprecation('twig/twig', '3.12', 'Not passing an instance of "TwigFilter" when creating a "%s" filter of type "%s" is deprecated.', $name, static::class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Not passing an instance of "TwigFilter" when creating a "%s" filter of type "%s" is deprecated.', $name, static::class);
         }
 
         parent::__construct(['node' => $node, 'filter' => $filterName, 'arguments' => $arguments], ['name' => $name, 'type' => 'filter'], $lineno);
@@ -62,11 +60,11 @@ class FilterExpression extends CallExpression
     {
         $name = $this->getNode('filter', false)->getAttribute('value');
         if ($name !== $this->getAttribute('name')) {
-            trigger_deprecation('twig/twig', '3.11', 'Changing the value of a "filter" node in a NodeVisitor class is not supported anymore.');
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.11', 'Changing the value of a "filter" node in a NodeVisitor class is not supported anymore.');
             $this->removeAttribute('twig_callable');
         }
         if ('raw' === $name) {
-            trigger_deprecation('twig/twig', '3.11', 'Creating the "raw" filter via "FilterExpression" is deprecated; use "RawFilter" instead.');
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.11', 'Creating the "raw" filter via "FilterExpression" is deprecated; use "RawFilter" instead.');
 
             $compiler->subcompile($this->getNode('node'));
 

@@ -152,6 +152,20 @@ class Shipping {
 
         // Phone number is needed to register shipment
         $this->loader->add_filter('woocommerce_billing_fields', $this, 'set_phone_required');
+
+        $this->loader->add_action( 'woocommerce_review_order_after_shipping', $this, 'mc_pickuppoint_after_shipping_details');
+    }
+
+    /**
+     * Inject a MakeCommerce container after shipping details on WooCommerce checkout.
+     * To that container pickup point list will be rendered in
+     *
+     * @since 4.0.2
+     */
+    public function mc_pickuppoint_after_shipping_details() {
+        echo '<tr class="makecommerce-pickuppoint-wrapper">
+                <td colspan="2" class="makecommerce-pickuppoint-table-data"></td>
+            </tr>';
     }
 
     /**
@@ -369,8 +383,20 @@ class Shipping {
         $selected_machine = isset($_REQUEST['selected_machine']) ? sanitize_text_field($_REQUEST['selected_machine']) : '';
         $country = isset($_REQUEST['country']) ? sanitize_text_field($_REQUEST['country']) : WC()->customer->get_shipping_country();
 
+        if (empty($country)) {
+            $country = self::get_shipping_country();
+        }
+
         if (!$carrier || !$country) {
             return;
+        }
+
+        if (function_exists( 'WC' ) && WC()->session &&
+            WC()->session->get('mc_selected_country') !== $country) {
+            // Country has changed → remove shipping cache, so new rates are fetched for country
+            $this->remove_wc_shipping_cache();
+            // Update session
+            WC()->session->set('mc_selected_country', $country);
         }
 
         $machines = self::get_carrier_country_machines($carrier, $country, $selected_machine);
@@ -481,6 +507,11 @@ class Shipping {
     public static function get_carrier_country_machines($carrier, $country, $selected_machine = '')
     {
         $client = self::init_client();
+        // Fallback if the country should be empty
+        if (empty($country)) {
+            self::get_shipping_country();
+        }
+
         $raw_machines = $client->listCarrierDestinations($carrier, $country);
 
         return array_reduce($raw_machines, function ($result, $item) use ($selected_machine) {
@@ -506,18 +537,20 @@ class Shipping {
      */
     public function enqueue_scripts()
     {
-        wp_enqueue_style('pickup-point-style', "https://static.maksekeskus.ee/modules/woocommerce/css/pickup-point.css");
+        if (!is_cart()){
+            wp_enqueue_style('pickup-point-style', "https://static.maksekeskus.ee/modules/woocommerce/css/pickup-point.css");
 
-        MakeCommerce::mc_enqueue_script(
-            'MC_PARCELMACHINE_JS',
-            "https://static.maksekeskus.ee/modules/woocommerce/js/pickuppoint.js",
-            [
-                'placeholder' => __('Select pickup point', 'wc_makecommerce_domain'),
-                'loadingPlaceholder' => __('Loading pickup points...', 'wc_makecommerce_domain')
-            ],
-            ['jquery'],
-            true
-        );
+            MakeCommerce::mc_enqueue_script(
+                'MC_PARCELMACHINE_JS',
+                "https://static.maksekeskus.ee/modules/woocommerce/js/pickuppoint.js",
+                [
+                    'placeholder' => __('Select pickup point', 'wc_makecommerce_domain'),
+                    'loadingPlaceholder' => __('Loading pickup points...', 'wc_makecommerce_domain')
+                ],
+                ['jquery'],
+                true
+            );
+        }
     }
 
     protected function render_template(string $template, array $data = []): void
@@ -534,6 +567,41 @@ class Shipping {
         ];
 
         echo $twig->render($template, array_merge($baseData, $data));
+    }
+
+    /**
+     * Returns customers shipping country
+     * if not, returns shop base country
+     * if not, default country by selected language
+     *
+     * @since 4.0.3
+     */
+    protected static function get_shipping_country()
+    {
+
+        global $woocommerce;
+
+        if ($woocommerce->customer && $woocommerce->customer->get_shipping_country()) {
+            return $woocommerce->customer->get_shipping_country();
+        }
+
+        if ($woocommerce->countries && $woocommerce->countries->get_base_country()) {
+            return $woocommerce->countries->get_base_country();
+        }
+
+        $localeToCountry = array(
+            'et' => 'ee',
+            'lv' => 'lv',
+            'lt' => 'lt',
+            'fi' => 'fi',
+        );
+
+        $locale = \MakeCommerce\i18n::get_two_char_locale();
+        if (array_key_exists($locale, $localeToCountry)) {
+            return $localeToCountry[$locale];
+        }
+
+        return 'EE';
     }
 
     /**

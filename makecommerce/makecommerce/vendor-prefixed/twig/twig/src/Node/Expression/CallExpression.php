@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression;
@@ -72,7 +70,7 @@ abstract class CallExpression extends AbstractExpression
     protected function compileArguments(Compiler $compiler, $isArray = false): void
     {
         if (\func_num_args() >= 2) {
-            trigger_deprecation('twig/twig', '3.11', 'Passing a second argument to "%s()" is deprecated.', __METHOD__);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.11', 'Passing a second argument to "%s()" is deprecated.', __METHOD__);
         }
 
         $compiler->raw($isArray ? '[' : '(');
@@ -137,7 +135,7 @@ abstract class CallExpression extends AbstractExpression
      */
     protected function getArguments($callable, $arguments)
     {
-        trigger_deprecation('twig/twig', '3.12', 'The "%s()" method is deprecated, use MakeCommercePrefix\Twig\Util\CallableArgumentsExtractor::getArguments() instead.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'The "%s()" method is deprecated, use MakeCommercePrefix\Twig\Util\CallableArgumentsExtractor::getArguments() instead.', __METHOD__);
 
         $callType = $this->getAttribute('type');
         $callName = $this->getAttribute('name');
@@ -267,7 +265,7 @@ abstract class CallExpression extends AbstractExpression
      */
     protected function normalizeName(string $name): string
     {
-        trigger_deprecation('twig/twig', '3.12', 'The "%s()" method is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'The "%s()" method is deprecated.', __METHOD__);
 
         return strtolower(preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], $name));
     }

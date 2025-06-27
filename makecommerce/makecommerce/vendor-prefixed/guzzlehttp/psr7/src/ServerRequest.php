@@ -1,9 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 declare(strict_types=1);
 
@@ -171,7 +166,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     public static function fromGlobals(): ServerRequestInterface
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $headers = getallheaders();
+        $headers = makecommerceprefix_getallheaders();
         $uri = self::getUriFromGlobals();
         $body = new CachingStream(new LazyOpenStream('php://input', 'r+'));
         $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';

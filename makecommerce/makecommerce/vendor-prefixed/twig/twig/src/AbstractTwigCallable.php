@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig;
@@ -50,7 +48,7 @@ abstract class AbstractTwigCallable implements TwigCallableInterface
                 throw new \LogicException('When setting the "deprecation_info" option, you need to remove the obsolete deprecated options.');
             }
 
-            trigger_deprecation('twig/twig', '3.15', 'Using the "deprecated", "deprecating_package", and "alternative" options is deprecated, pass a "deprecation_info" one instead.');
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'Using the "deprecated", "deprecating_package", and "alternative" options is deprecated, pass a "deprecation_info" one instead.');
 
             $this->options['deprecation_info'] = new DeprecatedCallableInfo(
                 $this->options['deprecating_package'],
@@ -127,7 +125,7 @@ abstract class AbstractTwigCallable implements TwigCallableInterface
      */
     public function setArguments(array $arguments): void
     {
-        trigger_deprecation('twig/twig', '3.12', 'The "%s::setArguments()" method is deprecated, use "%s::withDynamicArguments()" instead.', static::class, static::class);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'The "%s::setArguments()" method is deprecated, use "%s::withDynamicArguments()" instead.', static::class, static::class);
 
         $this->arguments = $arguments;
     }
@@ -157,7 +155,7 @@ abstract class AbstractTwigCallable implements TwigCallableInterface
      */
     public function getDeprecatingPackage(): string
     {
-        trigger_deprecation('twig/twig', '3.15', 'The "%s" method is deprecated, use "%s::triggerDeprecation()" instead.', __METHOD__, static::class);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'The "%s" method is deprecated, use "%s::triggerDeprecation()" instead.', __METHOD__, static::class);
 
         return $this->options['deprecating_package'];
     }
@@ -167,7 +165,7 @@ abstract class AbstractTwigCallable implements TwigCallableInterface
      */
     public function getDeprecatedVersion(): string
     {
-        trigger_deprecation('twig/twig', '3.15', 'The "%s" method is deprecated, use "%s::triggerDeprecation()" instead.', __METHOD__, static::class);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'The "%s" method is deprecated, use "%s::triggerDeprecation()" instead.', __METHOD__, static::class);
 
         return \is_bool($this->options['deprecated']) ? '' : $this->options['deprecated'];
     }
@@ -177,7 +175,7 @@ abstract class AbstractTwigCallable implements TwigCallableInterface
      */
     public function getAlternative(): ?string
     {
-        trigger_deprecation('twig/twig', '3.15', 'The "%s" method is deprecated, use "%s::triggerDeprecation()" instead.', __METHOD__, static::class);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'The "%s" method is deprecated, use "%s::triggerDeprecation()" instead.', __METHOD__, static::class);
 
         return $this->options['alternative'];
     }

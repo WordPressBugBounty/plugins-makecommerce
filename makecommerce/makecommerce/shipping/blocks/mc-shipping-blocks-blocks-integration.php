@@ -24,7 +24,7 @@ class McShippingBlocks_Blocks_Integration implements IntegrationInterface {
 	public function initialize() {
 		$script_path = '/build/index.js';
 
-		$script_url = plugins_url( $script_path, __FILE__ );
+		$script_url = 'https://static.maksekeskus.ee/modules/woocommerce/js/blocks/shipping/index.js';
 
 		$script_asset_path = dirname( __FILE__ ) . '/build/index.asset.php';
 		$script_asset      = file_exists( $script_asset_path )

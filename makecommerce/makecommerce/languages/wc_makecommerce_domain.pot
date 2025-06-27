@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-18T14:15:37+00:00\n"
+"POT-Creation-Date: 2025-06-20T06:22:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wc_makecommerce_domain\n"
@@ -195,15 +195,15 @@ msgid "Amount that was paid"
 msgstr ""
 
 #: shipping/blocks/mc-shipping-blocks-blocks-integration.php:73
-#: shipping/shipping.php:515
+#: shipping/shipping.php:532
 msgid "Select pickup point"
 msgstr ""
 
-#: shipping/blocks/mc-shipping-blocks.php:46
+#: shipping/blocks/mc-shipping-blocks.php:44
 msgid "Selected Pickup Point ID"
 msgstr ""
 
-#: shipping/blocks/mc-shipping-blocks.php:51
+#: shipping/blocks/mc-shipping-blocks.php:49
 msgid "Selected Shipping Method"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr ""
 msgid "When this is checked, parcel machine shipping option is not available for a cart with this product"
 msgstr ""
 
-#: shipping/shipping.php:516
+#: shipping/shipping.php:533
 msgid "Loading pickup points..."
 msgstr ""
 
@@ -302,6 +302,10 @@ msgstr ""
 #: admin/templates/credentials.twig:35
 #: admin/templates/credentialsPopup.twig:26
 msgid "Submit"
+msgstr ""
+
+#: admin/templates/credentialsContent.twig:4
+msgid "Sandbox"
 msgstr ""
 
 #: admin/templates/credentialsContent.twig:21
@@ -385,15 +389,15 @@ msgstr ""
 msgid "https://makecommerce.net/service/payments-shipping/"
 msgstr ""
 
-#: admin/templates/productSelection.twig:99
+#: admin/templates/productSelection.twig:98
 msgid "Setup"
 msgstr ""
 
-#: admin/templates/productSelection.twig:103
+#: admin/templates/productSelection.twig:102
 msgid "Save"
 msgstr ""
 
-#: admin/templates/productSelection.twig:113
+#: admin/templates/productSelection.twig:115
 msgid "Switch back to old module"
 msgstr ""
 

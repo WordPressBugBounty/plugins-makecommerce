@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\NodeVisitor;
@@ -54,7 +52,7 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
                 continue;
             }
 
-            if (\in_array('html_attr', $bucket['value'])) {
+            if (\in_array('html_attr', $bucket['value'], true)) {
                 $bucket['value'][] = 'html';
             }
 
@@ -119,7 +117,7 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
             if ($filter) {
                 $safe = $filter->getSafe($node->getNode('arguments'));
                 if (null === $safe) {
-                    trigger_deprecation('twig/twig', '3.16', 'The "%s::getSafe()" method should not return "null" anymore, return "[]" instead.', $filter::class);
+                    makecommerceprefix_trigger_deprecation('twig/twig', '3.16', 'The "%s::getSafe()" method should not return "null" anymore, return "[]" instead.', $filter::class);
                     $safe = [];
                 }
 
@@ -140,7 +138,7 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
             if ($function) {
                 $safe = $function->getSafe($node->getNode('arguments'));
                 if (null === $safe) {
-                    trigger_deprecation('twig/twig', '3.16', 'The "%s::getSafe()" method should not return "null" anymore, return "[]" instead.', $function::class);
+                    makecommerceprefix_trigger_deprecation('twig/twig', '3.16', 'The "%s::getSafe()" method should not return "null" anymore, return "[]" instead.', $function::class);
                     $safe = [];
                 }
                 $this->setSafe($node, $safe);
@@ -150,7 +148,7 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
             $this->setSafe($node, ['all']);
         } elseif ($node instanceof GetAttrExpression && $node->getNode('node') instanceof ContextVariable) {
             $name = $node->getNode('node')->getAttribute('name');
-            if (\in_array($name, $this->safeVars)) {
+            if (\in_array($name, $this->safeVars, true)) {
                 $this->setSafe($node, ['all']);
             }
         }
@@ -164,11 +162,11 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
             return [];
         }
 
-        if (\in_array('all', $a)) {
+        if (\in_array('all', $a, true)) {
             return $b;
         }
 
-        if (\in_array('all', $b)) {
+        if (\in_array('all', $b, true)) {
             return $a;
         }
 

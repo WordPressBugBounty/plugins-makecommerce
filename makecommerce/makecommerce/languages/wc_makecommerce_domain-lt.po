@@ -437,3 +437,7 @@ msgstr "Netelpa į siuntų terminalą"
 #: shipping/product.php:62
 msgid "When this is checked, parcel machine shipping option is not available for a cart with this product"
 msgstr "Kai tai pažymima, užsakymo su šiuo produktu į siuntų terminalus pristatymas negalimas"
+
+#: admin/templates/credentialsContent.twig:4
+msgid "Sandbox"
+msgstr "Test"

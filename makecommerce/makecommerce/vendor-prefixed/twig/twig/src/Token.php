@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig;
@@ -32,7 +30,13 @@ final class Token
     public const PUNCTUATION_TYPE = 9;
     public const INTERPOLATION_START_TYPE = 10;
     public const INTERPOLATION_END_TYPE = 11;
+    /**
+     * @deprecated since Twig 3.21, "arrow" is now an operator
+     */
     public const ARROW_TYPE = 12;
+    /**
+     * @deprecated since Twig 3.21, "spread" is now an operator
+     */
     public const SPREAD_TYPE = 13;
 
     public function __construct(
@@ -40,6 +44,12 @@ final class Token
         private $value,
         private int $lineno,
     ) {
+        if (self::ARROW_TYPE === $type) {
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.21', 'The "%s" token type is deprecated, "arrow" is now an operator.', self::ARROW_TYPE);
+        }
+        if (self::SPREAD_TYPE === $type) {
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.21', 'The "%s" token type is deprecated, "spread" is now an operator.', self::SPREAD_TYPE);
+        }
     }
 
     public function __toString(): string
@@ -65,9 +75,46 @@ final class Token
             $type = self::NAME_TYPE;
         }
 
-        return ($this->type === $type) && (
+        if (self::ARROW_TYPE === $type) {
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.21', 'The "%s" token type is deprecated, "arrow" is now an operator.', self::typeToEnglish(self::ARROW_TYPE));
+
+            return self::OPERATOR_TYPE === $this->type && '=>' === $this->value;
+        }
+        if (self::SPREAD_TYPE === $type) {
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.21', 'The "%s" token type is deprecated, "spread" is now an operator.', self::typeToEnglish(self::SPREAD_TYPE));
+
+            return self::OPERATOR_TYPE === $this->type && '...' === $this->value;
+        }
+
+        $typeMatches = $this->type === $type;
+        if ($typeMatches && self::PUNCTUATION_TYPE === $type && \in_array($this->value, ['(', '[', '|', '.', '?', '?:'], true) && $values) {
+            foreach ((array) $values as $value) {
+                if (\in_array($value, ['(', '[', '|', '.', '?', '?:'], true)) {
+                    makecommerceprefix_trigger_deprecation('twig/twig', '3.21', 'The "%s" token is now an "%s" token instead of a "%s" one.', $this->value, self::typeToEnglish(self::OPERATOR_TYPE), $this->toEnglish());
+
+                    break;
+                }
+            }
+        }
+        if (!$typeMatches) {
+            if (self::OPERATOR_TYPE === $type && self::PUNCTUATION_TYPE === $this->type) {
+                if ($values) {
+                    foreach ((array) $values as $value) {
+                        if (\in_array($value, ['(', '[', '|', '.', '?', '?:'], true)) {
+                            $typeMatches = true;
+
+                            break;
+                        }
+                    }
+                } else {
+                    $typeMatches = true;
+                }
+            }
+        }
+
+        return $typeMatches && (
             null === $values
-            || (\is_array($values) && \in_array($this->value, $values))
+            || (\is_array($values) && \in_array($this->value, $values, true))
             || $this->value == $values
         );
     }
@@ -82,14 +129,11 @@ final class Token
      */
     public function getType(): int
     {
-        trigger_deprecation('twig/twig', '3.19', \sprintf('The "%s()" method is deprecated.', __METHOD__));
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.19', \sprintf('The "%s()" method is deprecated.', __METHOD__));
 
         return $this->type;
     }
 
-    /**
-     * @return mixed
-     */
     public function getValue()
     {
         return $this->value;

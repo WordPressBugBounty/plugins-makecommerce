@@ -3,7 +3,7 @@ Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
 Tested up to: 6.8.1
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,13 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.3 2025-06-26 =
+* Feature - No country requirement in checkout
+* Tweak - Shipping+ setup page HTML
+* Tweak - Improved Twig compatibility with other plugins
+* Fix - Improved destination country changing and shipping prices
+* Fix - Deprecated function calls in legacy code
 
 = 4.0.2 2025-06-18 =
 * Feature - Added support for "Does not fit" parcel machine checkbox

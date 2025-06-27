@@ -25,7 +25,7 @@ class Activator
 
         // Save install status
         if (!$table_exists) {
-            update_option('makecommerce_install_status', 'new_install');
+            add_option('makecommerce_install_status', 'new_install');
             update_option('mc_shipping_plus', 'yes');
             //Create table
             $wpdb->query

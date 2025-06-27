@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Test;
@@ -41,7 +39,7 @@ abstract class NodeTestCase extends TestCase
      */
     public static function provideTests(): iterable
     {
-        trigger_deprecation('twig/twig', '3.13', 'Not implementing "%s()" in "%s" is deprecated. This method will be abstract in 4.0.', __METHOD__, static::class);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.13', 'Not implementing "%s()" in "%s" is deprecated. This method will be abstract in 4.0.', __METHOD__, static::class);
 
         return [];
     }
@@ -103,7 +101,7 @@ abstract class NodeTestCase extends TestCase
      */
     protected function getVariableGetter($name, $line = false)
     {
-        trigger_deprecation('twig/twig', '3.13', 'Method "%s()" is deprecated, use "createVariableGetter()" instead.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.13', 'Method "%s()" is deprecated, use "createVariableGetter()" instead.', __METHOD__);
 
         return self::createVariableGetter($name, $line);
     }
@@ -122,7 +120,7 @@ abstract class NodeTestCase extends TestCase
      */
     protected function getAttributeGetter()
     {
-        trigger_deprecation('twig/twig', '3.13', 'Method "%s()" is deprecated, use "createAttributeGetter()" instead.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.13', 'Method "%s()" is deprecated, use "createAttributeGetter()" instead.', __METHOD__);
 
         return self::createAttributeGetter();
     }
@@ -138,7 +136,7 @@ abstract class NodeTestCase extends TestCase
     {
         $r = new \ReflectionMethod(static::class, 'getTests');
         if (self::class !== $r->getDeclaringClass()->getName()) {
-            trigger_deprecation('twig/twig', '3.13', 'Implementing "%s::getTests()" in "%s" is deprecated, implement "provideTests()" instead.', self::class, static::class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.13', 'Implementing "%s::getTests()" in "%s" is deprecated, implement "provideTests()" instead.', self::class, static::class);
         }
     }
 }

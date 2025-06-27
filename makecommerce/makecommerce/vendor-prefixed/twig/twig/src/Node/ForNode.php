@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node;
@@ -34,11 +32,11 @@ class ForNode extends Node
         $body = new Nodes([$body, $this->loop = new ForLoopNode($lineno)]);
 
         if (null !== $ifexpr) {
-            trigger_deprecation('twig/twig', '3.19', \sprintf('Passing not-null to the "ifexpr" argument of the "%s" constructor is deprecated.', static::class));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.19', \sprintf('Passing not-null to the "ifexpr" argument of the "%s" constructor is deprecated.', static::class));
         }
 
         if (null !== $else && !$else instanceof ForElseNode) {
-            trigger_deprecation('twig/twig', '3.19', \sprintf('Not passing an instance of "%s" to the "else" argument of the "%s" constructor is deprecated.', ForElseNode::class, static::class));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.19', \sprintf('Not passing an instance of "%s" to the "else" argument of the "%s" constructor is deprecated.', ForElseNode::class, static::class));
 
             $else = new ForElseNode($else, $else->getTemplateLine());
         }

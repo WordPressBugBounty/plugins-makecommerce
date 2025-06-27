@@ -5,7 +5,12 @@ jQuery(function () {
 	jQuery(document).on('updated_checkout', initPickupPointInjection);
 });
 
-
+// Temporary workaround, custom theme
+jQuery(document).ajaxSuccess(function(event, xhr, settings) {
+	if (settings.url.includes('admin-ajax.php') && settings.data?.includes('action=uae_woo_checkout_update_order_review')) {
+		initPickupPointInjection();
+	}
+});
 
 function initPickupPointInjection() {
 	jQuery('.makecommerce-shipping-container').remove();
@@ -17,9 +22,8 @@ function initPickupPointInjection() {
 
 	const carrier = method.split('_')[2];
 	const country = jQuery('#mcCustomerCountry').val();
-	const widthPx = (jQuery('table.shop_table').width() - 40) + 'px';
 
-	const $select = insertLoadingSelect(carrier, widthPx);
+	const $select = insertLoadingSelect(carrier);
 
 	jQuery.ajax({
 		url: '/wp-admin/admin-ajax.php',
@@ -31,7 +35,7 @@ function initPickupPointInjection() {
 			selected_machine: ''
 		},
 		success: function (response) {
-			populatePickupPointSelect($select, response.machines, widthPx);
+			populatePickupPointSelect($select, response.machines);
 		},
 		error: function (error) {
 			console.error(error);
@@ -39,7 +43,8 @@ function initPickupPointInjection() {
 	});
 }
 
-function insertLoadingSelect(carrier, widthPx) {
+
+function insertLoadingSelect(carrier) {
 	const select = document.createElement('select');
 	select.className = 'pickup-point-select-box';
 	select.name = '_mc_machine_id';
@@ -52,33 +57,24 @@ function insertLoadingSelect(carrier, widthPx) {
 	const div = document.createElement('div');
 	div.id = `makecommerce-shipping-${carrier}-container`;
 	div.className = 'mcSelectContainer';
+	div.style.padding = '0 5px';
+	div.style.maxWidth = getWidth();
+
 	div.appendChild(select);
 
-	const tr = document.createElement('tr');
-	tr.className = 'makecommerce-shipping-container';
-
-	const td = document.createElement('td');
-	td.className = 'pickup_point_checkout';
-	td.colSpan = 2;
-	td.appendChild(div);
-	tr.appendChild(td);
-
-	const $shippingTotals = jQuery('.woocommerce-shipping-totals.shipping');
-	if ($shippingTotals.length > 0) {
-		$shippingTotals.last().after(tr);
-	}
+	injectSelectBox(div);
 
 	const $selectBox = jQuery(select).prop('disabled', true);
 	applySelectBox($selectBox, {
 		placeholder: placeholderText,
-		width: widthPx,
+		width: '100%',
 		minimumResultsForSearch: Infinity
 	});
 
 	return $selectBox;
 }
 
-function populatePickupPointSelect($select, machines, widthPx) {
+function populatePickupPointSelect($select, machines) {
 	$select.empty();
 	$select.prop('disabled', false)
 	const placeholderText = MC_PARCELMACHINE_JS['placeholder'] ?? 'Select pickup point';
@@ -107,7 +103,7 @@ function populatePickupPointSelect($select, machines, widthPx) {
 
 	applySelectBox($select, {
 		placeholder: placeholderText,
-		width: widthPx,
+		width: '100%',
 		dropdownAutoWidth: true,
 		dropdownCssClass: 'mcShippingSelectDropdown',
 		templateResult: customOption
@@ -142,3 +138,69 @@ function focusSelect2Search(select) {
 		setTimeout(() => searchField?.focus(), 300);
 	});
 }
+
+function getWidth() {
+	const shippingWidth = jQuery('.woocommerce-shipping-totals').width();
+	if (shippingWidth) return shippingWidth + 'px';
+
+	const methodParentWidth = jQuery('.woocommerce-shipping-methods').parent().width();
+	if (methodParentWidth) return methodParentWidth + 'px';
+
+	// Fallback width
+	return '300px';
+}
+
+// Various fallbacks where to inject the MakeCommerce selectBox
+function injectSelectBox(div) {
+	const $tableData = jQuery('.makecommerce-pickuppoint-table-data');
+
+	if ($tableData.length > 0) {
+		return wrapAndAppend(div, $tableData);
+	}
+
+	const $shippingTotals = jQuery('.woocommerce-shipping-totals.shipping');
+	if ($shippingTotals.length > 0) {
+		return injectAfterShippingTotals(div, $shippingTotals);
+	}
+
+	const $methods = jQuery('.woocommerce-shipping-methods');
+	if ($methods.length > 0) {
+		return wrapAndInsertAfter(div, $methods.parent());
+	}
+
+	const $fallbackInput = jQuery('input.shipping_method:checked').filter(function () {
+		return this.value.includes('mc_pickuppoint');
+	});
+
+	if ($fallbackInput.length > 0) {
+		return wrapAndInsertAfter(div, $fallbackInput.parent(), 'li');
+	}
+
+	console.warn('No suitable element found for pickup point injection');
+}
+
+function wrapAndAppend(div, $target) {
+	const container = document.createElement('div');
+	container.className = 'makecommerce-shipping-container';
+	container.appendChild(div);
+	$target.append(container);
+}
+
+function injectAfterShippingTotals(div, $target) {
+	const tr = document.createElement('tr');
+	tr.className = 'makecommerce-shipping-container';
+	const td = document.createElement('td');
+	td.className = 'pickup_point_checkout';
+	td.colSpan = 2;
+	td.appendChild(div);
+	tr.appendChild(td);
+	$target.last().after(tr);
+}
+
+function wrapAndInsertAfter(div, $target, tag = 'div') {
+	const container = document.createElement(tag);
+	container.className = 'makecommerce-shipping-container';
+	container.appendChild(div);
+	$target.after(container);
+}
+

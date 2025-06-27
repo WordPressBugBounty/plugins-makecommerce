@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Extension;
@@ -120,10 +118,6 @@ final class SandboxExtension extends AbstractExtension
     }
 
     /**
-     * @param mixed $obj
-     *
-     * @return mixed
-     *
      * @throws SecurityNotAllowedMethodError
      */
     public function ensureToStringAllowed($obj, int $lineno = -1, ?Source $source = null)

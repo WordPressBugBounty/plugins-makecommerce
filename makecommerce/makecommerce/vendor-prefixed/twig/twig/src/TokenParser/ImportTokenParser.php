@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -30,7 +28,7 @@ final class ImportTokenParser extends AbstractTokenParser
 {
     public function parse(Token $token): Node
     {
-        $macro = $this->parser->getExpressionParser()->parseExpression();
+        $macro = $this->parser->parseExpression();
         $this->parser->getStream()->expect(Token::NAME_TYPE, 'as');
         $name = $this->parser->getStream()->expect(Token::NAME_TYPE)->getValue();
         $var = new AssignTemplateVariable(new TemplateVariable($name, $token->getLine()), $this->parser->isMainScope());

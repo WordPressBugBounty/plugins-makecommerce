@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Loader;
@@ -106,7 +104,7 @@ final class ChainLoader implements LoaderInterface
             try {
                 return $loader->getCacheKey($name);
             } catch (LoaderError $e) {
-                $exceptions[] = \get_class($loader).': '.$e->getMessage();
+                $exceptions[] = $loader::class.': '.$e->getMessage();
             }
         }
 
@@ -125,7 +123,7 @@ final class ChainLoader implements LoaderInterface
             try {
                 return $loader->isFresh($name, $time);
             } catch (LoaderError $e) {
-                $exceptions[] = \get_class($loader).': '.$e->getMessage();
+                $exceptions[] = $loader::class.': '.$e->getMessage();
             }
         }
 

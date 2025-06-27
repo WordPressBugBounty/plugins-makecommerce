@@ -7,13 +7,15 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
 
+use MakeCommercePrefix\Twig\Lexer;
+use MakeCommercePrefix\Twig\Node\Expression\Variable\AssignContextVariable;
+use MakeCommercePrefix\Twig\Node\Nodes;
 use MakeCommercePrefix\Twig\Parser;
+use MakeCommercePrefix\Twig\Token;
 
 /**
  * Base class for all token parsers.
@@ -30,5 +32,30 @@ abstract class AbstractTokenParser implements TokenParserInterface
     public function setParser(Parser $parser): void
     {
         $this->parser = $parser;
+    }
+
+    /**
+     * Parses an assignment expression like "a, b".
+     */
+    protected function parseAssignmentExpression(): Nodes
+    {
+        $stream = $this->parser->getStream();
+        $targets = [];
+        while (true) {
+            $token = $stream->getCurrent();
+            if ($stream->test(Token::OPERATOR_TYPE) && preg_match(Lexer::REGEX_NAME, $token->getValue())) {
+                // in this context, string operators are variable names
+                $stream->next();
+            } else {
+                $stream->expect(Token::NAME_TYPE, null, 'Only variables can be assigned to');
+            }
+            $targets[] = new AssignContextVariable($token->getValue(), $token->getLine());
+
+            if (!$stream->nextIf(Token::PUNCTUATION_TYPE, ',')) {
+                break;
+            }
+        }
+
+        return new Nodes($targets);
     }
 }

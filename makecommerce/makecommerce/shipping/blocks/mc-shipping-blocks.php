@@ -11,10 +11,26 @@ final class MakeCommerceShippingBlocks {
         require_once __DIR__ . '/mc-shipping-blocks-blocks-integration.php';
 
         add_action( 'woocommerce_init', [ $this, 'register_store_api_data' ] );
+        add_action( 'woocommerce_init', [ $this, 'blocks_update_checkout_country' ] );
         add_action( 'woocommerce_blocks_checkout_block_registration', [ $this, 'register_checkout_block' ] );
         add_action( 'woocommerce_store_api_checkout_update_order_from_request', [ $this, 'update_order_shipping_meta' ], 10, 2 );
         add_action( 'woocommerce_thankyou', [$this, 'pickup_point_details'] );
     }
+
+    public function blocks_update_checkout_country(): void {
+        woocommerce_store_api_register_update_callback(
+            [
+                'namespace' => self::EXTENSION_NAMESPACE,
+                'callback'  => function( $data ) {
+                    if ( isset($data['country']) ) {
+                        $country = sanitize_text_field( $data['country'] );
+                        WC()->customer->set_shipping_country( $country );
+                        WC()->customer->save();
+                    }
+                }
+            ]);
+    }
+
 
 
     public function register_checkout_block( $registry ): void {
@@ -98,6 +114,10 @@ final class MakeCommerceShippingBlocks {
         $machine_id = $order->get_meta('_mc_machine_id', true);
         $carrier = $order->get_meta('_mc_shipping_carrier', true);
         $country = $order->get_shipping_country();
+
+        if (empty($country) && function_exists( 'WC' ) && WC()->countries ) {
+            $country = WC()->countries->get_base_country();
+        }
 
         if ( empty( $carrier ) ) {
             return;

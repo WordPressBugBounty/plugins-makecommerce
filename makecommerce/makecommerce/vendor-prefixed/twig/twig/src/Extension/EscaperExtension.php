@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Extension;
@@ -74,7 +72,7 @@ final class EscaperExtension extends AbstractExtension
     {
         $triggerDeprecation = \func_num_args() > 1 ? func_get_arg(1) : true;
         if ($triggerDeprecation) {
-            trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated and not needed if you are using methods from "MakeCommercePrefix\Twig\Runtime\EscaperRuntime".', __METHOD__);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated and not needed if you are using methods from "MakeCommercePrefix\Twig\Runtime\EscaperRuntime".', __METHOD__);
         }
 
         $this->environment = $environment;
@@ -88,7 +86,7 @@ final class EscaperExtension extends AbstractExtension
      */
     public function setEscaperRuntime(EscaperRuntime $escaper)
     {
-        trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated and not needed if you are using methods from "MakeCommercePrefix\Twig\Runtime\EscaperRuntime".', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated and not needed if you are using methods from "MakeCommercePrefix\Twig\Runtime\EscaperRuntime".', __METHOD__);
 
         $this->escaper = $escaper;
     }
@@ -140,7 +138,7 @@ final class EscaperExtension extends AbstractExtension
      */
     public function setEscaper($strategy, callable $callable)
     {
-        trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::setEscaper()" method instead (be warned that Environment is not passed anymore to the callable).', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::setEscaper()" method instead (be warned that Environment is not passed anymore to the callable).', __METHOD__);
 
         if (!isset($this->environment)) {
             throw new \LogicException(\sprintf('You must call "setEnvironment()" before calling "%s()".', __METHOD__));
@@ -163,7 +161,7 @@ final class EscaperExtension extends AbstractExtension
      */
     public function getEscapers()
     {
-        trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::getEscaper()" method instead.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::getEscaper()" method instead.', __METHOD__);
 
         return $this->escapers;
     }
@@ -175,7 +173,7 @@ final class EscaperExtension extends AbstractExtension
      */
     public function setSafeClasses(array $safeClasses = [])
     {
-        trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::setSafeClasses()" method instead.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::setSafeClasses()" method instead.', __METHOD__);
 
         if (!isset($this->escaper)) {
             throw new \LogicException(\sprintf('You must call "setEnvironment()" before calling "%s()".', __METHOD__));
@@ -191,7 +189,7 @@ final class EscaperExtension extends AbstractExtension
      */
     public function addSafeClass(string $class, array $strategies)
     {
-        trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::addSafeClass()" method instead.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.10', 'The "%s()" method is deprecated, use the "MakeCommercePrefix\Twig\Runtime\EscaperRuntime::addSafeClass()" method instead.', __METHOD__);
 
         if (!isset($this->escaper)) {
             throw new \LogicException(\sprintf('You must call "setEnvironment()" before calling "%s()".', __METHOD__));

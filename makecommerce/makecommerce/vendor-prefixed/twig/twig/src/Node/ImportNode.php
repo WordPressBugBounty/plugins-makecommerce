@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node;
@@ -30,11 +28,11 @@ class ImportNode extends Node
     public function __construct(AbstractExpression $expr, AbstractExpression|AssignTemplateVariable $var, int $lineno)
     {
         if (\func_num_args() > 3) {
-            trigger_deprecation('twig/twig', '3.15', \sprintf('Passing more than 3 arguments to "%s()" is deprecated.', __METHOD__));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', \sprintf('Passing more than 3 arguments to "%s()" is deprecated.', __METHOD__));
         }
 
         if (!$var instanceof AssignTemplateVariable) {
-            trigger_deprecation('twig/twig', '3.15', \sprintf('Passing a "%s" instance as the second argument of "%s" is deprecated, pass a "%s" instead.', $var::class, __CLASS__, AssignTemplateVariable::class));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', \sprintf('Passing a "%s" instance as the second argument of "%s" is deprecated, pass a "%s" instead.', $var::class, __CLASS__, AssignTemplateVariable::class));
 
             $var = new AssignTemplateVariable($var->getAttribute('name'), $lineno);
         }
@@ -50,10 +48,8 @@ class ImportNode extends Node
             $compiler->raw('$this');
         } else {
             $compiler
-                ->raw('$this->loadTemplate(')
+                ->raw('$this->load(')
                 ->subcompile($this->getNode('expr'))
-                ->raw(', ')
-                ->repr($this->getTemplateName())
                 ->raw(', ')
                 ->repr($this->getTemplateLine())
                 ->raw(')->unwrap()')

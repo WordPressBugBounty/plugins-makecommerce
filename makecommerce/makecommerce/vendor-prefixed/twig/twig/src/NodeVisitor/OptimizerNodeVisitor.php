@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\NodeVisitor;
@@ -61,11 +59,11 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
         }
 
         if (-1 !== $optimizers && self::OPTIMIZE_RAW_FILTER === (self::OPTIMIZE_RAW_FILTER & $optimizers)) {
-            trigger_deprecation('twig/twig', '3.11', 'The "MakeCommercePrefix\Twig\NodeVisitor\OptimizerNodeVisitor::OPTIMIZE_RAW_FILTER" option is deprecated and does nothing.');
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.11', 'The "MakeCommercePrefix\Twig\NodeVisitor\OptimizerNodeVisitor::OPTIMIZE_RAW_FILTER" option is deprecated and does nothing.');
         }
 
         if (-1 !== $optimizers && self::OPTIMIZE_TEXT_NODES === (self::OPTIMIZE_TEXT_NODES & $optimizers)) {
-            trigger_deprecation('twig/twig', '3.12', 'The "MakeCommercePrefix\Twig\NodeVisitor\OptimizerNodeVisitor::OPTIMIZE_TEXT_NODES" option is deprecated and does nothing.');
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'The "MakeCommercePrefix\Twig\NodeVisitor\OptimizerNodeVisitor::OPTIMIZE_TEXT_NODES" option is deprecated and does nothing.');
         }
     }
 
@@ -145,7 +143,7 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
         }
 
         // optimize access to loop targets
-        elseif ($node instanceof ContextVariable && \in_array($node->getAttribute('name'), $this->loopsTargets)) {
+        elseif ($node instanceof ContextVariable && \in_array($node->getAttribute('name'), $this->loopsTargets, true)) {
             $node->setAttribute('always_defined', true);
         }
 

@@ -1,9 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace MakeCommercePrefix\GuzzleHttp;
 
@@ -55,7 +50,7 @@ function debug_resource($value = null)
  *
  * The returned handler is not wrapped by any default middlewares.
  *
- * @return callable(\MakeCommercePrefix\Psr\Http\Message\RequestInterface, array): \MakeCommercePrefix\GuzzleHttp\Promise\PromiseInterface Returns the best handler for the given system.
+ * @return callable(\MakeCommercePrefix\Psr\Http\Message\RequestInterface, array): Promise\PromiseInterface Returns the best handler for the given system.
  *
  * @throws \RuntimeException if no viable Handler is available.
  *

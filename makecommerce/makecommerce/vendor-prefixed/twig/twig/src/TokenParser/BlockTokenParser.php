@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -55,7 +53,7 @@ final class BlockTokenParser extends AbstractTokenParser
             }
         } else {
             $body = new Nodes([
-                new PrintNode($this->parser->getExpressionParser()->parseExpression(), $lineno),
+                new PrintNode($this->parser->parseExpression(), $lineno),
             ]);
         }
         $stream->expect(Token::BLOCK_END_TYPE);

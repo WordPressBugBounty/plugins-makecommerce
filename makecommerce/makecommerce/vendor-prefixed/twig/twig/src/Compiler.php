@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig;
@@ -76,7 +74,7 @@ class Compiler
             $node->compile($this);
 
             if ($this->didUseEcho) {
-                trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[\MakeCommercePrefix\Twig\Attribute\YieldReady].', $this->didUseEcho, \get_class($node));
+                makecommerceprefix_trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[\MakeCommercePrefix\Twig\Attribute\YieldReady].', $this->didUseEcho, $node::class);
             }
 
             return $this;
@@ -101,7 +99,7 @@ class Compiler
             $node->compile($this);
 
             if ($this->didUseEcho) {
-                trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[\MakeCommercePrefix\Twig\Attribute\YieldReady].', $this->didUseEcho, \get_class($node));
+                makecommerceprefix_trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[\MakeCommercePrefix\Twig\Attribute\YieldReady].', $this->didUseEcho, $node::class);
             }
 
             return $this;

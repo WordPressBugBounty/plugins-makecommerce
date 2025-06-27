@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\NodeVisitor;
@@ -32,7 +30,7 @@ final class YieldNotReadyNodeVisitor implements NodeVisitorInterface
 
     public function enterNode(Node $node, Environment $env): Node
     {
-        $class = \get_class($node);
+        $class = $node::class;
 
         if ($node instanceof AbstractExpression || isset($this->yieldReadyNodes[$class])) {
             return $node;
@@ -43,7 +41,7 @@ final class YieldNotReadyNodeVisitor implements NodeVisitorInterface
                 throw new \LogicException(\sprintf('You cannot enable the "use_yield" option of Twig as node "%s" is not marked as ready for it; please make it ready and then flag it with the #[\MakeCommercePrefix\Twig\Attribute\YieldReady] attribute.', $class));
             }
 
-            trigger_deprecation('twig/twig', '3.9', 'Twig node "%s" is not marked as ready for using "yield" instead of "echo"; please make it ready and then flag it with the #[\MakeCommercePrefix\Twig\Attribute\YieldReady] attribute.', $class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.9', 'Twig node "%s" is not marked as ready for using "yield" instead of "echo"; please make it ready and then flag it with the #[\MakeCommercePrefix\Twig\Attribute\YieldReady] attribute.', $class);
         }
 
         return $node;

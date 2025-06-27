@@ -90,30 +90,32 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <hr class="my-4">
-        <div class="offset-3 col-6 g-5">
-            {% if setupSelection %}
-                <button class="w-100 btn btn-primary btn-lg" type="submit" name="setup_selection" value="mc_product">
-                    {{ __('Setup', 'wc_makecommerce_domain') }}
-                </button>
-            {% else %}
-                <button class="w-100 btn btn-primary btn-lg" type="submit" name="product_selection" value="mc_product">
-                    {{ __('Save', 'wc_makecommerce_domain') }}
-                </button>
-            {% endif %}
-        </div>
-
-        {% if not newInstall %}
-            <div class="col-8 offset-2 text-center mt-3">
-                <form method="post" novalidate>
-                    <button type="submit" name="switch" value="switch_to_old"
-                            class="btn btn-link p-0 m-0 align-baseline" style="font-size: 0.9rem; text-decoration: underline;">
-                        {{ __('Switch back to old module', 'wc_makecommerce_domain') }}
+            <hr class="my-4">
+            <div class="offset-3 col-6 g-5">
+                {% if setupSelection %}
+                    <button class="w-100 btn btn-primary btn-lg" type="submit" name="setup_selection" value="mc_product">
+                        {{ __('Setup', 'wc_makecommerce_domain') }}
                     </button>
-                </form>
+                {% else %}
+                    <button class="w-100 btn btn-primary btn-lg" type="submit" name="product_selection" value="mc_product">
+                        {{ __('Save', 'wc_makecommerce_domain') }}
+                    </button>
+                {% endif %}
             </div>
-        {% endif %}
+        </div>
+
     </form>
+
+    {% if not newInstall %}
+        <div class="col-8 offset-2 text-center mt-3">
+            <form method="post" novalidate>
+                <button type="submit" name="switch" value="switch_to_old"
+                        class="btn btn-link p-0 m-0 align-baseline" style="font-size: 0.9rem; text-decoration: underline;">
+                    {{ __('Switch back to old module', 'wc_makecommerce_domain') }}
+                </button>
+            </form>
+        </div>
+    {% endif %}
+
 {% endblock %}

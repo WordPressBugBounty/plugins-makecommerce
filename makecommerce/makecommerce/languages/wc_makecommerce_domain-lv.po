@@ -438,3 +438,7 @@ msgstr "Neder pakomātam"
 #: shipping/product.php:62
 msgid "When this is checked, parcel machine shipping option is not available for a cart with this product"
 msgstr "Kad šis ir atzīmēts, piegādes veids pakomāts nebūs pieejams pirkuma grozam, kas saturēs šo produktu"
+
+#: admin/templates/credentialsContent.twig:4
+msgid "Sandbox"
+msgstr "Testēt"

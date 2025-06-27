@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -38,7 +36,7 @@ final class ExtendsTokenParser extends AbstractTokenParser
             throw new SyntaxError('Cannot use "extend" in a macro.', $token->getLine(), $stream->getSourceContext());
         }
 
-        $this->parser->setParent($this->parser->getExpressionParser()->parseExpression());
+        $this->parser->setParent($this->parser->parseExpression());
 
         $stream->expect(Token::BLOCK_END_TYPE);
 

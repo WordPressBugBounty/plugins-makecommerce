@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node;
@@ -38,7 +36,16 @@ final class ModuleNode extends Node
     public function __construct(Node $body, ?AbstractExpression $parent, Node $blocks, Node $macros, Node $traits, $embeddedTemplates, Source $source)
     {
         if (!$body instanceof BodyNode) {
-            trigger_deprecation('twig/twig', '3.12', \sprintf('Not passing a "%s" instance as the "body" argument of the "%s" constructor is deprecated.', BodyNode::class, static::class));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', \sprintf('Not passing a "%s" instance as the "body" argument of the "%s" constructor is deprecated.', BodyNode::class, static::class));
+        }
+        if (!$embeddedTemplates instanceof Node) {
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.21', \sprintf('Not passing a "%s" instance as the "embedded_templates" argument of the "%s" constructor is deprecated.', Node::class, static::class));
+
+            if (null !== $embeddedTemplates) {
+                $embeddedTemplates = new Nodes($embeddedTemplates);
+            } else {
+                $embeddedTemplates = new EmptyNode();
+            }
         }
 
         $nodes = [
@@ -136,10 +143,8 @@ final class ModuleNode extends Node
             $compiler->subcompile($parent);
         } else {
             $compiler
-                ->raw('$this->loadTemplate(')
+                ->raw('$this->load(')
                 ->subcompile($parent)
-                ->raw(', ')
-                ->repr($this->getSourceContext()->getName())
                 ->raw(', ')
                 ->repr($parent->getTemplateLine())
                 ->raw(')')
@@ -220,10 +225,8 @@ final class ModuleNode extends Node
 
                 $compiler
                     ->addDebugInfo($node)
-                    ->write(\sprintf('$_trait_%s = $this->loadTemplate(', $i))
+                    ->write(\sprintf('$_trait_%s = $this->load(', $i))
                     ->subcompile($node)
-                    ->raw(', ')
-                    ->repr($node->getTemplateName())
                     ->raw(', ')
                     ->repr($node->getTemplateLine())
                     ->raw(");\n")
@@ -355,10 +358,8 @@ final class ModuleNode extends Node
             $compiler->addDebugInfo($parent);
             if ($parent instanceof ConstantExpression) {
                 $compiler
-                    ->write('$this->parent = $this->loadTemplate(')
+                    ->write('$this->parent = $this->load(')
                     ->subcompile($parent)
-                    ->raw(', ')
-                    ->repr($this->getSourceContext()->getName())
                     ->raw(', ')
                     ->repr($parent->getTemplateLine())
                     ->raw(");\n")

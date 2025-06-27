@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression;
@@ -19,7 +17,7 @@ use MakeCommercePrefix\Twig\Node\NameDeprecation;
 use MakeCommercePrefix\Twig\Node\Node;
 use MakeCommercePrefix\Twig\TwigTest;
 
-class TestExpression extends CallExpression
+class TestExpression extends CallExpression implements ReturnBoolInterface
 {
     #[FirstClassTwigCallableReady]
     /**
@@ -28,7 +26,7 @@ class TestExpression extends CallExpression
     public function __construct(Node $node, string|TwigTest $test, ?Node $arguments, int $lineno)
     {
         if (!$node instanceof AbstractExpression) {
-            trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance to the "node" argument of "%s" is deprecated ("%s" given).', AbstractExpression::class, static::class, \get_class($node));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance to the "node" argument of "%s" is deprecated ("%s" given).', AbstractExpression::class, static::class, $node::class);
         }
 
         $nodes = ['node' => $node];
@@ -40,7 +38,7 @@ class TestExpression extends CallExpression
             $name = $test->getName();
         } else {
             $name = $test;
-            trigger_deprecation('twig/twig', '3.12', 'Not passing an instance of "TwigTest" when creating a "%s" test of type "%s" is deprecated.', $name, static::class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Not passing an instance of "TwigTest" when creating a "%s" test of type "%s" is deprecated.', $name, static::class);
         }
 
         parent::__construct($nodes, ['name' => $name, 'type' => 'test'], $lineno);
@@ -61,7 +59,7 @@ class TestExpression extends CallExpression
         if ($this->hasAttribute('twig_callable')) {
             $name = $this->getAttribute('twig_callable')->getName();
             if ($name !== $this->getAttribute('name')) {
-                trigger_deprecation('twig/twig', '3.12', 'Changing the value of a "test" node in a NodeVisitor class is not supported anymore.');
+                makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Changing the value of a "test" node in a NodeVisitor class is not supported anymore.');
                 $this->removeAttribute('twig_callable');
             }
         }

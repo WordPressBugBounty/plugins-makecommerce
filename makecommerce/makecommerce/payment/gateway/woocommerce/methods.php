@@ -207,8 +207,8 @@ class Methods
 
         ?>
         <div class="mb-3">
-            <label for="makecommerce_customer_country" class="d-none"></label>
-            <select class="form-select" name="makecommerce_country_picker" id="makecommerce_customer_country">
+            <label for="makecommerce_customer_country_picker" class="d-none"></label>
+            <select class="form-select" name="makecommerce_country_picker" id="makecommerce_customer_country_picker">
                 <?php foreach (array_keys($this->banklinks_grouped) as $country): ?>
                     <option value="<?php echo $country; ?>" <?php if ($this->get_default_country() == $country) echo 'selected'; ?>>
                         <?php echo __($this->get_country_name_from_code($country), 'wc_makecommerce_domain'); ?>

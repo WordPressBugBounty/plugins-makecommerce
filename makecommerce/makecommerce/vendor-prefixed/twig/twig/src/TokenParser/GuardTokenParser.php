@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -28,7 +26,7 @@ final class GuardTokenParser extends AbstractTokenParser
     {
         $stream = $this->parser->getStream();
         $typeToken = $stream->expect(Token::NAME_TYPE);
-        if (!\in_array($typeToken->getValue(), ['function', 'filter', 'test'])) {
+        if (!\in_array($typeToken->getValue(), ['function', 'filter', 'test'], true)) {
             throw new SyntaxError(\sprintf('Supported guard types are function, filter and test, "%s" given.', $typeToken->getValue()), $typeToken->getLine(), $stream->getSourceContext());
         }
         $method = 'get'.$typeToken->getValue();

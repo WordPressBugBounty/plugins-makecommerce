@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -34,7 +32,7 @@ final class AutoEscapeTokenParser extends AbstractTokenParser
         if ($stream->test(Token::BLOCK_END_TYPE)) {
             $value = 'html';
         } else {
-            $expr = $this->parser->getExpressionParser()->parseExpression();
+            $expr = $this->parser->parseExpression();
             if (!$expr instanceof ConstantExpression) {
                 throw new SyntaxError('An escaping strategy must be a string or false.', $stream->getCurrent()->getLine(), $stream->getSourceContext());
             }

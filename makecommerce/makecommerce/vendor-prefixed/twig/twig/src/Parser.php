@@ -8,13 +8,17 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig;
 
 use MakeCommercePrefix\Twig\Error\SyntaxError;
+use MakeCommercePrefix\Twig\ExpressionParser\ExpressionParserInterface;
+use MakeCommercePrefix\Twig\ExpressionParser\ExpressionParsers;
+use MakeCommercePrefix\Twig\ExpressionParser\ExpressionParserType;
+use MakeCommercePrefix\Twig\ExpressionParser\InfixExpressionParserInterface;
+use MakeCommercePrefix\Twig\ExpressionParser\Prefix\LiteralExpressionParser;
+use MakeCommercePrefix\Twig\ExpressionParser\PrefixExpressionParserInterface;
 use MakeCommercePrefix\Twig\Node\BlockNode;
 use MakeCommercePrefix\Twig\Node\BlockReferenceNode;
 use MakeCommercePrefix\Twig\Node\BodyNode;
@@ -39,6 +43,7 @@ use MakeCommercePrefix\Twig\Util\ReflectionCallable;
 class Parser
 {
     private $stack = [];
+    private ?\WeakMap $expressionRefs = null;
     private $stream;
     private $parent;
     private $visitors;
@@ -51,10 +56,12 @@ class Parser
     private $embeddedTemplates = [];
     private $varNameSalt = 0;
     private $ignoreUnknownTwigCallables = false;
+    private ExpressionParsers $parsers;
 
     public function __construct(
         private Environment $env,
     ) {
+        $this->parsers = $env->getExpressionParsers();
     }
 
     public function getEnvironment(): Environment
@@ -64,7 +71,7 @@ class Parser
 
     public function getVarName(): string
     {
-        trigger_deprecation('twig/twig', '3.15', 'The "%s()" method is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'The "%s()" method is deprecated.', __METHOD__);
 
         return \sprintf('__internal_parse_%d', $this->varNameSalt++);
     }
@@ -80,10 +87,6 @@ class Parser
             $this->visitors = $this->env->getNodeVisitors();
         }
 
-        if (null === $this->expressionParser) {
-            $this->expressionParser = new ExpressionParser($this, $this->env);
-        }
-
         $this->stream = $stream;
         $this->parent = null;
         $this->blocks = [];
@@ -92,6 +95,7 @@ class Parser
         $this->blockStack = [];
         $this->importedSymbols = [[]];
         $this->embeddedTemplates = [];
+        $this->expressionRefs = new \WeakMap();
 
         try {
             $body = $this->subparse($test, $dropNeedle);
@@ -109,9 +113,19 @@ class Parser
             }
 
             throw $e;
+        } finally {
+            $this->expressionRefs = null;
         }
 
-        $node = new ModuleNode(new BodyNode([$body]), $this->parent, new Nodes($this->blocks), new Nodes($this->macros), new Nodes($this->traits), $this->embeddedTemplates, $stream->getSourceContext());
+        $node = new ModuleNode(
+            new BodyNode([$body]),
+            $this->parent,
+            $this->blocks ? new Nodes($this->blocks) : new EmptyNode(),
+            $this->macros ? new Nodes($this->macros) : new EmptyNode(),
+            $this->traits ? new Nodes($this->traits) : new EmptyNode(),
+            $this->embeddedTemplates ? new Nodes($this->embeddedTemplates) : new EmptyNode(),
+            $stream->getSourceContext(),
+        );
 
         $traverser = new NodeTraverser($this->env, $this->visitors);
 
@@ -157,7 +171,7 @@ class Parser
 
                 case $this->stream->getCurrent()->test(Token::VAR_START_TYPE):
                     $token = $this->stream->next();
-                    $expr = $this->expressionParser->parseExpression();
+                    $expr = $this->parseExpression();
                     $this->stream->expect(Token::VAR_END_TYPE);
                     $rv[] = new PrintNode($expr, $token->getLine());
                     break;
@@ -203,7 +217,7 @@ class Parser
                     $subparser->setParser($this);
                     $node = $subparser->parse($token);
                     if (!$node) {
-                        trigger_deprecation('twig/twig', '3.12', 'Returning "null" from "%s" is deprecated and forbidden by "TokenParserInterface".', $subparser::class);
+                        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Returning "null" from "%s" is deprecated and forbidden by "TokenParserInterface".', $subparser::class);
                     } else {
                         $node->setNodeTag($subparser->getTag());
                         $rv[] = $node;
@@ -224,7 +238,7 @@ class Parser
 
     public function getBlockStack(): array
     {
-        trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
 
         return $this->blockStack;
     }
@@ -249,14 +263,14 @@ class Parser
 
     public function hasBlock(string $name): bool
     {
-        trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
 
         return isset($this->blocks[$name]);
     }
 
     public function getBlock(string $name): Node
     {
-        trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
 
         return $this->blocks[$name];
     }
@@ -272,7 +286,7 @@ class Parser
 
     public function hasMacro(string $name): bool
     {
-        trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
 
         return isset($this->macros[$name]);
     }
@@ -289,7 +303,7 @@ class Parser
 
     public function hasTraits(): bool
     {
-        trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
 
         return \count($this->traits) > 0;
     }
@@ -307,7 +321,7 @@ class Parser
     public function addImportedSymbol(string $type, string $alias, ?string $name = null, AbstractExpression|AssignTemplateVariable|null $internalRef = null): void
     {
         if ($internalRef && !$internalRef instanceof AssignTemplateVariable) {
-            trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance as an internal reference is deprecated ("%s" given).', __METHOD__, AssignTemplateVariable::class, $internalRef::class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance as an internal reference is deprecated ("%s" given).', __METHOD__, AssignTemplateVariable::class, $internalRef::class);
 
             $internalRef = new AssignTemplateVariable(new TemplateVariable($internalRef->getAttribute('name'), $internalRef->getTemplateLine()), $internalRef->getAttribute('global'));
         }
@@ -339,14 +353,45 @@ class Parser
         array_shift($this->importedSymbols);
     }
 
+    /**
+     * @deprecated since Twig 3.21
+     */
     public function getExpressionParser(): ExpressionParser
     {
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.21', 'Method "%s()" is deprecated, use "parseExpression()" instead.', __METHOD__);
+
+        if (null === $this->expressionParser) {
+            $this->expressionParser = new ExpressionParser($this, $this->env);
+        }
+
         return $this->expressionParser;
+    }
+
+    public function parseExpression(int $precedence = 0): AbstractExpression
+    {
+        $token = $this->getCurrentToken();
+        if ($token->test(Token::OPERATOR_TYPE) && $ep = $this->parsers->getByName(PrefixExpressionParserInterface::class, $token->getValue())) {
+            $this->getStream()->next();
+            $expr = $ep->parse($this, $token);
+            $this->checkPrecedenceDeprecations($ep, $expr);
+        } else {
+            $expr = $this->parsers->getByClass(LiteralExpressionParser::class)->parse($this, $token);
+        }
+
+        $token = $this->getCurrentToken();
+        while ($token->test(Token::OPERATOR_TYPE) && ($ep = $this->parsers->getByName(InfixExpressionParserInterface::class, $token->getValue())) && $ep->getPrecedence() >= $precedence) {
+            $this->getStream()->next();
+            $expr = $ep->parse($this, $expr, $token);
+            $this->checkPrecedenceDeprecations($ep, $expr);
+            $token = $this->getCurrentToken();
+        }
+
+        return $expr;
     }
 
     public function getParent(): ?Node
     {
-        trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Method "%s()" is deprecated.', __METHOD__);
 
         return $this->parent;
     }
@@ -362,7 +407,7 @@ class Parser
     public function setParent(?Node $parent): void
     {
         if (null === $parent) {
-            trigger_deprecation('twig/twig', '3.12', 'Passing "null" to "%s()" is deprecated.', __METHOD__);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Passing "null" to "%s()" is deprecated.', __METHOD__);
         }
 
         if (null !== $this->parent) {
@@ -380,6 +425,98 @@ class Parser
     public function getCurrentToken(): Token
     {
         return $this->stream->getCurrent();
+    }
+
+    public function getFunction(string $name, int $line): TwigFunction
+    {
+        try {
+            $function = $this->env->getFunction($name);
+        } catch (SyntaxError $e) {
+            if (!$this->shouldIgnoreUnknownTwigCallables()) {
+                throw $e;
+            }
+
+            $function = null;
+        }
+
+        if (!$function) {
+            if ($this->shouldIgnoreUnknownTwigCallables()) {
+                return new TwigFunction($name, fn () => '');
+            }
+            $e = new SyntaxError(\sprintf('Unknown "%s" function.', $name), $line, $this->stream->getSourceContext());
+            $e->addSuggestions($name, array_keys($this->env->getFunctions()));
+
+            throw $e;
+        }
+
+        if ($function->isDeprecated()) {
+            $src = $this->stream->getSourceContext();
+            $function->triggerDeprecation($src->getPath() ?: $src->getName(), $line);
+        }
+
+        return $function;
+    }
+
+    public function getFilter(string $name, int $line): TwigFilter
+    {
+        try {
+            $filter = $this->env->getFilter($name);
+        } catch (SyntaxError $e) {
+            if (!$this->shouldIgnoreUnknownTwigCallables()) {
+                throw $e;
+            }
+
+            $filter = null;
+        }
+        if (!$filter) {
+            if ($this->shouldIgnoreUnknownTwigCallables()) {
+                return new TwigFilter($name, fn () => '');
+            }
+            $e = new SyntaxError(\sprintf('Unknown "%s" filter.', $name), $line, $this->stream->getSourceContext());
+            $e->addSuggestions($name, array_keys($this->env->getFilters()));
+
+            throw $e;
+        }
+
+        if ($filter->isDeprecated()) {
+            $src = $this->stream->getSourceContext();
+            $filter->triggerDeprecation($src->getPath() ?: $src->getName(), $line);
+        }
+
+        return $filter;
+    }
+
+    public function getTest(int $line): TwigTest
+    {
+        $name = $this->stream->expect(Token::NAME_TYPE)->getValue();
+
+        if ($this->stream->test(Token::NAME_TYPE)) {
+            // try 2-words tests
+            $name = $name.' '.$this->getCurrentToken()->getValue();
+
+            if ($test = $this->env->getTest($name)) {
+                $this->stream->next();
+            }
+        } else {
+            $test = $this->env->getTest($name);
+        }
+
+        if (!$test) {
+            if ($this->shouldIgnoreUnknownTwigCallables()) {
+                return new TwigTest($name, fn () => '');
+            }
+            $e = new SyntaxError(\sprintf('Unknown "%s" test.', $name), $line, $this->stream->getSourceContext());
+            $e->addSuggestions($name, array_keys($this->env->getTests()));
+
+            throw $e;
+        }
+
+        if ($test->isDeprecated()) {
+            $src = $this->stream->getSourceContext();
+            $test->triggerDeprecation($src->getPath() ?: $src->getName(), $this->stream->getCurrent()->getLine());
+        }
+
+        return $test;
     }
 
     private function filterBodyNodes(Node $node, bool $nested = false): ?Node
@@ -420,7 +557,7 @@ class Parser
         // here, $nested means "being at the root level of a child template"
         // we need to discard the wrapping "Node" for the "body" node
         // Node::class !== \get_class($node) should be removed in Twig 4.0
-        $nested = $nested || (Node::class !== \get_class($node) && !$node instanceof Nodes);
+        $nested = $nested || (Node::class !== $node::class && !$node instanceof Nodes);
         foreach ($node as $k => $n) {
             if (null !== $n && null === $this->filterBodyNodes($n, $nested)) {
                 $node->removeNode($k);
@@ -428,5 +565,44 @@ class Parser
         }
 
         return $node;
+    }
+
+    private function checkPrecedenceDeprecations(ExpressionParserInterface $expressionParser, AbstractExpression $expr)
+    {
+        $this->expressionRefs[$expr] = $expressionParser;
+        $precedenceChanges = $this->parsers->getPrecedenceChanges();
+
+        // Check that the all nodes that are between the 2 precedences have explicit parentheses
+        if (!isset($precedenceChanges[$expressionParser])) {
+            return;
+        }
+
+        if ($expr->hasExplicitParentheses()) {
+            return;
+        }
+
+        if ($expressionParser instanceof PrefixExpressionParserInterface) {
+            /** @var AbstractExpression $node */
+            $node = $expr->getNode('node');
+            foreach ($precedenceChanges as $ep => $changes) {
+                if (!\in_array($expressionParser, $changes, true)) {
+                    continue;
+                }
+                if (isset($this->expressionRefs[$node]) && $ep === $this->expressionRefs[$node]) {
+                    $change = $expressionParser->getPrecedenceChange();
+                    makecommerceprefix_trigger_deprecation($change->getPackage(), $change->getVersion(), \sprintf('As the "%s" %s operator will change its precedence in the next major version, add explicit parentheses to avoid behavior change in "%s" at line %d.', $expressionParser->getName(), ExpressionParserType::getType($expressionParser)->value, $this->getStream()->getSourceContext()->getName(), $node->getTemplateLine()));
+                }
+            }
+        }
+
+        foreach ($precedenceChanges[$expressionParser] as $ep) {
+            foreach ($expr as $node) {
+                /** @var AbstractExpression $node */
+                if (isset($this->expressionRefs[$node]) && $ep === $this->expressionRefs[$node] && !$node->hasExplicitParentheses()) {
+                    $change = $ep->getPrecedenceChange();
+                    makecommerceprefix_trigger_deprecation($change->getPackage(), $change->getVersion(), \sprintf('As the "%s" %s operator will change its precedence in the next major version, add explicit parentheses to avoid behavior change in "%s" at line %d.', $ep->getName(), ExpressionParserType::getType($ep)->value, $this->getStream()->getSourceContext()->getName(), $node->getTemplateLine()));
+                }
+            }
+        }
     }
 }

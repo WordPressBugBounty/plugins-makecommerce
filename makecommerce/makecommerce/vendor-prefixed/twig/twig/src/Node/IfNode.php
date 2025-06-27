@@ -8,14 +8,15 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node;
 
 use MakeCommercePrefix\Twig\Attribute\YieldReady;
 use MakeCommercePrefix\Twig\Compiler;
+use MakeCommercePrefix\Twig\Node\Expression\ReturnPrimitiveTypeInterface;
+use MakeCommercePrefix\Twig\Node\Expression\Test\TrueTest;
+use MakeCommercePrefix\Twig\TwigTest;
 
 /**
  * Represents an if node.
@@ -27,6 +28,12 @@ class IfNode extends Node
 {
     public function __construct(Node $tests, ?Node $else, int $lineno)
     {
+        for ($i = 0, $count = \count($tests); $i < $count; $i += 2) {
+            $test = $tests->getNode((string) $i);
+            if (!$test instanceof ReturnPrimitiveTypeInterface) {
+                $tests->setNode($i, new TrueTest($test, new TwigTest('true'), null, $test->getTemplateLine()));
+            }
+        }
         $nodes = ['tests' => $tests];
         if (null !== $else) {
             $nodes['else'] = $else;

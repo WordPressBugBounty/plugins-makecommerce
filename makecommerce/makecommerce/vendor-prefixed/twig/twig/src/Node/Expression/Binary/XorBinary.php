@@ -8,15 +8,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression\Binary;
 
 use MakeCommercePrefix\Twig\Compiler;
+use MakeCommercePrefix\Twig\Node\Expression\ReturnBoolInterface;
 
-class XorBinary extends AbstractBinary
+class XorBinary extends AbstractBinary implements ReturnBoolInterface
 {
     public function operator(Compiler $compiler): Compiler
     {

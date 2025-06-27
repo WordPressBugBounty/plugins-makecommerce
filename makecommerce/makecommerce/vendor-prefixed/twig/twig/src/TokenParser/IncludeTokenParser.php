@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -32,7 +30,7 @@ class IncludeTokenParser extends AbstractTokenParser
 {
     public function parse(Token $token): Node
     {
-        $expr = $this->parser->getExpressionParser()->parseExpression();
+        $expr = $this->parser->parseExpression();
 
         [$variables, $only, $ignoreMissing] = $this->parseArguments();
 
@@ -55,7 +53,7 @@ class IncludeTokenParser extends AbstractTokenParser
 
         $variables = null;
         if ($stream->nextIf(Token::NAME_TYPE, 'with')) {
-            $variables = $this->parser->getExpressionParser()->parseExpression();
+            $variables = $this->parser->parseExpression();
         }
 
         $only = false;

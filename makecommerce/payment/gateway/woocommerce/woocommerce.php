@@ -11,7 +11,7 @@ class WooCommerce extends Gateway {
     use Creditcard;
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
-    public $version = '4.0.2';
+    public $version = '4.0.3';
     
     public $payment_return_url;
     public $payment_return_url_m2m;
@@ -600,7 +600,7 @@ class WooCommerce extends Gateway {
 
 		if ( $mc_version != $version ) {
 			// Get payment methods
-			$methods = WooCommerce\Banklink::get_payment_methods();
+			$methods = self::get_payment_methods();
 
 			// Drop tables
 			$sql = "DROP TABLE IF EXISTS `".$banklinks_table."`";
@@ -610,7 +610,7 @@ class WooCommerce extends Gateway {
 			\MakeCommerce\Activator::activate();
 
 			// Update tables
-			$update = WooCommerce\Banklink::insert_payment_methods( $methods );
+			$update = self::insert_payment_methods( $methods );
 
 			// Add version into wp_options
 			if ( $mc_version === 'unset' ) {

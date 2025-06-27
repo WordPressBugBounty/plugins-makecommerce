@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -33,7 +31,7 @@ final class WithTokenParser extends AbstractTokenParser
         $variables = null;
         $only = false;
         if (!$stream->test(Token::BLOCK_END_TYPE)) {
-            $variables = $this->parser->getExpressionParser()->parseExpression();
+            $variables = $this->parser->parseExpression();
             $only = (bool) $stream->nextIf(Token::NAME_TYPE, 'only');
         }
 

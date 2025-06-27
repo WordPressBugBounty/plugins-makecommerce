@@ -1,4 +1,4 @@
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 
 const fetchCarrierMachines = async (carrier, selectedCountry) => {
     const response = await fetch('/wp-admin/admin-ajax.php', {
@@ -38,10 +38,11 @@ export const usePickupOptions = ({
                                      setSelectedPickupPoint,
                                      setExtensionData,
                                  }) => {
-    useEffect(() => {
-        setSelectedPickupPoint(null);
-        setPickupPointOptions([])
+    // If country and rate id are same, then do not fetch the machines.
+    const previousRateRef = useRef('');
+    const previousCountryRef = useRef('');
 
+    useEffect(() => {
         const currentPackage = shippingRates?.[0];
         if (!currentPackage) return;
 
@@ -62,9 +63,21 @@ export const usePickupOptions = ({
         const carrier = rateId.split('_')[2];
         if (!carrier) return;
 
+        if (previousRateRef.current === rateId &&
+            previousCountryRef.current === selectedCountry) {
+            // No changes, skip fetching
+            setIsMcShipping(true);
+            return;
+        }
+        previousRateRef.current = rateId;
+        previousCountryRef.current = selectedCountry;
+
         setExtensionData('makecommerce', 'shipping_method', rateId);
         setIsMcShipping(true);
         setLoading(true);
+        // reset fields, fetch machines
+        setPickupPointOptions([]);
+        setSelectedPickupPoint(null);
 
         fetchCarrierMachines(carrier, selectedCountry)
             .then((data) => {

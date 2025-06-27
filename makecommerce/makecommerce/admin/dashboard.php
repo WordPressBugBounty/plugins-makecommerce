@@ -314,7 +314,7 @@ class Dashboard
             );
             update_option('mc_credentials_error', '');
         } catch (\Exception $e) {
-            $label = $api_mode === 'test' ? 'sandbox' : 'live';
+            $label = $api_mode === 'test' ? __('Sandbox', 'wc_makecommerce_domain') : __('Live', 'wc_makecommerce_domain');
             update_option('mc_credentials_error',
                 sprintf(
                     /* translators: %s: Environment name */

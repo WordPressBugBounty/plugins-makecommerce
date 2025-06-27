@@ -7,13 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression;
 
 use MakeCommercePrefix\Twig\Compiler;
+use MakeCommercePrefix\Twig\Error\SyntaxError;
+use MakeCommercePrefix\Twig\Node\Expression\Variable\AssignContextVariable;
+use MakeCommercePrefix\Twig\Node\Expression\Variable\ContextVariable;
 use MakeCommercePrefix\Twig\Node\Node;
 
 /**
@@ -25,6 +26,14 @@ class ArrowFunctionExpression extends AbstractExpression
 {
     public function __construct(AbstractExpression $expr, Node $names, $lineno)
     {
+        if (!$names instanceof ListExpression && !$names instanceof ContextVariable) {
+            throw new SyntaxError('The arrow function argument must be a list of variables or a single variable.', $names->getTemplateLine(), $names->getSourceContext());
+        }
+
+        if ($names instanceof ContextVariable) {
+            $names = new ListExpression([new AssignContextVariable($names->getAttribute('name'), $names->getTemplateLine())], $lineno);
+        }
+
         parent::__construct(['expr' => $expr, 'names' => $names], [], $lineno);
     }
 
@@ -33,19 +42,7 @@ class ArrowFunctionExpression extends AbstractExpression
         $compiler
             ->addDebugInfo($this)
             ->raw('function (')
-        ;
-        foreach ($this->getNode('names') as $i => $name) {
-            if ($i) {
-                $compiler->raw(', ');
-            }
-
-            $compiler
-                ->raw('$__')
-                ->raw($name->getAttribute('name'))
-                ->raw('__')
-            ;
-        }
-        $compiler
+            ->subcompile($this->getNode('names'))
             ->raw(') use ($context, $macros) { ')
         ;
         foreach ($this->getNode('names') as $name) {

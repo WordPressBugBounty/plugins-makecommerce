@@ -437,3 +437,7 @@ msgstr "Ei sobi pakiautomaati"
 #: shipping/product.php:62
 msgid "When this is checked, parcel machine shipping option is not available for a cart with this product"
 msgstr "Kui see on märgitud, siis ostukorvile selle tootega pakiautomaate tarneviisina ei pakuta"
+
+#: admin/templates/credentialsContent.twig:4
+msgid "Sandbox"
+msgstr "Test"

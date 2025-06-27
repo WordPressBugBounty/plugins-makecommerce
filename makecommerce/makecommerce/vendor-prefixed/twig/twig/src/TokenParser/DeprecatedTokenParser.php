@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -35,8 +33,7 @@ final class DeprecatedTokenParser extends AbstractTokenParser
     public function parse(Token $token): Node
     {
         $stream = $this->parser->getStream();
-        $expressionParser = $this->parser->getExpressionParser();
-        $expr = $expressionParser->parseExpression();
+        $expr = $this->parser->parseExpression();
         $node = new DeprecatedNode($expr, $token->getLine());
 
         while ($stream->test(Token::NAME_TYPE)) {
@@ -46,10 +43,10 @@ final class DeprecatedTokenParser extends AbstractTokenParser
 
             switch ($k) {
                 case 'package':
-                    $node->setNode('package', $expressionParser->parseExpression());
+                    $node->setNode('package', $this->parser->parseExpression());
                     break;
                 case 'version':
-                    $node->setNode('version', $expressionParser->parseExpression());
+                    $node->setNode('version', $this->parser->parseExpression());
                     break;
                 default:
                     throw new SyntaxError(\sprintf('Unknown "%s" option.', $k), $stream->getCurrent()->getLine(), $stream->getSourceContext());

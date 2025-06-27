@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression;
@@ -17,8 +15,11 @@ namespace MakeCommercePrefix\Twig\Node\Expression;
 use MakeCommercePrefix\Twig\Compiler;
 use MakeCommercePrefix\Twig\Node\Expression\Variable\ContextVariable;
 
-class NameExpression extends AbstractExpression
+class NameExpression extends AbstractExpression implements SupportDefinedTestInterface
 {
+    use SupportDefinedTestDeprecationTrait;
+    use SupportDefinedTestTrait;
+
     private $specialVars = [
         '_self' => '$this->getTemplateName()',
         '_context' => '$context',
@@ -28,10 +29,10 @@ class NameExpression extends AbstractExpression
     public function __construct(string $name, int $lineno)
     {
         if (self::class === static::class) {
-            trigger_deprecation('twig/twig', '3.15', 'The "%s" class is deprecated, use "%s" instead.', self::class, ContextVariable::class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', 'The "%s" class is deprecated, use "%s" instead.', self::class, ContextVariable::class);
         }
 
-        parent::__construct([], ['name' => $name, 'is_defined_test' => false, 'ignore_strict_check' => false, 'always_defined' => false], $lineno);
+        parent::__construct([], ['name' => $name, 'ignore_strict_check' => false, 'always_defined' => false], $lineno);
     }
 
     public function compile(Compiler $compiler): void
@@ -40,7 +41,7 @@ class NameExpression extends AbstractExpression
 
         $compiler->addDebugInfo($this);
 
-        if ($this->getAttribute('is_defined_test')) {
+        if ($this->definedTest) {
             if (isset($this->specialVars[$name]) || $this->getAttribute('always_defined')) {
                 $compiler->repr(true);
             } elseif (\PHP_VERSION_ID >= 70400) {
@@ -97,7 +98,7 @@ class NameExpression extends AbstractExpression
      */
     public function isSpecial()
     {
-        trigger_deprecation('twig/twig', '3.11', 'The "%s()" method is deprecated and will be removed in Twig 4.0.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.11', 'The "%s()" method is deprecated and will be removed in Twig 4.0.', __METHOD__);
 
         return isset($this->specialVars[$this->getAttribute('name')]);
     }
@@ -107,8 +108,8 @@ class NameExpression extends AbstractExpression
      */
     public function isSimple()
     {
-        trigger_deprecation('twig/twig', '3.11', 'The "%s()" method is deprecated and will be removed in Twig 4.0.', __METHOD__);
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.11', 'The "%s()" method is deprecated and will be removed in Twig 4.0.', __METHOD__);
 
-        return !$this->isSpecial() && !$this->getAttribute('is_defined_test');
+        return !isset($this->specialVars[$this->getAttribute('name')]) && !$this->definedTest;
     }
 }

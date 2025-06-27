@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression\Test;
@@ -17,7 +15,7 @@ use MakeCommercePrefix\Twig\Compiler;
 use MakeCommercePrefix\Twig\Node\Expression\TestExpression;
 
 /**
- * Checks that a variable is null.
+ * Checks that an expression is null.
  *
  *  {{ var is none }}
  *

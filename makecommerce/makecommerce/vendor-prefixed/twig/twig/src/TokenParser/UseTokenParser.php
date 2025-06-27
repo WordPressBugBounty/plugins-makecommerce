@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\TokenParser;
@@ -38,7 +36,7 @@ final class UseTokenParser extends AbstractTokenParser
 {
     public function parse(Token $token): Node
     {
-        $template = $this->parser->getExpressionParser()->parseExpression();
+        $template = $this->parser->parseExpression();
         $stream = $this->parser->getStream();
 
         if (!$template instanceof ConstantExpression) {

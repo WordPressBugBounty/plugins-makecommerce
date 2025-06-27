@@ -483,6 +483,11 @@ class API {
             plugin_dir_url(__DIR__) . 'makecommerce/assets/bootstrap.5.3.3.min.css'
         );
 
+        wp_enqueue_style(
+            'shipping-confirm',
+            'https://static.maksekeskus.ee/modules/woocommerce/css/shipping-confirm.css'
+        );
+
         wp_enqueue_script(
             'makecommerce-bootstrap',
             plugin_dir_url(__DIR__) . 'makecommerce/assets/bootstrap.bundle.min.js',
@@ -536,6 +541,7 @@ class API {
         ) {
             update_option('mc_shipping_plus_confirmed', 'yes');
             update_option('mc_shipping_plus', 'yes');
+            update_option('makecommerce_install_status', 'upgrade');
             $this->mc_shipping_plus_creds_migration();
             wp_redirect(admin_url('admin.php?page=makecommerce_dashboard'));
             exit;

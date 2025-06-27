@@ -7,10 +7,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-
 namespace MakeCommercePrefix\Twig;
 
 use MakeCommercePrefix\Twig\Cache\CacheInterface;
@@ -21,6 +18,7 @@ use MakeCommercePrefix\Twig\Error\Error;
 use MakeCommercePrefix\Twig\Error\LoaderError;
 use MakeCommercePrefix\Twig\Error\RuntimeError;
 use MakeCommercePrefix\Twig\Error\SyntaxError;
+use MakeCommercePrefix\Twig\ExpressionParser\ExpressionParsers;
 use MakeCommercePrefix\Twig\Extension\CoreExtension;
 use MakeCommercePrefix\Twig\Extension\EscaperExtension;
 use MakeCommercePrefix\Twig\Extension\ExtensionInterface;
@@ -29,8 +27,6 @@ use MakeCommercePrefix\Twig\Extension\YieldNotReadyExtension;
 use MakeCommercePrefix\Twig\Loader\ArrayLoader;
 use MakeCommercePrefix\Twig\Loader\ChainLoader;
 use MakeCommercePrefix\Twig\Loader\LoaderInterface;
-use MakeCommercePrefix\Twig\Node\Expression\Binary\AbstractBinary;
-use MakeCommercePrefix\Twig\Node\Expression\Unary\AbstractUnary;
 use MakeCommercePrefix\Twig\Node\ModuleNode;
 use MakeCommercePrefix\Twig\Node\Node;
 use MakeCommercePrefix\Twig\NodeVisitor\NodeVisitorInterface;
@@ -38,7 +34,6 @@ use MakeCommercePrefix\Twig\Runtime\EscaperRuntime;
 use MakeCommercePrefix\Twig\RuntimeLoader\FactoryRuntimeLoader;
 use MakeCommercePrefix\Twig\RuntimeLoader\RuntimeLoaderInterface;
 use MakeCommercePrefix\Twig\TokenParser\TokenParserInterface;
-
 /**
  * Stores the Twig configuration and renders templates.
  *
@@ -46,13 +41,12 @@ use MakeCommercePrefix\Twig\TokenParser\TokenParserInterface;
  */
 class Environment
 {
-    public const VERSION = '3.20.0';
-    public const VERSION_ID = 32000;
+    public const VERSION = '3.21.1';
+    public const VERSION_ID = 32101;
     public const MAJOR_VERSION = 3;
-    public const MINOR_VERSION = 20;
-    public const RELEASE_VERSION = 0;
+    public const MINOR_VERSION = 21;
+    public const RELEASE_VERSION = 1;
     public const EXTRA_VERSION = '';
-
     private $charset;
     private $loader;
     private $debug;
@@ -75,7 +69,6 @@ class Environment
     private $useYield;
     private $defaultRuntimeLoader;
     private array $hotCache = [];
-
     /**
      * Constructor.
      *
@@ -114,18 +107,7 @@ class Environment
     public function __construct(LoaderInterface $loader, array $options = [])
     {
         $this->setLoader($loader);
-
-        $options = array_merge([
-            'debug' => false,
-            'charset' => 'UTF-8',
-            'strict_variables' => false,
-            'autoescape' => 'html',
-            'cache' => false,
-            'auto_reload' => null,
-            'optimizations' => -1,
-            'use_yield' => false,
-        ], $options);
-
+        $options = array_merge(['debug' => false, 'charset' => 'UTF-8', 'strict_variables' => false, 'autoescape' => 'html', 'cache' => false, 'auto_reload' => null, 'optimizations' => -1, 'use_yield' => false], $options);
         $this->useYield = (bool) $options['use_yield'];
         $this->debug = (bool) $options['debug'];
         $this->setCharset($options['charset'] ?? 'UTF-8');
@@ -133,10 +115,9 @@ class Environment
         $this->strictVariables = (bool) $options['strict_variables'];
         $this->setCache($options['cache']);
         $this->extensionSet = new ExtensionSet();
-        $this->defaultRuntimeLoader = new FactoryRuntimeLoader([
-            EscaperRuntime::class => function () { return new EscaperRuntime($this->charset); },
-        ]);
-
+        $this->defaultRuntimeLoader = new FactoryRuntimeLoader([EscaperRuntime::class => function () {
+            return new EscaperRuntime($this->charset);
+        }]);
         $this->addExtension(new CoreExtension());
         $escaperExt = new EscaperExtension($options['autoescape']);
         $escaperExt->setEnvironment($this, false);
@@ -146,7 +127,6 @@ class Environment
         }
         $this->addExtension(new OptimizerExtension($options['optimizations']));
     }
-
     /**
      * @internal
      */
@@ -154,7 +134,6 @@ class Environment
     {
         return $this->useYield;
     }
-
     /**
      * Enables debugging mode.
      *
@@ -165,7 +144,6 @@ class Environment
         $this->debug = true;
         $this->updateOptionsHash();
     }
-
     /**
      * Disables debugging mode.
      *
@@ -176,7 +154,6 @@ class Environment
         $this->debug = false;
         $this->updateOptionsHash();
     }
-
     /**
      * Checks if debug mode is enabled.
      *
@@ -186,7 +163,6 @@ class Environment
     {
         return $this->debug;
     }
-
     /**
      * Enables the auto_reload option.
      *
@@ -196,7 +172,6 @@ class Environment
     {
         $this->autoReload = true;
     }
-
     /**
      * Disables the auto_reload option.
      *
@@ -206,7 +181,6 @@ class Environment
     {
         $this->autoReload = false;
     }
-
     /**
      * Checks if the auto_reload option is enabled.
      *
@@ -216,7 +190,6 @@ class Environment
     {
         return $this->autoReload;
     }
-
     /**
      * Enables the strict_variables option.
      *
@@ -227,7 +200,6 @@ class Environment
         $this->strictVariables = true;
         $this->updateOptionsHash();
     }
-
     /**
      * Disables the strict_variables option.
      *
@@ -238,7 +210,6 @@ class Environment
         $this->strictVariables = false;
         $this->updateOptionsHash();
     }
-
     /**
      * Checks if the strict_variables option is enabled.
      *
@@ -248,19 +219,16 @@ class Environment
     {
         return $this->strictVariables;
     }
-
     public function removeCache(string $name): void
     {
         $cls = $this->getTemplateClass($name);
-        $this->hotCache[$name] = $cls.'_'.bin2hex(random_bytes(16));
-
+        $this->hotCache[$name] = $cls . '_' . bin2hex(random_bytes(16));
         if ($this->cache instanceof RemovableCacheInterface) {
             $this->cache->remove($name, $cls);
         } else {
             throw new \LogicException(\sprintf('The "%s" cache class does not support removing template cache as it does not implement the "RemovableCacheInterface" interface.', \get_class($this->cache)));
         }
     }
-
     /**
      * Gets the current cache implementation.
      *
@@ -274,7 +242,6 @@ class Environment
     {
         return $original ? $this->originalCache : $this->cache;
     }
-
     /**
      * Sets the current cache implementation.
      *
@@ -298,7 +265,6 @@ class Environment
             throw new \LogicException('Cache can only be a string, false, or a \Twig\Cache\CacheInterface implementation.');
         }
     }
-
     /**
      * Gets the template class associated with the given string.
      *
@@ -317,11 +283,9 @@ class Environment
      */
     public function getTemplateClass(string $name, ?int $index = null): string
     {
-        $key = ($this->hotCache[$name] ?? $this->getLoader()->getCacheKey($name)).$this->optionsHash;
-
-        return '__TwigTemplate_'.hash(\PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128', $key).(null === $index ? '' : '___'.$index);
+        $key = ($this->hotCache[$name] ?? $this->getLoader()->getCacheKey($name)) . $this->optionsHash;
+        return '__TwigTemplate_' . hash(\PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128', $key) . (null === $index ? '' : '___' . $index);
     }
-
     /**
      * Renders a template.
      *
@@ -335,7 +299,6 @@ class Environment
     {
         return $this->load($name)->render($context);
     }
-
     /**
      * Displays a template.
      *
@@ -349,7 +312,6 @@ class Environment
     {
         $this->load($name)->display($context);
     }
-
     /**
      * Loads a template.
      *
@@ -365,14 +327,11 @@ class Environment
             return $name;
         }
         if ($name instanceof Template) {
-            trigger_deprecation('twig/twig', '3.9', 'Passing a "%s" instance to "%s" is deprecated.', self::class, __METHOD__);
-
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.9', 'Passing a "%s" instance to "%s" is deprecated.', self::class, __METHOD__);
             return $name;
         }
-
         return new TemplateWrapper($this, $this->loadTemplate($this->getTemplateClass($name), $name));
     }
-
     /**
      * Loads a template internal representation.
      *
@@ -392,20 +351,16 @@ class Environment
     {
         $mainCls = $cls;
         if (null !== $index) {
-            $cls .= '___'.$index;
+            $cls .= '___' . $index;
         }
-
         if (isset($this->loadedTemplates[$cls])) {
             return $this->loadedTemplates[$cls];
         }
-
         if (!class_exists($cls, false)) {
             $key = $this->cache->generateKey($name, $mainCls);
-
             if (!$this->isAutoReload() || $this->isTemplateFresh($name, $this->cache->getTimestamp($key))) {
                 $this->cache->load($key);
             }
-
             if (!class_exists($cls, false)) {
                 $source = $this->getLoader()->getSourceContext($name);
                 $content = $this->compileSource($source);
@@ -413,27 +368,22 @@ class Environment
                     $this->cache->write($key, $content);
                     $this->cache->load($key);
                 }
-
                 if (!class_exists($mainCls, false)) {
                     /* Last line of defense if either $this->bcWriteCacheFile was used,
                      * $this->cache is implemented as a no-op or we have a race condition
                      * where the cache was cleared between the above calls to write to and load from
                      * the cache.
                      */
-                    eval('?>'.$content);
+                    eval('?>' . $content);
                 }
-
                 if (!class_exists($cls, false)) {
                     throw new RuntimeError(\sprintf('Failed to load Twig template "%s", index "%s": cache might be corrupted.', $name, $index), -1, $source);
                 }
             }
         }
-
         $this->extensionSet->initRuntime();
-
         return $this->loadedTemplates[$cls] = new $cls($this);
     }
-
     /**
      * Creates a template from source.
      *
@@ -453,12 +403,7 @@ class Environment
         } else {
             $name = \sprintf('__string_template__%s', $hash);
         }
-
-        $loader = new ChainLoader([
-            new ArrayLoader([$name => $template]),
-            $current = $this->getLoader(),
-        ]);
-
+        $loader = new ChainLoader([new ArrayLoader([$name => $template]), $current = $this->getLoader()]);
         $this->setLoader($loader);
         try {
             return new TemplateWrapper($this, $this->loadTemplate($this->getTemplateClass($name), $name));
@@ -466,7 +411,6 @@ class Environment
             $this->setLoader($current);
         }
     }
-
     /**
      * Returns true if the template is still fresh.
      *
@@ -480,7 +424,6 @@ class Environment
     {
         return $this->extensionSet->getLastModified() <= $time && $this->getLoader()->isFresh($name, $time);
     }
-
     /**
      * Tries to load a template consecutively from an array.
      *
@@ -497,28 +440,22 @@ class Environment
         if (!\is_array($names)) {
             return $this->load($names);
         }
-
         $count = \count($names);
         foreach ($names as $name) {
             if ($name instanceof Template) {
-                trigger_deprecation('twig/twig', '3.9', 'Passing a "%s" instance to "%s" is deprecated.', Template::class, __METHOD__);
-
+                makecommerceprefix_trigger_deprecation('twig/twig', '3.9', 'Passing a "%s" instance to "%s" is deprecated.', Template::class, __METHOD__);
                 return new TemplateWrapper($this, $name);
             }
             if ($name instanceof TemplateWrapper) {
                 return $name;
             }
-
             if (1 !== $count && !$this->getLoader()->exists($name)) {
                 continue;
             }
-
             return $this->load($name);
         }
-
         throw new LoaderError(\sprintf('Unable to find one of the following templates: "%s".', implode('", "', $names)));
     }
-
     /**
      * @return void
      */
@@ -526,7 +463,6 @@ class Environment
     {
         $this->lexer = $lexer;
     }
-
     /**
      * @throws SyntaxError When the code is syntactically wrong
      */
@@ -535,10 +471,8 @@ class Environment
         if (null === $this->lexer) {
             $this->lexer = new Lexer($this);
         }
-
         return $this->lexer->tokenize($source);
     }
-
     /**
      * @return void
      */
@@ -546,7 +480,6 @@ class Environment
     {
         $this->parser = $parser;
     }
-
     /**
      * Converts a token stream to a node tree.
      *
@@ -557,10 +490,8 @@ class Environment
         if (null === $this->parser) {
             $this->parser = new Parser($this);
         }
-
         return $this->parser->parse($stream);
     }
-
     /**
      * @return void
      */
@@ -568,7 +499,6 @@ class Environment
     {
         $this->compiler = $compiler;
     }
-
     /**
      * Compiles a node and returns the PHP code.
      */
@@ -577,10 +507,8 @@ class Environment
         if (null === $this->compiler) {
             $this->compiler = new Compiler($this);
         }
-
         return $this->compiler->compile($node)->getSource();
     }
-
     /**
      * Compiles a template source code.
      *
@@ -597,7 +525,6 @@ class Environment
             throw new SyntaxError(\sprintf('An exception has been thrown during the compilation of a template ("%s").', $e->getMessage()), -1, $source, $e);
         }
     }
-
     /**
      * @return void
      */
@@ -605,12 +532,10 @@ class Environment
     {
         $this->loader = $loader;
     }
-
     public function getLoader(): LoaderInterface
     {
         return $this->loader;
     }
-
     /**
      * @return void
      */
@@ -620,20 +545,16 @@ class Environment
             // iconv on Windows requires "UTF-8" instead of "UTF8"
             $charset = 'UTF-8';
         }
-
         $this->charset = $charset;
     }
-
     public function getCharset(): string
     {
         return $this->charset;
     }
-
     public function hasExtension(string $class): bool
     {
         return $this->extensionSet->hasExtension($class);
     }
-
     /**
      * @return void
      */
@@ -641,7 +562,6 @@ class Environment
     {
         $this->runtimeLoaders[] = $loader;
     }
-
     /**
      * @template TExtension of ExtensionInterface
      *
@@ -653,7 +573,6 @@ class Environment
     {
         return $this->extensionSet->getExtension($class);
     }
-
     /**
      * Returns the runtime implementation of a Twig element (filter/function/tag/test).
      *
@@ -670,20 +589,16 @@ class Environment
         if (isset($this->runtimes[$class])) {
             return $this->runtimes[$class];
         }
-
         foreach ($this->runtimeLoaders as $loader) {
             if (null !== $runtime = $loader->load($class)) {
                 return $this->runtimes[$class] = $runtime;
             }
         }
-
         if (null !== $runtime = $this->defaultRuntimeLoader->load($class)) {
             return $this->runtimes[$class] = $runtime;
         }
-
         throw new RuntimeError(\sprintf('Unable to load the "%s" runtime.', $class));
     }
-
     /**
      * @return void
      */
@@ -692,7 +607,6 @@ class Environment
         $this->extensionSet->addExtension($extension);
         $this->updateOptionsHash();
     }
-
     /**
      * @param ExtensionInterface[] $extensions An array of extensions
      *
@@ -703,7 +617,6 @@ class Environment
         $this->extensionSet->setExtensions($extensions);
         $this->updateOptionsHash();
     }
-
     /**
      * @return ExtensionInterface[] An array of extensions (keys are for internal usage only and should not be relied on)
      */
@@ -711,7 +624,6 @@ class Environment
     {
         return $this->extensionSet->getExtensions();
     }
-
     /**
      * @return void
      */
@@ -719,7 +631,6 @@ class Environment
     {
         $this->extensionSet->addTokenParser($parser);
     }
-
     /**
      * @return TokenParserInterface[]
      *
@@ -729,7 +640,6 @@ class Environment
     {
         return $this->extensionSet->getTokenParsers();
     }
-
     /**
      * @internal
      */
@@ -737,7 +647,6 @@ class Environment
     {
         return $this->extensionSet->getTokenParser($name);
     }
-
     /**
      * @param callable(string): (TokenParserInterface|false) $callable
      */
@@ -745,7 +654,6 @@ class Environment
     {
         $this->extensionSet->registerUndefinedTokenParserCallback($callable);
     }
-
     /**
      * @return void
      */
@@ -753,7 +661,6 @@ class Environment
     {
         $this->extensionSet->addNodeVisitor($visitor);
     }
-
     /**
      * @return NodeVisitorInterface[]
      *
@@ -763,7 +670,6 @@ class Environment
     {
         return $this->extensionSet->getNodeVisitors();
     }
-
     /**
      * @return void
      */
@@ -771,7 +677,6 @@ class Environment
     {
         $this->extensionSet->addFilter($filter);
     }
-
     /**
      * @internal
      */
@@ -779,7 +684,6 @@ class Environment
     {
         return $this->extensionSet->getFilter($name);
     }
-
     /**
      * @param callable(string): (TwigFilter|false) $callable
      */
@@ -787,13 +691,12 @@ class Environment
     {
         $this->extensionSet->registerUndefinedFilterCallback($callable);
     }
-
     /**
      * Gets the registered Filters.
      *
      * Be warned that this method cannot return filters defined with registerUndefinedFilterCallback.
      *
-     * @return TwigFilter[]
+     * @return \TwigFilter[]
      *
      * @see registerUndefinedFilterCallback
      *
@@ -803,7 +706,6 @@ class Environment
     {
         return $this->extensionSet->getFilters();
     }
-
     /**
      * @return void
      */
@@ -811,9 +713,8 @@ class Environment
     {
         $this->extensionSet->addTest($test);
     }
-
     /**
-     * @return TwigTest[]
+     * @return \TwigTest[]
      *
      * @internal
      */
@@ -821,7 +722,6 @@ class Environment
     {
         return $this->extensionSet->getTests();
     }
-
     /**
      * @internal
      */
@@ -829,7 +729,6 @@ class Environment
     {
         return $this->extensionSet->getTest($name);
     }
-
     /**
      * @return void
      */
@@ -837,7 +736,6 @@ class Environment
     {
         $this->extensionSet->addFunction($function);
     }
-
     /**
      * @internal
      */
@@ -845,7 +743,6 @@ class Environment
     {
         return $this->extensionSet->getFunction($name);
     }
-
     /**
      * @param callable(string): (TwigFunction|false) $callable
      */
@@ -853,13 +750,12 @@ class Environment
     {
         $this->extensionSet->registerUndefinedFunctionCallback($callable);
     }
-
     /**
      * Gets registered functions.
      *
      * Be warned that this method cannot return functions defined with registerUndefinedFunctionCallback.
      *
-     * @return TwigFunction[]
+     * @return \TwigFunction[]
      *
      * @see registerUndefinedFunctionCallback
      *
@@ -869,7 +765,6 @@ class Environment
     {
         return $this->extensionSet->getFunctions();
     }
-
     /**
      * Registers a Global.
      *
@@ -885,14 +780,12 @@ class Environment
         if ($this->extensionSet->isInitialized() && !\array_key_exists($name, $this->getGlobals())) {
             throw new \LogicException(\sprintf('Unable to add global "%s" as the runtime or the extensions have already been initialized.', $name));
         }
-
         if (null !== $this->resolvedGlobals) {
             $this->resolvedGlobals[$name] = $value;
         } else {
             $this->globals[$name] = $value;
         }
     }
-
     /**
      * @return array<string, mixed>
      */
@@ -902,59 +795,32 @@ class Environment
             if (null === $this->resolvedGlobals) {
                 $this->resolvedGlobals = array_merge($this->extensionSet->getGlobals(), $this->globals);
             }
-
             return $this->resolvedGlobals;
         }
-
         return array_merge($this->extensionSet->getGlobals(), $this->globals);
     }
-
     public function resetGlobals(): void
     {
         $this->resolvedGlobals = null;
         $this->extensionSet->resetGlobals();
     }
-
     /**
      * @deprecated since Twig 3.14
      */
     public function mergeGlobals(array $context): array
     {
-        trigger_deprecation('twig/twig', '3.14', 'The "%s" method is deprecated.', __METHOD__);
-
+        makecommerceprefix_trigger_deprecation('twig/twig', '3.14', 'The "%s" method is deprecated.', __METHOD__);
         return $context + $this->getGlobals();
     }
-
     /**
      * @internal
-     *
-     * @return array<string, array{precedence: int, precedence_change?: OperatorPrecedenceChange, class: class-string<AbstractUnary>}>
      */
-    public function getUnaryOperators(): array
+    public function getExpressionParsers(): ExpressionParsers
     {
-        return $this->extensionSet->getUnaryOperators();
+        return $this->extensionSet->getExpressionParsers();
     }
-
-    /**
-     * @internal
-     *
-     * @return array<string, array{precedence: int, precedence_change?: OperatorPrecedenceChange, class: class-string<AbstractBinary>, associativity: ExpressionParser::OPERATOR_*}>
-     */
-    public function getBinaryOperators(): array
-    {
-        return $this->extensionSet->getBinaryOperators();
-    }
-
     private function updateOptionsHash(): void
     {
-        $this->optionsHash = implode(':', [
-            $this->extensionSet->getSignature(),
-            \PHP_MAJOR_VERSION,
-            \PHP_MINOR_VERSION,
-            self::VERSION,
-            (int) $this->debug,
-            (int) $this->strictVariables,
-            $this->useYield ? '1' : '0',
-        ]);
+        $this->optionsHash = implode(':', [$this->extensionSet->getSignature(), \PHP_MAJOR_VERSION, \PHP_MINOR_VERSION, self::VERSION, (int) $this->debug, (int) $this->strictVariables, $this->useYield ? '1' : '0']);
     }
 }

@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression;
@@ -19,8 +17,11 @@ use MakeCommercePrefix\Twig\Node\NameDeprecation;
 use MakeCommercePrefix\Twig\Node\Node;
 use MakeCommercePrefix\Twig\TwigFunction;
 
-class FunctionExpression extends CallExpression
+class FunctionExpression extends CallExpression implements SupportDefinedTestInterface
 {
+    use SupportDefinedTestDeprecationTrait;
+    use SupportDefinedTestTrait;
+
     #[FirstClassTwigCallableReady]
     public function __construct(TwigFunction|string $function, Node $arguments, int $lineno)
     {
@@ -28,10 +29,10 @@ class FunctionExpression extends CallExpression
             $name = $function->getName();
         } else {
             $name = $function;
-            trigger_deprecation('twig/twig', '3.12', 'Not passing an instance of "TwigFunction" when creating a "%s" function of type "%s" is deprecated.', $name, static::class);
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Not passing an instance of "TwigFunction" when creating a "%s" function of type "%s" is deprecated.', $name, static::class);
         }
 
-        parent::__construct(['arguments' => $arguments], ['name' => $name, 'type' => 'function', 'is_defined_test' => false], $lineno);
+        parent::__construct(['arguments' => $arguments], ['name' => $name, 'type' => 'function'], $lineno);
 
         if ($function instanceof TwigFunction) {
             $this->setAttribute('twig_callable', $function);
@@ -46,6 +47,13 @@ class FunctionExpression extends CallExpression
         $this->deprecateAttribute('dynamic_name', new NameDeprecation('twig/twig', '3.12'));
     }
 
+    public function enableDefinedTest(): void
+    {
+        if ('constant' === $this->getAttribute('name')) {
+            $this->definedTest = true;
+        }
+    }
+
     /**
      * @return void
      */
@@ -55,7 +63,7 @@ class FunctionExpression extends CallExpression
         if ($this->hasAttribute('twig_callable')) {
             $name = $this->getAttribute('twig_callable')->getName();
             if ($name !== $this->getAttribute('name')) {
-                trigger_deprecation('twig/twig', '3.12', 'Changing the value of a "function" node in a NodeVisitor class is not supported anymore.');
+                makecommerceprefix_trigger_deprecation('twig/twig', '3.12', 'Changing the value of a "function" node in a NodeVisitor class is not supported anymore.');
                 $this->removeAttribute('twig_callable');
             }
         }
@@ -64,7 +72,7 @@ class FunctionExpression extends CallExpression
             $this->setAttribute('twig_callable', $compiler->getEnvironment()->getFunction($name));
         }
 
-        if ('constant' === $name && $this->getAttribute('is_defined_test')) {
+        if ('constant' === $name && $this->isDefinedTestEnabled()) {
             $this->getNode('arguments')->setNode('checkDefined', new ConstantExpression(true, $this->getTemplateLine()));
         }
 

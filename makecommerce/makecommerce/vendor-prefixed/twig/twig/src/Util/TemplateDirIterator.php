@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Util;
@@ -19,7 +17,7 @@ namespace MakeCommercePrefix\Twig\Util;
 class TemplateDirIterator extends \IteratorIterator
 {
     /**
-     * @return mixed
+     * @return string
      */
     #[\ReturnTypeWillChange]
     public function current()
@@ -28,7 +26,7 @@ class TemplateDirIterator extends \IteratorIterator
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     #[\ReturnTypeWillChange]
     public function key()

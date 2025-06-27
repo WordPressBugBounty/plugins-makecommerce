@@ -8,8 +8,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node;
@@ -50,7 +48,7 @@ class Node implements \Countable, \IteratorAggregate
     public function __construct(array $nodes = [], array $attributes = [], int $lineno = 0)
     {
         if (self::class === static::class) {
-            trigger_deprecation('twig/twig', '3.15', \sprintf('Instantiating "%s" directly is deprecated; the class will become abstract in 4.0.', self::class));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.15', \sprintf('Instantiating "%s" directly is deprecated; the class will become abstract in 4.0.', self::class));
         }
 
         foreach ($nodes as $name => $node) {
@@ -63,7 +61,7 @@ class Node implements \Countable, \IteratorAggregate
         $this->lineno = $lineno;
 
         if (\func_num_args() > 3) {
-            trigger_deprecation('twig/twig', '3.12', \sprintf('The "tag" constructor argument of the "%s" class is deprecated and ignored (check which TokenParser class set it to "%s"), the tag is now automatically set by the Parser when needed.', static::class, func_get_arg(3) ?: 'null'));
+            makecommerceprefix_trigger_deprecation('twig/twig', '3.12', \sprintf('The "tag" constructor argument of the "%s" class is deprecated and ignored (check which TokenParser class set it to "%s"), the tag is now automatically set by the Parser when needed.', static::class, func_get_arg(3) ?: 'null'));
         }
     }
 
@@ -151,9 +149,6 @@ class Node implements \Countable, \IteratorAggregate
         return \array_key_exists($name, $this->attributes);
     }
 
-    /**
-     * @return mixed
-     */
     public function getAttribute(string $name)
     {
         if (!\array_key_exists($name, $this->attributes)) {
@@ -164,9 +159,9 @@ class Node implements \Countable, \IteratorAggregate
         if ($triggerDeprecation && isset($this->attributeNameDeprecations[$name])) {
             $dep = $this->attributeNameDeprecations[$name];
             if ($dep->getNewName()) {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting attribute "%s" on a "%s" class is deprecated, get the "%s" attribute instead.', $name, static::class, $dep->getNewName());
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting attribute "%s" on a "%s" class is deprecated, get the "%s" attribute instead.', $name, static::class, $dep->getNewName());
             } else {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting attribute "%s" on a "%s" class is deprecated.', $name, static::class);
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting attribute "%s" on a "%s" class is deprecated.', $name, static::class);
             }
         }
 
@@ -179,9 +174,9 @@ class Node implements \Countable, \IteratorAggregate
         if ($triggerDeprecation && isset($this->attributeNameDeprecations[$name])) {
             $dep = $this->attributeNameDeprecations[$name];
             if ($dep->getNewName()) {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting attribute "%s" on a "%s" class is deprecated, set the "%s" attribute instead.', $name, static::class, $dep->getNewName());
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting attribute "%s" on a "%s" class is deprecated, set the "%s" attribute instead.', $name, static::class, $dep->getNewName());
             } else {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting attribute "%s" on a "%s" class is deprecated.', $name, static::class);
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting attribute "%s" on a "%s" class is deprecated.', $name, static::class);
             }
         }
 
@@ -219,9 +214,9 @@ class Node implements \Countable, \IteratorAggregate
         if ($triggerDeprecation && isset($this->nodeNameDeprecations[$name])) {
             $dep = $this->nodeNameDeprecations[$name];
             if ($dep->getNewName()) {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting node "%s" on a "%s" class is deprecated, get the "%s" node instead.', $name, static::class, $dep->getNewName());
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting node "%s" on a "%s" class is deprecated, get the "%s" node instead.', $name, static::class, $dep->getNewName());
             } else {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting node "%s" on a "%s" class is deprecated.', $name, static::class);
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Getting node "%s" on a "%s" class is deprecated.', $name, static::class);
             }
         }
 
@@ -237,9 +232,9 @@ class Node implements \Countable, \IteratorAggregate
         if ($triggerDeprecation && isset($this->nodeNameDeprecations[$name])) {
             $dep = $this->nodeNameDeprecations[$name];
             if ($dep->getNewName()) {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting node "%s" on a "%s" class is deprecated, set the "%s" node instead.', $name, static::class, $dep->getNewName());
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting node "%s" on a "%s" class is deprecated, set the "%s" node instead.', $name, static::class, $dep->getNewName());
             } else {
-                trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting node "%s" on a "%s" class is deprecated.', $name, static::class);
+                makecommerceprefix_trigger_deprecation($dep->getPackage(), $dep->getVersion(), 'Setting node "%s" on a "%s" class is deprecated.', $name, static::class);
             }
         }
 

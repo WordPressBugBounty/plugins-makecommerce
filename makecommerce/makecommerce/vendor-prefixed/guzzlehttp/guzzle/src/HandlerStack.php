@@ -1,9 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace MakeCommercePrefix\GuzzleHttp;
 
@@ -186,7 +181,7 @@ class HandlerStack
     public function remove($remove): void
     {
         if (!is_string($remove) && !is_callable($remove)) {
-            trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing a callable or string to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
+            makecommerceprefix_trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing a callable or string to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
         }
 
         $this->cached = null;

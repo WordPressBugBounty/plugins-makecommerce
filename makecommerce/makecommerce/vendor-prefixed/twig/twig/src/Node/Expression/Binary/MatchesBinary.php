@@ -7,18 +7,17 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified by makecommerce on 03-March-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace MakeCommercePrefix\Twig\Node\Expression\Binary;
 
 use MakeCommercePrefix\Twig\Compiler;
 use MakeCommercePrefix\Twig\Error\SyntaxError;
+use MakeCommercePrefix\Twig\Node\Expression\ReturnBoolInterface;
 use MakeCommercePrefix\Twig\Node\Expression\ConstantExpression;
 use MakeCommercePrefix\Twig\Node\Node;
 
-class MatchesBinary extends AbstractBinary
+class MatchesBinary extends AbstractBinary implements ReturnBoolInterface
 {
     public function __construct(Node $left, Node $right, int $lineno)
     {
