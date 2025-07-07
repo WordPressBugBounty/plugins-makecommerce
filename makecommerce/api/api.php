@@ -562,14 +562,13 @@ class API {
             'mc_test_shop_id' => 'mk_test_shop_id',
             'mc_test_secret_key' => 'mk_test_private_key',
             'mc_test_public_key' => 'mk_test_public_key',
-            'mc_api_mode' => 'mk_api_mode',
+            'mc_api_mode' => 'mk_api_type',
         ];
 
         foreach ($migration_map as $new_key => $old_key) {
-            $new_value = get_option($new_key, null);
             $old_value = get_option($old_key, null);
 
-            if (($new_value === '' || $new_value === null) && $old_value !== null && $old_value !== '') {
+            if ($old_value !== null) {
                 update_option($new_key, $old_value);
             }
         }

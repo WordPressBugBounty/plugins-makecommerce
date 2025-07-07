@@ -163,7 +163,7 @@ class Shipping {
      * @since 4.0.2
      */
     public function mc_pickuppoint_after_shipping_details() {
-        echo '<tr class="makecommerce-pickuppoint-wrapper">
+        echo '<tr class="makecommerce-pickuppoint-wrapper" hidden>
                 <td colspan="2" class="makecommerce-pickuppoint-table-data"></td>
             </tr>';
     }
@@ -347,11 +347,12 @@ class Shipping {
      */
     private function get_destination_data($order, $machine)
     {
+        $country = $order->get_shipping_country() ?: WC()->countries->get_base_country();
         if ($machine) {
             return [
                 'destination' => [
                     'id' => $machine,
-                    'country' => $order->get_shipping_country(),
+                    'country' => $country,
                 ],
             ];
         }
@@ -359,7 +360,7 @@ class Shipping {
         return [
             'destination' => [
                 'zip' => $order->get_shipping_postcode(),
-                'country' => $order->get_shipping_country(),
+                'country' => $country,
                 'city' => $order->get_shipping_city(),
                 'street' => !empty($order->get_shipping_address_2())
                     ? $order->get_shipping_address_2()
@@ -506,28 +507,33 @@ class Shipping {
      */
     public static function get_carrier_country_machines($carrier, $country, $selected_machine = '')
     {
-        $client = self::init_client();
-        // Fallback if the country should be empty
-        if (empty($country)) {
-            self::get_shipping_country();
+        try{
+            $client = self::init_client();
+            // Fallback if the country should be empty
+            if (empty($country)) {
+                self::get_shipping_country();
+            }
+
+            $raw_machines = $client->listCarrierDestinations($carrier, $country);
+
+            return array_reduce($raw_machines, function ($result, $item) use ($selected_machine) {
+                $result[$item->city][] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'address' => $item->address ?? '',
+                    'availability' => $item->availability ?? '',
+                    'city' => $item->city ?? '',
+                    'zip' => $item->zip ?? '',
+                    'longitude' => $item->x ?? '',
+                    'latitude' => $item->y ?? '',
+                    'selected' => $item->id === $selected_machine
+                ];
+                return $result;
+            }, []);
+        } catch (\Exception $e) {
+            error_log('Error while fetching pickup points [' . $e->getMessage() . ']');
+            return [];
         }
-
-        $raw_machines = $client->listCarrierDestinations($carrier, $country);
-
-        return array_reduce($raw_machines, function ($result, $item) use ($selected_machine) {
-            $result[$item->city][] = [
-                'id' => $item->id,
-                'name' => $item->name,
-                'address' => $item->address ?? '',
-                'availability' => $item->availability ?? '',
-                'city' => $item->city ?? '',
-                'zip' => $item->zip ?? '',
-                'longitude' => $item->x ?? '',
-                'latitude' => $item->y ?? '',
-                'selected' => $item->id === $selected_machine
-            ];
-            return $result;
-        }, []);
     }
 
     /**
@@ -545,7 +551,8 @@ class Shipping {
                 "https://static.maksekeskus.ee/modules/woocommerce/js/pickuppoint.js",
                 [
                     'placeholder' => __('Select pickup point', 'wc_makecommerce_domain'),
-                    'loadingPlaceholder' => __('Loading pickup points...', 'wc_makecommerce_domain')
+                    'loadingPlaceholder' => __('Loading pickup points...', 'wc_makecommerce_domain'),
+                    'ajaxurl' => admin_url( 'admin-ajax.php' )
                 ],
                 ['jquery'],
                 true
@@ -564,6 +571,7 @@ class Shipping {
 
         $baseData = [
             'path' => plugin_dir_url(__DIR__),
+            's3_path' => 'https://static.maksekeskus.ee/img/woocommerce/'
         ];
 
         echo $twig->render($template, array_merge($baseData, $data));

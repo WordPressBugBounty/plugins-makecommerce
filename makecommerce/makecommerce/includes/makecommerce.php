@@ -318,9 +318,12 @@ class MakeCommerce {
      */
     public static function get_sdk_config() {
         $conf = [
-            "module"         => "MakeCommerce",
-            "module_version" => MAKECOMMERCE_VERSION,
-            "platform"       => "WooCommerce",
+            "module"           => "MakeCommerce",
+            "module_version"   => MAKECOMMERCE_VERSION,
+            "platform"         => "WooCommerce",
+            "hpos_enabled"     => filter_var( get_option( 'woocommerce_custom_orders_table_enabled' ), FILTER_VALIDATE_BOOLEAN ),
+            "payments_enabled" => filter_var( get_option( 'mc_payments' ), FILTER_VALIDATE_BOOLEAN ),
+            "shipping_enabled" => filter_var( get_option( 'mc_shipping' ), FILTER_VALIDATE_BOOLEAN )
         ];
 
         if (class_exists('WooCommerce')) {

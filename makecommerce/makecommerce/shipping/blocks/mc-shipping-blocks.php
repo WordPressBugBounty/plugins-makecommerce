@@ -95,6 +95,8 @@ final class MakeCommerceShippingBlocks {
         if ( $machine_id && (stripos($shipping_method, 'pickuppoint') !== false) ) {
             $order->update_meta_data( '_mc_machine_id', $machine_id );
         }
+
+        $order->save();
     }
 
     /**
@@ -113,13 +115,15 @@ final class MakeCommerceShippingBlocks {
 
         $machine_id = $order->get_meta('_mc_machine_id', true);
         $carrier = $order->get_meta('_mc_shipping_carrier', true);
+        $shipment_id = $order->get_meta('_mc_shipment_id', true);
         $country = $order->get_shipping_country();
 
         if (empty($country) && function_exists( 'WC' ) && WC()->countries ) {
             $country = WC()->countries->get_base_country();
         }
 
-        if ( empty( $carrier ) ) {
+        // if _mc_shipment_id empty, then not mc shipment and do not add details
+        if ( empty( $shipment_id ) ) {
             return;
         }
 

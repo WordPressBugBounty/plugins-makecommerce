@@ -3,7 +3,7 @@ Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
 Tested up to: 6.8.1
-Stable tag: 4.0.3
+Stable tag: 4.0.4
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,12 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.4 2025-07-07 =
+* Feature - Sync credentials between legacy and Shipping+
+* Tweak - Change credentials on the payments only page
+* Tweak - Support WordPress installations hosted in subfolders
+* Fix - Do not add shipping info to emails, if not MakeCommerce's shipments
 
 = 4.0.3 2025-06-26 =
 * Feature - No country requirement in checkout

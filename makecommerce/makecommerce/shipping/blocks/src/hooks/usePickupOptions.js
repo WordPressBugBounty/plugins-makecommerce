@@ -1,7 +1,11 @@
 import { useEffect, useRef } from '@wordpress/element';
+import {getSetting} from "@woocommerce/settings";
+
+const mcShippingBlocksData = getSetting('mc-shipping-blocks_data', {});
 
 const fetchCarrierMachines = async (carrier, selectedCountry) => {
-    const response = await fetch('/wp-admin/admin-ajax.php', {
+    const ajaxUrl = mcShippingBlocksData?.ajaxUrl || '/wp-admin/admin-ajax.php';
+    const response = await fetch(ajaxUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -50,8 +54,10 @@ export const usePickupOptions = ({
         if (!selectedRate) return;
 
         const rateId = selectedRate.rate_id;
+        setExtensionData('makecommerce', 'shipping_method', rateId);
+
         if (rateId?.startsWith('mc_courier_')) {
-            setExtensionData('makecommerce', 'shipping_method', rateId);
+            setPickupPointOptions([]);
             return;
         }
 
@@ -72,7 +78,6 @@ export const usePickupOptions = ({
         previousRateRef.current = rateId;
         previousCountryRef.current = selectedCountry;
 
-        setExtensionData('makecommerce', 'shipping_method', rateId);
         setIsMcShipping(true);
         setLoading(true);
         // reset fields, fetch machines

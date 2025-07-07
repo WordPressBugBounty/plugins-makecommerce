@@ -137,6 +137,9 @@ class Dashboard
                 'setupSelection' => true,
                 'newInstall' => $this->is_new_install()
             ]);
+        } else if ($this->checkApiCredentials()){
+            // if user has prefilled credentials, then render iframe
+            $this->render_shipping_configuration_iframe();
         } else {
             $this->render_template('credentials.twig');
         }
@@ -153,6 +156,7 @@ class Dashboard
 
     function render_payments_only_page()
     {
+        $this->render_template('credentialsPopup.twig', ['render_footer' => false]);
         $this->render_template('onlyPayments.twig', [
             'configure_url' =>  admin_url('admin.php?page=' . self::CONF_SLUG)
         ]);
@@ -186,6 +190,11 @@ class Dashboard
 
     public function render_shipping_configuration_iframe()
     {
+        if (!$this->checkApiCredentials()){
+            $this->render_template('credentials.twig');
+            return;
+        }
+
         $shipping = get_option('mc_shipping', 'off');
         $payments = get_option('mc_payments', 'off');
 
@@ -196,7 +205,7 @@ class Dashboard
                 $token = $client->connectShop(
                     $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
                         get_site_url() ?? $_SERVER['REMOTE_ADDR'],
-                    get_site_url() . '/wp-admin/post.php?post={id}&action=edit'
+                        admin_url( 'post.php?post={id}&action=edit' )
                 );
 
                 if (empty($token->body->jwt)) {
@@ -257,8 +266,36 @@ class Dashboard
 
     private function switch_to_old_plugin(){
         update_option('mc_shipping_plus', 'no');
+        $this->mc_creds_migration();
         wp_redirect(admin_url('admin.php?page=wc-settings&tab=advanced&section=mk_api'));
         exit;
+    }
+
+    /**
+     * Run credentials migration when 'mc_shipping_plus' is turned off
+     * This is run to have compatible credentials on the old module as well
+     * @return void
+     */
+    private function mc_creds_migration(): void
+    {
+        $migration_map = [
+            'mc_shop_id' => 'mk_shop_id',
+            'mc_secret_key' => 'mk_private_key',
+            'mc_public_key' => 'mk_public_key',
+            'mc_test_shop_id' => 'mk_test_shop_id',
+            'mc_test_secret_key' => 'mk_test_private_key',
+            'mc_test_public_key' => 'mk_test_public_key',
+            'mc_api_mode' => 'mk_api_type',
+        ];
+
+        foreach ($migration_map as $new_key => $old_key) {
+            $new_value = get_option($new_key, null);
+
+            if ($new_value !== null && $new_value !== '') {
+                // set old plugins credentials to new plugins ones
+                update_option($old_key, $new_value);
+            }
+        }
     }
 
     private function save_product_selection_settings($setupSelection = false){
@@ -305,25 +342,10 @@ class Dashboard
             $this->public_key = $public_key;
         }
 
-        try {
-            $client = $this->get_client();
-            $client->connectShop(
-                $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-                get_site_url() ?? $_SERVER['REMOTE_ADDR'],
-                get_site_url() . '/wp-admin/post.php?post={id}&action=edit'
-            );
-            update_option('mc_credentials_error', '');
-        } catch (\Exception $e) {
-            $label = $api_mode === 'test' ? __('Sandbox', 'wc_makecommerce_domain') : __('Live', 'wc_makecommerce_domain');
-            update_option('mc_credentials_error',
-                sprintf(
-                    /* translators: %s: Environment name */
-                    __('Unable to verify %s credentials', 'wc_makecommerce_domain'), $label)
-            );
+        if($this->checkApiCredentials()){
+            // When credentials correctly submitted, update banklinks
+            \MakeCommerce\Payment::update_banklinks();
         }
-
-        // When credentials correctly submitted, update banklinks
-        \MakeCommerce\Payment::update_banklinks();
         wp_redirect(admin_url('admin.php?page=' . self::DASHBOARD_SLUG));
         exit;
     }
@@ -358,10 +380,10 @@ class Dashboard
 
     public function enqueue_dashboard_scripts($hook)
     {
-        if ($hook === 'toplevel_page_makecommerce_dashboard') {
+        if ($hook === 'toplevel_page_makecommerce_dashboard' || $hook === 'admin_page_makecommerce_payments_only') {
             wp_enqueue_style('makecommerce-iframe-style', "https://static.maksekeskus.ee/modules/woocommerce/css/iframe.css");
             wp_enqueue_script('bootstrap-bundle', plugin_dir_url(__DIR__) . 'assets/bootstrap.bundle.min.js', [], '5.3.3', true);
-            wp_enqueue_script('mc-shop-credentials', plugin_dir_url(__FILE__) . 'js/mc-shop-credentials.js', ['bootstrap-bundle'], null, true);
+            wp_enqueue_script('mc-shop-credentials', "https://static.maksekeskus.ee/modules/woocommerce/js/mc-shop-credentials.js", ['bootstrap-bundle'], null, true);
             wp_enqueue_script('mc-module-config', plugin_dir_url(__FILE__) . 'js/mc-module-config.js', ['bootstrap-bundle'], null, true);
             wp_enqueue_script('mc-iframe-height', plugin_dir_url(__FILE__) . 'js/mc-iframe-height.js', [], null, true);
             // Pass redirect url to javascript
@@ -406,10 +428,32 @@ class Dashboard
         }
 
         return ( $shipping === 'on' || $payments === 'on' )
-            && ( $shop_id || $public_key || $secret_key );
+            && ( $shop_id && $public_key && $secret_key );
     }
 
     private function is_new_install() {
         return get_option('makecommerce_install_status', 'upgrade') === 'new_install';
+    }
+
+    private function checkApiCredentials(): bool
+    {
+        try {
+            $client = $this->get_client();
+            $client->connectShop(
+                $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+                get_site_url() ?? $_SERVER['REMOTE_ADDR'],
+                    admin_url( 'post.php?post={id}&action=edit' )
+            );
+            update_option('mc_credentials_error', '');
+            return true;
+        } catch (\Exception $e) {
+            $label = $this->api_mode === 'test' ? __('Sandbox', 'wc_makecommerce_domain') : __('Live', 'wc_makecommerce_domain');
+            update_option('mc_credentials_error',
+                sprintf(
+                /* translators: %s: Environment name */
+                    __('Unable to verify %s credentials', 'wc_makecommerce_domain'), $label)
+            );
+            return false;
+        }
     }
 }

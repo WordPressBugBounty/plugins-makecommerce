@@ -6,3 +6,8 @@
 .mcShippingSelectDropdown {
   max-width: 600px;
 }
+
+.wc-checkout-review-order-table tr.makecommerce-pickuppoint-wrapper,
+.woocommerce-checkout-review-order-table tr.makecommerce-pickuppoint-wrapper {
+  display: none;
+}

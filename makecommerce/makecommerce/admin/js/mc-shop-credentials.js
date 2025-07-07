@@ -12,3 +12,8 @@ window.addEventListener('message', function (event) {
         modal.show();
     }
 }, false);
+
+document.getElementById('mc-shop-credentials')?.addEventListener('click', function () {
+    let myModal = new bootstrap.Modal(document.getElementById('makecommerceCredentialsModal'));
+    myModal.show();
+});

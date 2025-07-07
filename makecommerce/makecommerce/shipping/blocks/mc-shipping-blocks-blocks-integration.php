@@ -70,7 +70,8 @@ class McShippingBlocks_Blocks_Integration implements IntegrationInterface {
         $data = [
             'mc-shipping-blocks-active'    => true,
             'defaultCountry'               => $this->get_default_country(),
-            'pickupPointPlaceholder'       => __('Select pickup point', 'wc_makecommerce_domain')
+            'pickupPointPlaceholder'       => __('Select pickup point', 'wc_makecommerce_domain'),
+            'ajaxUrl'                      => admin_url( 'admin-ajax.php' )
         ];
         return $data;
     }

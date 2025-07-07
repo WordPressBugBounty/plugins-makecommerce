@@ -5,6 +5,12 @@
     overflow: hidden !important;
 }
 
+@media (max-height: 850px) {
+    #wpcontent {
+        overflow: auto !important;
+    }
+}
+
 #wpbody-content{
     padding-bottom: 0 !important;
 }

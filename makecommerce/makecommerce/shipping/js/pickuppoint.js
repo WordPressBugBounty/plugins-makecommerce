@@ -26,7 +26,7 @@ function initPickupPointInjection() {
 	const $select = insertLoadingSelect(carrier);
 
 	jQuery.ajax({
-		url: '/wp-admin/admin-ajax.php',
+		url: MC_PARCELMACHINE_JS['ajaxurl'] ?? '/wp-admin/admin-ajax.php',
 		type: 'post',
 		data: {
 			action: 'get_carrier_machines',
@@ -155,6 +155,8 @@ function injectSelectBox(div) {
 	const $tableData = jQuery('.makecommerce-pickuppoint-table-data');
 
 	if ($tableData.length > 0) {
+		jQuery('.makecommerce-pickuppoint-wrapper').show();
+		jQuery('.makecommerce-pickuppoint-wrapper').removeAttr('hidden');
 		return wrapAndAppend(div, $tableData);
 	}
 

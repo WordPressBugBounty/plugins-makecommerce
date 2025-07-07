@@ -56,6 +56,8 @@ class Order extends \MakeCommerce\Shipping
 
         $order = wc_get_order($order->get_id());
 
+        if ( ! $order ) {return;}
+
         $shipment_id   = $order->get_meta('_mc_shipment_id', true);
         $tracking_link = $order->get_meta('_mc_tracking_link', true);
         $carrier       = $order->get_meta('_mc_shipping_carrier', true);
@@ -67,8 +69,13 @@ class Order extends \MakeCommerce\Shipping
             $country = self::get_shipping_country();
         }
 
+        // if _mc_shipment_id empty, then not mc shipment and do not add details
+        if ( empty( $shipment_id ) ) {
+            return;
+        }
+
         if ( $plain_text ) {
-            echo "=== MakeCommerce Shipping Details ===\n";
+            echo "=== " . __( 'MakeCommerce Shipping Details', 'wc_makecommerce_domain' ) . " ===\n";
 
             if ( $machine_id ) {
                 $machine = self::mk_get_machine( $carrier, $machine_id, $country );
@@ -137,6 +144,7 @@ class Order extends \MakeCommerce\Shipping
     private function _display_shipping_details( $order, $context ) {
         $machine_id    = $order->get_meta( '_mc_machine_id', true );
         $carrier       = $order->get_meta( '_mc_shipping_carrier', true );
+        $mc_method     = $order->get_meta('_mc_shipping_method', true);
         $tracking_link = $order->get_meta( '_mc_tracking_link', true );
         $shipment_id   = $order->get_meta( '_mc_shipment_id', true );
         $country       = $order->get_shipping_country();
@@ -145,11 +153,16 @@ class Order extends \MakeCommerce\Shipping
             $country = self::get_shipping_country();
         }
 
-        if ( empty( $carrier ) ) {
+        if ( empty( $carrier ) || empty( $mc_method) ) {
             $old_machine = $order->get_meta( '_parcel_machine', true );
             if (!empty( $old_machine ) ) {
                 echo '<p style="color:red">' . __( 'Unable to display shipment details<br> This MakeCommerce shipment was created with v3.4 or lower plugin', 'wc_makecommerce_domain' ) . '</p>';
             }
+            return;
+        }
+
+        // if _mc_shipment_id empty, then not mc shipment and do not add details
+        if (empty($shipment_id)) {
             return;
         }
 
