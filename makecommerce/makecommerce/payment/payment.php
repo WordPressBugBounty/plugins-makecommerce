@@ -169,6 +169,13 @@ class Payment {
 		}
 
 		$returnUrl = home_url();
+
+        // Avoid processing double requests from Google-Read-Aloud
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        if (str_contains($user_agent, 'Google-Read-Aloud')) {
+            error_log( 'MakeCommerce: Blocked request from Google-Read-Aloud user agent.' );
+            return $returnUrl;
+        }
 		
 		$request = stripslashes_deep( $_POST );
 

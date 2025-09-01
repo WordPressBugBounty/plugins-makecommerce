@@ -62,7 +62,7 @@ trait Banklink {
         
         if ( isset( $methods->cards ) ) {
             foreach( $methods->cards as $method ) {
-                $wpdb->insert( $tableName, array( 'type' => 'card', 'name' => $method->name, 'logo_url' => $method->logo_url, 'min_amount' => $method->min_amount ?? NULL, 'max_amount' => $method->max_amount ?? NULL, 'channel' => $method->channel, 'display_name' => $method->display_name ) );
+                $wpdb->insert( $tableName, array( 'type' => 'card', 'name' => $method->name, 'url' => $method->url, 'logo_url' => $method->logo_url, 'min_amount' => $method->min_amount ?? NULL, 'max_amount' => $method->max_amount ?? NULL, 'channel' => $method->channel, 'display_name' => $method->display_name ) );
             }
         }
 

@@ -3,7 +3,7 @@ Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
 Tested up to: 6.8.1
-Stable tag: 4.0.4
+Stable tag: 4.0.5
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,12 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.5 2025-09-01 =
+* Feature - CC payment redirect
+* Feature - Support for TranslatePress - Multilingual
+* Tweak - Payment JS files moved to CDN
+* Tweak - Improved error logging
 
 = 4.0.4 2025-07-07 =
 * Feature - Sync credentials between legacy and Shipping+

@@ -109,10 +109,14 @@ class Method extends WC_Shipping_Method
         $city = $package['destination']['city'];
         $postcode = $package['destination']['postcode'];
 
+        $details = ['package' => $this->normalize_data($package)];
+        $details = $this->add_woo_conf($details);
+
         $location = [];
         try {
             $client = Shipping::init_client();
             $rates = $client->getRates([
+                'details' => $details,
                 'weight' => $totalWeight,
                 'destination' => $dst,
                 'location' => [
@@ -250,5 +254,36 @@ class Method extends WC_Shipping_Method
         }
 
         return $weight;
+    }
+
+    /**
+     * Recursively convert all objects to arrays.
+     */
+    private function normalize_data($data)
+    {
+        if (is_object($data)) {
+            if (method_exists($data, 'get_data')) {
+                return $this->normalize_data($data->get_data());
+            }
+            return $this->normalize_data(get_object_vars($data));
+        }
+
+        if (is_array($data)) {
+            return array_map([$this, 'normalize_data'], $data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Add needed conf to details array
+     */
+    private function add_woo_conf(array $details): array
+    {
+        $details['configuration'] = [
+            'weight_unit' => get_option('woocommerce_weight_unit', 'kg')
+        ];
+
+        return $details;
     }
 }

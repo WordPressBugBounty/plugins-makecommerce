@@ -23,11 +23,14 @@ jQuery(document).ready(function($) {
         function makecommercePick(country) {
             $('select#' + MC_METHOD_LIST.id).val('');
             $('div.payment-method').removeClass('payment-method-selected');
-            $('div.makecommerce_country_methods').hide();
             $('input[name="payment"]').prop('checked', false);
 
-            // Show current country methods
-            $('div#makecommerce_country_methods_' + country).show();
+            if (country) {
+                $('div.makecommerce_country_methods').hide();
+
+                // Show current country methods
+                $('div#makecommerce_country_methods_' + country).show();
+            }
         }
     }
 

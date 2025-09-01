@@ -173,7 +173,7 @@ class Dashboard
 
         $baseData = [
             'path' => plugin_dir_url(__DIR__),
-            's3_path' => 'https://static.maksekeskus.ee/img/woocommerce/',
+            's3_path' => \MakeCommerce::get_static_url(),
             'shopId' => $this->shop_id,
             'secretKey' => $this->secret_key,
             'publicKey' => $this->public_key,
@@ -221,6 +221,11 @@ class Dashboard
                 echo '<iframe id="mcIframe" src="' . esc_url($url) . '" width="100%"></iframe>';
                 $this->render_template('credentialsPopup.twig', ['render_footer' => false]);
             } catch (\Throwable $e) {
+                if ( function_exists( 'wc_get_logger' ) ) {
+                    $logger = wc_get_logger();
+                    $log_context = [ 'source' => 'makecommerce-errors' ];
+                    $logger->error('Error loading iframe: ' . json_encode($e->getMessage()), $log_context);
+                }
                 // Problem with getting iframe
                 $this->render_template('error.twig', ['mc_error' => __('Failed to load Iframe. Please try again later.', 'wc_makecommerce_domain')]);
             }
@@ -381,9 +386,9 @@ class Dashboard
     public function enqueue_dashboard_scripts($hook)
     {
         if ($hook === 'toplevel_page_makecommerce_dashboard' || $hook === 'admin_page_makecommerce_payments_only') {
-            wp_enqueue_style('makecommerce-iframe-style', "https://static.maksekeskus.ee/modules/woocommerce/css/iframe.css");
+            wp_enqueue_style('makecommerce-iframe-style', \MakeCommerce::get_static_url() . "modules/woocommerce/css/iframe.css");
             wp_enqueue_script('bootstrap-bundle', plugin_dir_url(__DIR__) . 'assets/bootstrap.bundle.min.js', [], '5.3.3', true);
-            wp_enqueue_script('mc-shop-credentials', "https://static.maksekeskus.ee/modules/woocommerce/js/mc-shop-credentials.js", ['bootstrap-bundle'], null, true);
+            wp_enqueue_script('mc-shop-credentials', \MakeCommerce::get_static_url() . "modules/woocommerce/js/mc-shop-credentials.js", ['bootstrap-bundle'], null, true);
             wp_enqueue_script('mc-module-config', plugin_dir_url(__FILE__) . 'js/mc-module-config.js', ['bootstrap-bundle'], null, true);
             wp_enqueue_script('mc-iframe-height', plugin_dir_url(__FILE__) . 'js/mc-iframe-height.js', [], null, true);
             // Pass redirect url to javascript
@@ -448,6 +453,11 @@ class Dashboard
             return true;
         } catch (\Exception $e) {
             $label = $this->api_mode === 'test' ? __('Sandbox', 'wc_makecommerce_domain') : __('Live', 'wc_makecommerce_domain');
+            if ( function_exists( 'wc_get_logger' ) ) {
+                $logger = wc_get_logger();
+                $log_context = [ 'source' => 'makecommerce-errors' ];
+                $logger->error('Unable to verify credentials: ' . json_encode($e->getMessage()), $log_context);
+            }
             update_option('mc_credentials_error',
                 sprintf(
                 /* translators: %s: Environment name */

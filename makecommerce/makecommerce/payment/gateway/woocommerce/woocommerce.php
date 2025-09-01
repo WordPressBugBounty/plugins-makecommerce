@@ -12,7 +12,7 @@ class WooCommerce extends Gateway {
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
 
-    public $version = '4.0.4';
+    public $version = '4.0.5';
     
     public $payment_return_url;
     public $payment_return_url_m2m;
@@ -71,13 +71,17 @@ class WooCommerce extends Gateway {
      */
     private function set_return_urls() {
 
-        //set language
-        $langGet = "&lang1=" . \MakeCommerce\i18n::get_two_char_locale();
-
+        $locale = \MakeCommerce\i18n::get_two_char_locale();
+        
         //set return url's
-        $this->payment_return_url = site_url( '/?makecommerce_return=1'.$langGet );
-        $this->payment_return_url_m2m = site_url( '/?makecommerce_return=1&ajax_content=1'.$langGet );
-        $this->payment_return_url_cancel = site_url( '/?makecommerce_return=1'.$langGet );
+        $return_url = add_query_arg([
+            'makecommerce_return' => '1',
+            'lang1' => $locale,
+        ], home_url('/'));
+
+        $this->payment_return_url = $return_url;
+        $this->payment_return_url_m2m = add_query_arg('ajax_content', '1', $return_url);
+        $this->payment_return_url_cancel = $return_url;
     }
 
 
@@ -102,9 +106,9 @@ class WooCommerce extends Gateway {
                 add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
             }
             wp_enqueue_script( 'jquery');
-            wp_enqueue_style( 'makecommerce', "https://static.maksekeskus.ee/modules/woocommerce/css/makecommerce.css", array(), $this->version );
+            wp_enqueue_style( 'makecommerce', \MakeCommerce::get_static_url() . "modules/woocommerce/css/makecommerce.css", array(), $this->version );
 
-            wp_enqueue_style('makecommerce-bootstrap', "https://static.maksekeskus.ee/modules/woocommerce/css/bootstrap-mk-scoped.css");
+            wp_enqueue_style('makecommerce-bootstrap', \MakeCommerce::get_static_url() . "modules/woocommerce/css/bootstrap-mk-scoped.css");
 
             //enqueue scripts for payment methods checkout
             add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -119,13 +123,14 @@ class WooCommerce extends Gateway {
      */
     public function enqueue_scripts() {
         \MakeCommerce::mc_enqueue_script( 
-            'MC_METHOD_LIST', 
-            dirname( __FILE__ ) . '/js/mc_method_list.js', 
+            'MC_METHOD_LIST',
+            \MakeCommerce::get_static_url() . "modules/woocommerce/js/mc_method_list.js",
             [
                 'id' => $this->id,
                 'settings' => $this->settings,
             ], 
-            [ 'jquery' ]
+            [ 'jquery' ],
+            true
         );
     }
     
@@ -220,8 +225,22 @@ class WooCommerce extends Gateway {
                 $order->update_meta_data( '_makecommerce_transaction_id', $transaction->id );
 
                 if ( substr( $selected, 0, 5 ) == 'card_' ) {
+                    $has_subscription = function_exists( 'wcs_order_contains_subscription' ) && wcs_order_contains_subscription( $order ) || $order->get_status() === 'active';
 
-                    $redirect_url = $order->get_checkout_payment_url( true );
+                    if ( $has_subscription ) {
+                        $redirect_url = $order->get_checkout_payment_url( true );
+                    } else {
+                        $redirect_url = false;
+                        foreach ( $transaction->payment_methods->cards as $card ) {
+                            if ( 'card_'.$card->name === $selected ) {
+                                $redirect_url = $card->url;
+                            }
+                        }
+
+                        if ( !$redirect_url ) {
+                            $redirect_url = $this->_getRedirectUrl( $selected ).$transaction->id;
+                        }
+                    }
                 } else {
 
                     $redirect_url = false;
@@ -264,6 +283,13 @@ class WooCommerce extends Gateway {
         foreach ( $this->methods->banklinks as $method ) {
 
             if ( $selected == $method->country.'_'.$method->name ) {
+                return $method->url;
+            }
+        }
+
+        foreach ( $this->methods->cards as $method ) {
+
+            if ( $selected == 'card_'.$method->name ) {
                 return $method->url;
             }
         }

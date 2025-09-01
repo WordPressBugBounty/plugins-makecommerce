@@ -49,11 +49,6 @@ class Order extends \MakeCommerce\Shipping
      * @since 4.0.0
      */
     function add_mc_shipping_info_to_email( $order, $sent_to_admin, $plain_text, $email ) {
-        // Only add for customer emails (optional filter)
-        if ( ! in_array( $email->id, [ 'customer_processing_order', 'customer_completed_order' ] ) ) {
-            return;
-        }
-
         $order = wc_get_order($order->get_id());
 
         if ( ! $order ) {return;}

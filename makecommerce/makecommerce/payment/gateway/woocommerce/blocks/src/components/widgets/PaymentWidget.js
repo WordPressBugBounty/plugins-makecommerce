@@ -22,6 +22,7 @@ export const PaymentWidget = ({ methods, defaultCountry }) => {
 
     return (
         <div className="makecommerce-payment-methods">
+            <input type="hidden" id="makecommerce_customer_country" value={normalizedDefaultCountry}/>
             <div className="makecommerce-picker bg-white p-3">
                 <CountrySelector
                     selected={selectedCountry}

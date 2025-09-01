@@ -43,7 +43,7 @@ final class WooCommerceBlocks extends AbstractPaymentMethodType {
 
         $script_path = '/build/index.js';
 
-        $script_url = plugins_url( $script_path, __FILE__ );
+        $script_url = \MakeCommerce::get_static_url() . 'modules/woocommerce/js/blocks/payments/index.js';
 
         $script_asset_path = dirname( __FILE__ ) . '/build/index.asset.php';
         $script_asset      = file_exists( $script_asset_path )

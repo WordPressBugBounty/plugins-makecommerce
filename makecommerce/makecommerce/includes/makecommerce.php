@@ -334,6 +334,22 @@ class MakeCommerce {
     }
 
     /**
+     * Gets static url based on env
+     *
+     * @since 3.0.0
+     */
+    public static function get_static_url() {
+
+        $mc_api_type = get_option( 'mc_api_mode', 'live' );
+
+        if ($mc_api_type === 'test') {
+            return 'https://static.test.maksekeskus.ee/';
+        } else {
+            return 'https://static.maksekeskus.ee/';
+        }
+    }
+
+    /**
      * Enqueues javascript with parameters.
      *
      * @since	3.0.9

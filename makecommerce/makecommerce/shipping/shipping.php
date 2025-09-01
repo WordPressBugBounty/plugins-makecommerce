@@ -280,7 +280,17 @@ class Shipping {
         try {
             $shipment = $this->client->createShipment($carrier, $shipment, $method);
         } catch (\Exception $e) {
-            error_log('Error while creating shipment [' . $e->getMessage() . ']');
+            if ( function_exists( 'wc_get_logger' ) ) {
+                $logger = wc_get_logger();
+                $log_context = [ 'source' => 'makecommerce-errors' ];
+                $logger->error('Error while creating shipment: ' . json_encode($e->getMessage()), $log_context);
+                $logger->info('Failed shipment: ' . json_encode($shipment) .
+                    ' Carrier: ' . json_encode($carrier) .
+                    ' Method: ' . json_encode($method),
+                    $log_context);
+            } else {
+                error_log('Error while creating shipment: ' . json_encode($e->getMessage()));
+            }
             return;
         }
 
@@ -347,7 +357,7 @@ class Shipping {
      */
     private function get_destination_data($order, $machine)
     {
-        $country = $order->get_shipping_country() ?: WC()->countries->get_base_country();
+        $country = $order->get_shipping_country() ?: $order->get_billing_country() ?: WC()->countries->get_base_country();
         if ($machine) {
             return [
                 'destination' => [
@@ -357,14 +367,28 @@ class Shipping {
             ];
         }
 
+        if (!empty($order->get_shipping_address_1())) {
+            $street_address = $order->get_shipping_address_1();
+
+            if (!empty($order->get_shipping_address_2())) {
+                $street_address .= ', ' . $order->get_shipping_address_2();
+            }
+        }
+        else {
+            $street_address = $order->get_billing_address_1();
+
+            if (!empty($order->get_billing_address_2())) {
+                $street_address .= ', ' . $order->get_billing_address_2();
+            }
+        }
+
+
         return [
             'destination' => [
-                'zip' => $order->get_shipping_postcode(),
+                'zip' => $order->get_shipping_postcode() ?: $order->get_billing_postcode(),
                 'country' => $country,
-                'city' => $order->get_shipping_city(),
-                'street' => !empty($order->get_shipping_address_2())
-                    ? $order->get_shipping_address_2()
-                    : $order->get_shipping_address_1(),
+                'city' => $order->get_shipping_city() ?: $order->get_billing_city(),
+                'street' =>  $street_address,
             ],
         ];
     }
@@ -543,12 +567,12 @@ class Shipping {
      */
     public function enqueue_scripts()
     {
-        if (!is_cart()){
-            wp_enqueue_style('pickup-point-style', "https://static.maksekeskus.ee/modules/woocommerce/css/pickup-point.css");
+        if (function_exists( 'is_checkout' ) && is_checkout()){
+            wp_enqueue_style('pickup-point-style', \MakeCommerce::get_static_url() . "modules/woocommerce/css/pickup-point.css");
 
             MakeCommerce::mc_enqueue_script(
                 'MC_PARCELMACHINE_JS',
-                "https://static.maksekeskus.ee/modules/woocommerce/js/pickuppoint.js",
+                \MakeCommerce::get_static_url() . "modules/woocommerce/js/pickuppoint.js",
                 [
                     'placeholder' => __('Select pickup point', 'wc_makecommerce_domain'),
                     'loadingPlaceholder' => __('Loading pickup points...', 'wc_makecommerce_domain'),
@@ -571,7 +595,7 @@ class Shipping {
 
         $baseData = [
             'path' => plugin_dir_url(__DIR__),
-            's3_path' => 'https://static.maksekeskus.ee/img/woocommerce/'
+            's3_path' => \MakeCommerce::get_static_url()
         ];
 
         echo $twig->render($template, array_merge($baseData, $data));

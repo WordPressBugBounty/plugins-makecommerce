@@ -14,9 +14,10 @@ trait Creditcard {
         $order = wc_get_order( $orderId );
 
         if ( substr( $order->get_meta( '_makecommerce_preselected_method', true ), 0, 5 ) == 'card_' && in_array( $order->get_status(), ['pending', 'active'] ) ) {
-
+            echo "<div class='makecommerce-cc-form-container'>";
             echo "<br>".__( 'The order is still awaiting your payment', 'wc_makecommerce_domain' )."<br>";
             echo $this->generateCardForm( $order );
+            echo "</div>";
         }
     }
 

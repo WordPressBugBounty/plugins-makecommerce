@@ -155,7 +155,7 @@ class Methods
 
         if ($woocommerce->customer) {
 
-            $customerCountry = strtolower($woocommerce->customer->get_shipping_country());
+            $customerCountry = strtolower($woocommerce->customer->get_billing_country());
             if (array_key_exists($customerCountry, $this->banklinks_grouped)) {
                 return $customerCountry;
             } else {
