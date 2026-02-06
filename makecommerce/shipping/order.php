@@ -352,7 +352,9 @@ class Order extends \MakeCommerce\Shipping {
      */
     public function shipping_email_details( $fields, $sent_to_admin, $order ) {
 		// No mc metadata without calling the wc_get_order again
-		$order = wc_get_order( $order->get_id() );
+        $order = wc_get_order($order->get_id());
+
+        if ( ! $order ) {return $fields;}
 
 		//check if makecommerce shipping has been used
 		//add tracking information (if possible)

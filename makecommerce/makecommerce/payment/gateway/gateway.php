@@ -53,7 +53,7 @@ abstract class Gateway extends WC_Payment_Gateway {
         //get settings from \WC_Payment_Gateway
         $this->init_settings();
 
-        $this->enabled = 'yes' === $this->get_option( 'enabled' ) ? 'yes' : 'no';
+        $this->enabled = $this->enabled() ? 'yes' : 'no';
 
         //set hooks
         $this->set_hooks();

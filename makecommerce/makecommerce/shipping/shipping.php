@@ -279,7 +279,7 @@ class Shipping {
 
         try {
             $shipment = $this->client->createShipment($carrier, $shipment, $method);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ( function_exists( 'wc_get_logger' ) ) {
                 $logger = wc_get_logger();
                 $log_context = [ 'source' => 'makecommerce-errors' ];
@@ -554,7 +554,7 @@ class Shipping {
                 ];
                 return $result;
             }, []);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             error_log('Error while fetching pickup points [' . $e->getMessage() . ']');
             return [];
         }

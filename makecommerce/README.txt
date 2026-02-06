@@ -2,8 +2,8 @@
 Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
-Tested up to: 6.8.1
-Stable tag: 4.0.5
+Tested up to: 6.9
+Stable tag: 4.0.6
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,18 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.6 2026-01-27 =
+* Feature - Enable searching for parcel machines by city name when the city is not included in the machine's title.
+* Tweak - Enhanced logging for order total and payment amount mismatches to aid troubleshooting.
+* Tweak - Improve error handling by catching Throwable instead of Exception for better stability.
+* Tweak - Optimize Makecommerce API calls by sending a better structured payload.
+* Tweak - Update Secret Key field to password type on the credentials popup for improved security.
+* Fix - Resolve email preview errors when no order exists or Makecommerce data is unavailable.
+* Fix - Resolve pickup point list rendering issues on Block themes for Firefox.
+* Fix - Issue preventing the Payment Gateway from activating correctly.
+* Fix - Ensure pickup points re-render correctly when switching between methods from the same carrier.
+
 
 = 4.0.5 2025-09-01 =
 * Feature - CC payment redirect

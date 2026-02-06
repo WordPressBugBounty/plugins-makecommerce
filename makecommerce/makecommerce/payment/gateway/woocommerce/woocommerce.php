@@ -12,7 +12,7 @@ class WooCommerce extends Gateway {
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
 
-    public $version = '4.0.5';
+    public $version = '4.0.6';
     
     public $payment_return_url;
     public $payment_return_url_m2m;
@@ -431,13 +431,13 @@ class WooCommerce extends Gateway {
     public function setPaymentMethodTitle(): void
     {
         if (!empty($this->methods->banklinks) && !empty($this->methods->cards)) {
-            $this->title = \MakeCommerce\i18n::get_string_from_mo( 'Bank-links or credit card', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_locale() );
+            $this->title = __( 'Bank-links or credit card', 'wc_makecommerce_domain');
         } elseif (!empty($this->methods->banklinks)) {
-            $this->title = \MakeCommerce\i18n::get_string_from_mo( 'Bank-links', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_locale() );
+            $this->title = __( 'Bank-links', 'wc_makecommerce_domain');
         } elseif (!empty($this->methods->cards)) {
-            $this->title = \MakeCommerce\i18n::get_string_from_mo( 'Credit card', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_locale() );
+            $this->title = __( 'Credit card', 'wc_makecommerce_domain');
         } else {
-            $this->title = \MakeCommerce\i18n::get_string_from_mo( 'Bank-links or credit card', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_locale() );
+            $this->title = __( 'Bank-links or credit card', 'wc_makecommerce_domain');
         }
     }
 }

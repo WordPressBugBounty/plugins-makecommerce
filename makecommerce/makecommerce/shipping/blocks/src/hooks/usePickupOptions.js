@@ -58,6 +58,8 @@ export const usePickupOptions = ({
 
         if (rateId?.startsWith('mc_courier_')) {
             setPickupPointOptions([]);
+            previousRateRef.current = rateId;
+            previousCountryRef.current = selectedCountry;
             return;
         }
 

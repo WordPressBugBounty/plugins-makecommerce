@@ -141,7 +141,7 @@ trait Banklink {
         try {
             $shopConfig = $MK->getShopConfig( \MakeCommerce::config_request_parameters( MAKECOMMERCE_PLUGIN_ID.' '.MAKECOMMERCE_VERSION ) );
             $methods = $shopConfig->paymentMethods;	
-        } catch ( \Exception $e ) {
+        } catch ( \Throwable $e ) {
             error_log( print_r( $e, 1 ) );
             return false;
         }

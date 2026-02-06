@@ -109,7 +109,7 @@ class Method extends WC_Shipping_Method
         $city = $package['destination']['city'];
         $postcode = $package['destination']['postcode'];
 
-        $details = ['package' => $this->normalize_data($package)];
+        $details = ['package' => $this->filter_package_details($package)];
         $details = $this->add_woo_conf($details);
 
         $location = [];
@@ -125,7 +125,7 @@ class Method extends WC_Shipping_Method
                     'zip' => $postcode,
                 ]
             ], $location);
-            
+
             $decoded_location = is_string($location) ? json_decode($location) : $location;
             if (
                 is_array($decoded_location) &&
@@ -156,8 +156,11 @@ class Method extends WC_Shipping_Method
 
             }
 
-        } catch (\Exception $e) {
-            $this->logger->error(__('Unable to retrieve MakeCommerce shipping rates. ' . json_encode($e->getMessage()), 'wc_makecommerce_domain'), $this->log_context);
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                __('Unable to retrieve MakeCommerce shipping rates. ' . json_encode($e->getMessage()), 'wc_makecommerce_domain'),
+                $this->log_context
+            );
         }
     }
 
@@ -257,22 +260,94 @@ class Method extends WC_Shipping_Method
     }
 
     /**
-     * Recursively convert all objects to arrays.
+
+     *
+     * @param array $package The full WooCommerce package.
+     * @return array Filtered package with only required fields.
      */
-    private function normalize_data($data)
+    private function filter_package_details($package)
     {
-        if (is_object($data)) {
-            if (method_exists($data, 'get_data')) {
-                return $this->normalize_data($data->get_data());
-            }
-            return $this->normalize_data(get_object_vars($data));
+        try {
+            $package['contents'] = $this->filter_package_contents($package['contents'] ?? []);
+            unset($package['rates']);
+
+            return $package;
+        } catch (\Exception $e) {
+            $this->logger->error(__('Error filtering package details: ' . $e->getMessage(), 'wc_makecommerce_domain'), $this->log_context);
+            return ['error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Filter package details to only include necessary fields for API request.
+     * Reduces payload size by excluding unnecessary data.
+     *
+     * @param array $contents Cart contents from package.
+     * @return array Filtered contents.
+     */
+    private function filter_package_contents($contents)
+    {
+        $filtered_contents = [];
+
+        foreach ($contents as $cart_item_key => $cart_item) {
+            $filtered_contents[$cart_item_key] = [
+                'product_id' => $cart_item['product_id'] ?? null,
+                'variation_id' => $cart_item['variation_id'] ?? null,
+                'quantity' => $cart_item['quantity'] ?? 0,
+                'line_subtotal' => $cart_item['line_subtotal'] ?? 0,
+                'line_subtotal_tax' => $cart_item['line_subtotal_tax'] ?? 0,
+                'line_total' => $cart_item['line_total'] ?? 0,
+                'line_tax' => $cart_item['line_tax'] ?? 0,
+                'data' => $this->extract_product_data($cart_item['data'] ?? null),
+            ];
         }
 
-        if (is_array($data)) {
-            return array_map([$this, 'normalize_data'], $data);
+        return $filtered_contents;
+    }
+
+    /**
+     * Extract only needed product data fields.
+     *
+     * @param mixed $product_data WC_Product object or data array.
+     * @return array Filtered product data.
+     */
+    private function extract_product_data($product_data)
+    {
+        if (empty($product_data)) {
+            return [];
         }
 
-        return $data;
+        // If it's a WC_Product object, extract data
+        if (is_object($product_data) && method_exists($product_data, 'get_data')) {
+            $data = $product_data->get_data();
+        } elseif (is_object($product_data)) {
+            $data = get_object_vars($product_data);
+        } else {
+            $data = $product_data;
+        }
+
+        // Return only needed fields
+        return [
+            'id' => $data['id'] ?? '',
+            'name' => $data['name'] ?? '',
+            'sku' => $data['sku'] ?? '',
+            'global_unique_id' => $data['global_unique_id'] ?? '',
+            'price' => $data['price'] ?? '',
+            'regular_price' => $data['regular_price'] ?? '',
+            'sale_price' => $data['sale_price'] ?? '',
+            'total_sales' => $data['total_sales'] ?? 0,
+            'tax_status' => $data['tax_status'] ?? '',
+            'tax_class' => $data['tax_class'] ?? '',
+            'weight' => $data['weight'] ?? '',
+            'length' => $data['length'] ?? '',
+            'width' => $data['width'] ?? '',
+            'height' => $data['height'] ?? '',
+            'parent_id' => $data['parent_id'] ?? '',
+            'virtual' => $data['virtual'] ?? '',
+            'downloadable' => $data['downloadable'] ?? '',
+            'category_ids' => $data['category_ids'] ?? [],
+            'shipping_class_id' => $data['shipping_class_id'] ?? [],
+        ];
     }
 
     /**

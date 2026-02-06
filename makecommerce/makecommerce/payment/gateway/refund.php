@@ -42,7 +42,7 @@ trait Refund {
                         }
                     }
                 }
-            } catch ( \Exception $e ) {
+            } catch ( \Throwable $e ) {
                 if ( strval( $e->getCode() ) === '1045' ) {
                     return new \WP_Error( 
                         'makecommerce_refund_error',

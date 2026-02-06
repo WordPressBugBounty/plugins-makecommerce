@@ -451,7 +451,7 @@ class Dashboard
             );
             update_option('mc_credentials_error', '');
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $label = $this->api_mode === 'test' ? __('Sandbox', 'wc_makecommerce_domain') : __('Live', 'wc_makecommerce_domain');
             if ( function_exists( 'wc_get_logger' ) ) {
                 $logger = wc_get_logger();

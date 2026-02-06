@@ -163,11 +163,6 @@ class Payment {
 
 		$api = \MakeCommerce::get_api();
 
-		//set the correct language
-		if ( isset( $_GET["lang1"] ) ) {
-			\MakeCommerce\i18n::switch_language( $_GET["lang1"] );
-		}
-
 		$returnUrl = home_url();
 
         // Avoid processing double requests from Google-Read-Aloud
@@ -240,9 +235,11 @@ class Payment {
 					__( 'Transaction ID that was assigned to this order', 'wc_makecommerce_domain' ),
 					'<a target=_blank href="'.$api->getEnvUrls()->merchantUrl.'merchant/shop/deals/detail.html?id='. $transactionId .'">'.$transactionId.'</a>'
 				);
-				$notes[] = sprintf('%s: %s€',
+				$notes[] = sprintf('%s: %s€, %s: %s€',
 					__( 'Amount that was paid', 'wc_makecommerce_domain' ),
-					$totalAmount
+					$totalAmount,
+                    __( 'Order total', 'wc_makecommerce_domain' ),
+                    $order->get_total()
 				);
 
 				$order->add_order_note( implode( "\r\n", $notes ) );

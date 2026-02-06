@@ -65,6 +65,13 @@ export const PickupPointSelect = ({ checkoutExtensionData }) => {
                         value={selectedPickupPoint}
                         isLoading={loading}
                         onChange={onChange}
+                        styles={{
+                            container: (base) => ({
+                                ...base,
+                                display: 'grid',
+                                gridTemplateColumns: 'minmax(0, 1fr)',
+                            }),
+                          }}
                     />
                 </div>
             </div>

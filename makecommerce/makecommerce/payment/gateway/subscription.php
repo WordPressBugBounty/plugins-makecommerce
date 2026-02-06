@@ -75,7 +75,7 @@ trait Subscription {
 
         try {
             $this->MK->createPayment( $transaction->id, $paymentRequest );
-        } catch ( \Exception $e ) {
+        } catch ( \Throwable $e ) {
             error_log( 'Payment failed ['.$e->getMessage().']' );
             $order->add_order_note( __( 'Unable to renew subscription', 'wc_makecommerce_domain' )."\r\n".$e->getMessage() );
 

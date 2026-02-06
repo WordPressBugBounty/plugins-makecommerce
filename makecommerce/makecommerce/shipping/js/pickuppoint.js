@@ -85,15 +85,18 @@ function populatePickupPointSelect($select, machines) {
 	for (const key in machines) {
 		const $optgroup = jQuery(`<optgroup label="${key}"></optgroup>`);
 		machines[key].forEach(item => {
+			const name = item.name || '';
+			const city = item.city || '';
+			const address = item.address || '';
+			const zip = item.zip || '';
+			const displayText = item.name + ' - ' + item.city + ', ' + item.address + ', ' + item.zip
 			const $option = jQuery('<option>', {
 				value: item.id,
-				text: item.name
-			}).data({
-				name: item.name,
-				address: item.address,
-				city: item.city,
-				zip: item.zip,
-				availability: item.availability
+				text: displayText,
+				name: name,
+				city: city,
+				address: address,
+				zip: zip,
 			});
 			if (item.selected) $option.prop('selected', true);
 			$optgroup.append($option);
@@ -106,7 +109,6 @@ function populatePickupPointSelect($select, machines) {
 		width: '100%',
 		dropdownAutoWidth: true,
 		dropdownCssClass: 'mcShippingSelectDropdown',
-		templateResult: customOption
 	});
 }
 
@@ -122,16 +124,6 @@ function applySelectBox($element, options) {
 	}
 }
 
-function customOption(option) {
-	if (!option.id) return option.text;
-	const el = jQuery(option.element);
-	const name = el.data('name') || option.text || '';
-	const city = el.data('city') || '';
-	const address = el.data('address') || '';
-	const zip = el.data('zip') || '';
-	return jQuery(`<span>${name} - ${city}, ${address}, ${zip}</span>`);
-}
-
 function focusSelect2Search(select) {
 	jQuery(select).on('select2:open', function () {
 		const searchField = jQuery('.select2-container--open').find('input.select2-search__field')[0];
@@ -140,14 +132,14 @@ function focusSelect2Search(select) {
 }
 
 function getWidth() {
-	const shippingWidth = jQuery('.woocommerce-shipping-totals').width();
+	const shippingWidth = jQuery('.woocommerce-shipping-totals').width() - 46;
 	if (shippingWidth) return shippingWidth + 'px';
 
-	const methodParentWidth = jQuery('.woocommerce-shipping-methods').parent().width();
+	const methodParentWidth = jQuery('.woocommerce-shipping-methods').parent().width() - 46;
 	if (methodParentWidth) return methodParentWidth + 'px';
 
 	// Fallback width
-	return '300px';
+	return '275px';
 }
 
 // Various fallbacks where to inject the MakeCommerce selectBox

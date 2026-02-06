@@ -97,7 +97,7 @@ class Label extends \MakeCommerce\Shipping {
             }
             try {
                 $pdf = $this->client->getLabel( $carrier, $shipment_id, $shipment_type );
-            } catch ( \Exception $e ) {
+            } catch ( \Throwable $e ) {
                 $error_msg = __('Label fetch failed: ', 'wc_makecommerce_domain' )  . $e->getMessage();
                 $this->render_template('error.twig', [
                     'mc_error' => $error_msg ] );

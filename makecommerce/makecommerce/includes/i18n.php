@@ -265,33 +265,5 @@ class i18n {
 		
 		return $languages2;
 	}
-
-	/**
-     * Switches language using WPML
-	 * 
-	 * This function needs work
-     * 
-     * @since 3.0.0
-     */
-	public static function switch_language( $language_code ) {
-
-		//switch wordpress language first
-		try {
-			switch_to_locale( $language_code );
-		} catch ( Throwable $t ) {
-			//switching to locale doesnt always work
-			error_log( print_r( $t, true ) );
-		}
-
-		//set wpml language
-		if ( function_exists( 'icl_object_id' ) ) {
-			do_action( 'wpml_switch_language', $language_code );
-
-		} else {
-			//set polylang language
-			if ( function_exists( 'pll_current_language' ) ) {
-				do_action( 'wpml_switch_language', $language_code ); //this also seems to work for polylang
-			}
-		}
-	}
+    
 }
