@@ -5,6 +5,7 @@ namespace MakeCommercePrefix\MakeCommerceShipping\SDK\Http;
 use Exception;
 use MakeCommercePrefix\GuzzleHttp\Client;
 use MakeCommercePrefix\GuzzleHttp\Exception\GuzzleException;
+use MakeCommercePrefix\GuzzleHttp\Exception\InvalidArgumentException;
 use MakeCommercePrefix\MakeCommerceShipping\SDK\Environment;
 use MakeCommercePrefix\MakeCommerceShipping\SDK\Exception\MCException;
 
@@ -15,12 +16,17 @@ class MakeCommerceClient implements HttpClientInterface
     /**
      * @var string
      */
-    private string $apiUrl;
+    private string $shippingUrl;
 
     /**
      * @var string
      */
     private string $managerUrl;
+
+    /**
+     * @var string
+     */
+    private string $apiUrl;
 
     /**
      * @var string Shop ID
@@ -63,16 +69,19 @@ class MakeCommerceClient implements HttpClientInterface
     ) {
         switch ($environment) {
             case Environment::DEV:
-                $this->setApiUrl(self::DEV_BASE_URI);
+                $this->setShippingUrl(self::DEV_SHIPPING_URI);
                 $this->setManagerUrl(self::DEV_MANAGER_URI);
+                $this->setApiUrl(self::DEV_API_URI);
                 break;
             case Environment::TEST:
-                $this->setApiUrl(self::TEST_BASE_URI);
+                $this->setShippingUrl(self::TEST_SHIPPING_URI);
                 $this->setManagerUrl(self::TEST_MANAGER_URI);
+                $this->setApiUrl(self::TEST_API_URI);
                 break;
             case Environment::LIVE:
-                $this->setApiUrl(self::LIVE_BASE_URI);
+                $this->setShippingUrl(self::LIVE_SHIPPING_URI);
                 $this->setManagerUrl(self::LIVE_MANAGER_URI);
+                $this->setApiUrl(self::LIVE_API_URI);
                 break;
         }
 
@@ -87,9 +96,9 @@ class MakeCommerceClient implements HttpClientInterface
      * @param string $url
      * @return void
      */
-    public function setApiUrl(string $url)
+    public function setShippingUrl(string $url)
     {
-        $this->apiUrl = $url;
+        $this->shippingUrl = $url;
     }
 
     /**
@@ -101,6 +110,14 @@ class MakeCommerceClient implements HttpClientInterface
         $this->managerUrl = $url;
     }
 
+    /**
+     * @param string $url
+     * @return void
+     */
+    public function setApiUrl(string $url)
+    {
+        $this->apiUrl = $url;
+    }
 
     /**
      * @param string $locale
@@ -117,23 +134,12 @@ class MakeCommerceClient implements HttpClientInterface
      * @throws GuzzleException|MCException
      */
     //TODO How will this change with the flattening
-    public function getPickuppoints(): array
-    {
-        return $this->makeApiRequest(self::GET, self::PICKUPPOINT_RESOURCES['listPickupPoints'])->body;
-    }
-
-    /**
-     * @return array
-     * @throws Exception
-     * @throws GuzzleException|MCException
-     */
-    //TODO How will this change with the flattening
     /**
      * @param string $method
      * @param string $endpoint
      * @param array $body
      * @param array $additionalHeaders
-     * @param bool $managerRequest
+     * @param string $requestType
      * @return MCResponse
      * @throws GuzzleException
      * @throws MCException
@@ -143,12 +149,28 @@ class MakeCommerceClient implements HttpClientInterface
         string $endpoint,
         array $body = [],
         array $additionalHeaders = [],
-        bool $managerRequest = false
+        string $requestType = self::REQUEST_TYPE_SHIPPING
     ): MCResponse {
-        $uri = $this->apiUrl . $endpoint;
-        if ($managerRequest) {
-            $uri = $this->managerUrl . $endpoint;
+        if (
+            !in_array($requestType, [
+            self::REQUEST_TYPE_MANAGER,
+            self::REQUEST_TYPE_SHIPPING,
+            self::REQUEST_TYPE_API])
+        ) {
+            throw new InvalidArgumentException('Unknown request type: ' . $requestType);
         }
+        switch ($requestType) {
+            case self::REQUEST_TYPE_API:
+                $uri = $this->apiUrl;
+                break;
+            case self::REQUEST_TYPE_SHIPPING:
+                $uri = $this->shippingUrl;
+                break;
+            case self::REQUEST_TYPE_MANAGER:
+                $uri = $this->managerUrl;
+                break;
+        }
+        $uri .= $endpoint;
 
         $headers = [
             'Accept' => 'application/json',
@@ -182,18 +204,6 @@ class MakeCommerceClient implements HttpClientInterface
         }
 
         return new MCResponse($response);
-    }
-
-    /**
-     * @return array|mixed|object
-     * @throws GuzzleException
-     * @throws MCException
-     */
-    //TODO How will this change with the flattening
-
-    public function getCouriers()
-    {
-        return $this->makeApiRequest(self::GET, self::COURIER_RESOURCES['listCouriers'])->body;
     }
 
     /**
@@ -398,12 +408,17 @@ class MakeCommerceClient implements HttpClientInterface
      * @throws GuzzleException
      * @throws MCException
      */
-    public function connectShop(string $userAgent, string $remoteAddr, string $orderUrl = ''): MCResponse
-    {
+    public function connectShop(
+        string $userAgent,
+        string $remoteAddr,
+        string $orderUrl = '',
+        string $webhookUrl = ''
+    ): MCResponse {
         $body = [
             'shopId' => $this->shopId,
             'secretKey' => $this->secretKey,
             'instanceId' => $this->instanceId,
+            'webhookUrl' => $webhookUrl,
             'orderUrl' => $orderUrl,
             'HTTP_USER_AGENT' => $userAgent,
             'REMOTE_ADDR' => $remoteAddr
@@ -437,5 +452,35 @@ class MakeCommerceClient implements HttpClientInterface
         $response = $this->makeApiRequest(self::GET, $endpoint, [], $headers);
 
         return $response->code === 200 && $response->body == 'Valid';
+    }
+
+    /**
+     * @param string $subscription
+     * @return bool
+     * @throws GuzzleException
+     * @throws MCException
+     */
+    public function changeSubscriptionPlan(string $subscription): bool
+    {
+        $subscription = strtoupper($subscription);
+        $endpoint = self::CONFIGURATION_RESOURCES['subscription'];
+        $body = ['subscription' => $subscription];
+        $response = $this->makeApiRequest(self::POST, $endpoint, $body, [], self::REQUEST_TYPE_API);
+
+        return $response->code === 200 && $response->rawBody == 'Success';
+    }
+
+
+    /**
+     * @return bool
+     * @throws GuzzleException
+     * @throws MCException
+     */
+    public function deactivateSubscriptionPlan(): bool
+    {
+        $endpoint = self::CONFIGURATION_RESOURCES['deactivateSubscription'];
+        $response = $this->makeApiRequest(self::POST, $endpoint, [], [], self::REQUEST_TYPE_API);
+
+        return $response->code === 200 && $response->rawBody == 'Success';
     }
 }

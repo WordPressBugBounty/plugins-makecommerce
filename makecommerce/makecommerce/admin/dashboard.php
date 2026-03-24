@@ -203,9 +203,10 @@ class Dashboard
                 $client = $this->get_client();
 
                 $token = $client->connectShop(
-                    $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-                        get_site_url() ?? $_SERVER['REMOTE_ADDR'],
-                        admin_url( 'post.php?post={id}&action=edit' )
+                    userAgent: $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+                    remoteAddr: get_site_url() ?? $_SERVER['REMOTE_ADDR'],
+                    orderUrl: admin_url( 'post.php?post={id}&action=edit' ),
+                    webhookUrl: home_url('/')
                 );
 
                 if (empty($token->body->jwt)) {
@@ -445,9 +446,10 @@ class Dashboard
         try {
             $client = $this->get_client();
             $client->connectShop(
-                $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-                get_site_url() ?? $_SERVER['REMOTE_ADDR'],
-                    admin_url( 'post.php?post={id}&action=edit' )
+                userAgent: $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+                remoteAddr: get_site_url() ?? $_SERVER['REMOTE_ADDR'],
+                orderUrl: admin_url( 'post.php?post={id}&action=edit' ),
+                webhookUrl: home_url('/')
             );
             update_option('mc_credentials_error', '');
             return true;

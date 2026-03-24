@@ -20,6 +20,7 @@ use MakeCommercePrefix\Twig\Node\Expression\AbstractExpression;
 use MakeCommercePrefix\Twig\Node\Expression\ArrayExpression;
 use MakeCommercePrefix\Twig\Node\Expression\Binary\ConcatBinary;
 use MakeCommercePrefix\Twig\Node\Expression\ConstantExpression;
+use MakeCommercePrefix\Twig\Node\Expression\EmptyExpression;
 use MakeCommercePrefix\Twig\Node\Expression\Variable\ContextVariable;
 use MakeCommercePrefix\Twig\Parser;
 use MakeCommercePrefix\Twig\Token;
@@ -100,10 +101,6 @@ final class LiteralExpressionParser extends AbstractExpressionParser implements 
                     return new ContextVariable($token->getValue(), $token->getLine());
                 }
 
-                if ('=' === $token->getValue() && ('==' === $stream->look(-1)->getValue() || '!=' === $stream->look(-1)->getValue())) {
-                    throw new SyntaxError(\sprintf('Unexpected operator of value "%s". Did you try to use "===" or "!==" for strict comparison? Use "is same as(value)" instead.', $token->getValue()), $token->getLine(), $stream->getSourceContext());
-                }
-
                 // no break
             default:
                 throw new SyntaxError(\sprintf('Unexpected token "%s" of value "%s".', $token->toEnglish(), $token->getValue()), $token->getLine(), $stream->getSourceContext());
@@ -174,7 +171,12 @@ final class LiteralExpressionParser extends AbstractExpressionParser implements 
             }
             $first = false;
 
-            $node->addElement($parser->parseExpression());
+            // Check for empty slots (comma with no expression)
+            if ($stream->test(Token::PUNCTUATION_TYPE, ',')) {
+                $node->addElement(new EmptyExpression($stream->getCurrent()->getLine()));
+            } else {
+                $node->addElement($parser->parseExpression());
+            }
         }
         $stream->expect(Token::PUNCTUATION_TYPE, ']', 'An opened sequence is not properly closed');
 

@@ -10,8 +10,11 @@
  */
 namespace MakeCommercePrefix\Twig\Extension;
 
+use MakeCommercePrefix\Twig\ExpressionParser;
 use MakeCommercePrefix\Twig\ExpressionParser\ExpressionParserInterface;
 use MakeCommercePrefix\Twig\ExpressionParser\PrecedenceChange;
+use MakeCommercePrefix\Twig\Node\Expression\Binary\AbstractBinary;
+use MakeCommercePrefix\Twig\Node\Expression\Unary\AbstractUnary;
 use MakeCommercePrefix\Twig\NodeVisitor\NodeVisitorInterface;
 use MakeCommercePrefix\Twig\TokenParser\TokenParserInterface;
 use MakeCommercePrefix\Twig\TwigFilter;

@@ -11,11 +11,15 @@
 
 namespace MakeCommercePrefix\Twig\ExpressionParser;
 
+use MakeCommercePrefix\Twig\Error\SyntaxError;
 use MakeCommercePrefix\Twig\Node\Expression\AbstractExpression;
 use MakeCommercePrefix\Twig\Parser;
 use MakeCommercePrefix\Twig\Token;
 
 interface PrefixExpressionParserInterface extends ExpressionParserInterface
 {
+    /**
+     * @throws SyntaxError
+     */
     public function parse(Parser $parser, Token $token): AbstractExpression;
 }

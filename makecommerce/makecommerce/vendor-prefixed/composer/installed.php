@@ -4,7 +4,7 @@
     'name' => 'makecommerce/module-woocommerce',
     'pretty_version' => 'dev-master',
     'version' => 'dev-master',
-    'reference' => '8b4cb8bcd3e5c2eac26f2f7bbfabee8818520d8c',
+    'reference' => 'b619b6efbbd00a4e883143e6f266623ebb43b47a',
     'type' => 'library',
     'install_path' => __DIR__ . '/../',
     'aliases' => 
@@ -16,9 +16,9 @@
   array (
     'guzzlehttp/guzzle' => 
     array (
-      'pretty_version' => '7.9.3',
-      'version' => '7.9.3.0',
-      'reference' => '7b2f29fe81dc4da0ca0ea7d42107a0845946ea77',
+      'pretty_version' => '7.10.0',
+      'version' => '7.10.0.0',
+      'reference' => 'b51ac707cfa420b7bfd4e4d5e510ba8008e822b4',
       'type' => 'library',
       'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
       'aliases' => 
@@ -28,9 +28,9 @@
     ),
     'guzzlehttp/promises' => 
     array (
-      'pretty_version' => '2.2.0',
-      'version' => '2.2.0.0',
-      'reference' => '7c69f28996b0a6920945dd20b3857e499d9ca96c',
+      'pretty_version' => '2.3.0',
+      'version' => '2.3.0.0',
+      'reference' => '481557b130ef3790cf82b713667b43030dc9c957',
       'type' => 'library',
       'install_path' => __DIR__ . '/../guzzlehttp/promises',
       'aliases' => 
@@ -40,9 +40,9 @@
     ),
     'guzzlehttp/psr7' => 
     array (
-      'pretty_version' => '2.7.1',
-      'version' => '2.7.1.0',
-      'reference' => 'c2270caaabe631b3b44c85f99e5a04bbb8060d16',
+      'pretty_version' => '2.9.0',
+      'version' => '2.9.0.0',
+      'reference' => '7d0ed42f28e42d61352a7a79de682e5e67fec884',
       'type' => 'library',
       'install_path' => __DIR__ . '/../guzzlehttp/psr7',
       'aliases' => 
@@ -52,9 +52,9 @@
     ),
     'maksekeskus/php-shipping-sdk' => 
     array (
-      'pretty_version' => '1.5.1',
-      'version' => '1.5.1.0',
-      'reference' => '119c45a091f4c47ece0f5434b1f12b1a74217aff',
+      'pretty_version' => '1.5.5',
+      'version' => '1.5.5.0',
+      'reference' => 'ced07b21189c5736a91bd5116c4607b0b28a4b13',
       'type' => 'library',
       'install_path' => __DIR__ . '/../maksekeskus/php-shipping-sdk',
       'aliases' => 
@@ -124,8 +124,8 @@
     ),
     'symfony/polyfill-ctype' => 
     array (
-      'pretty_version' => 'v1.32.0',
-      'version' => '1.32.0.0',
+      'pretty_version' => 'v1.33.0',
+      'version' => '1.33.0.0',
       'reference' => 'a3cc8b044a6ea513310cbd48ef7333b384945638',
       'type' => 'library',
       'install_path' => __DIR__ . '/../symfony/polyfill-ctype',
@@ -136,8 +136,8 @@
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.32.0',
-      'version' => '1.32.0.0',
+      'pretty_version' => 'v1.33.0',
+      'version' => '1.33.0.0',
       'reference' => '6d857f4d76bd4b343eac26d6b539585d2bc56493',
       'type' => 'library',
       'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
@@ -148,9 +148,9 @@
     ),
     'twig/twig' => 
     array (
-      'pretty_version' => 'v3.21.1',
-      'version' => '3.21.1.0',
-      'reference' => '285123877d4dd97dd7c11842ac5fb7e86e60d81d',
+      'pretty_version' => 'v3.23.0',
+      'version' => '3.23.0.0',
+      'reference' => 'a64dc5d2cc7d6cafb9347f6cd802d0d06d0351c9',
       'type' => 'library',
       'install_path' => __DIR__ . '/../twig/twig',
       'aliases' => 

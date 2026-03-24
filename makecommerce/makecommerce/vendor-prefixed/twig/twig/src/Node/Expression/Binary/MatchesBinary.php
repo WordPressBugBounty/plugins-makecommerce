@@ -13,8 +13,8 @@ namespace MakeCommercePrefix\Twig\Node\Expression\Binary;
 
 use MakeCommercePrefix\Twig\Compiler;
 use MakeCommercePrefix\Twig\Error\SyntaxError;
-use MakeCommercePrefix\Twig\Node\Expression\ReturnBoolInterface;
 use MakeCommercePrefix\Twig\Node\Expression\ConstantExpression;
+use MakeCommercePrefix\Twig\Node\Expression\ReturnBoolInterface;
 use MakeCommercePrefix\Twig\Node\Node;
 
 class MatchesBinary extends AbstractBinary implements ReturnBoolInterface

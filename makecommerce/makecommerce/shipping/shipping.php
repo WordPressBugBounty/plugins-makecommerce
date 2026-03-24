@@ -81,6 +81,10 @@ class Shipping {
 
         // Add blocks support
         add_action( 'woocommerce_blocks_loaded', [$this, 'woocommerce_blocks_support'] );
+
+        // Shipping Webhook endpoint
+        add_filter( 'query_vars', array( $this, 'register_webhook_query_var') );
+        add_action( 'template_redirect', array( $this, 'handle_webhooks') );
     }
 
     public static function init_client(): MakeCommerceClient {
@@ -154,6 +158,249 @@ class Shipping {
         $this->loader->add_filter('woocommerce_billing_fields', $this, 'set_phone_required');
 
         $this->loader->add_action( 'woocommerce_review_order_after_shipping', $this, 'mc_pickuppoint_after_shipping_details');
+    }
+
+    /**
+     * Register shared webhook query variable.
+     *
+     * @since 4.0.7
+     */
+    public function register_webhook_query_var( $vars ) {
+        $vars[] = 'makecommerce_shipping_webhook';
+
+        return $vars;
+    }
+
+    /**
+     * Unified webhook dispatcher. Routes to specific handlers based on query var.
+     *
+     * Usage examples:
+     *  - ?makecommerce_shipping_webhook=status_automation
+     *  - ?makecommerce_shipping_webhook=categories
+     *
+     * @since 4.0.7
+     */
+    public function handle_webhooks() {
+        $type = get_query_var( 'makecommerce_shipping_webhook' );
+
+        if ( empty( $type ) ) {
+            return;
+        }
+
+        if ( $type === 'status_automation' ) {
+            $this->handle_shipping_status_automation_webhook();
+            return;
+        }
+
+        if ( $type === 'categories' ) {
+            $this->handle_categories_webhook();
+            return;
+        }
+    }
+
+    /**
+     * Handles shipping webhook callback
+     *
+     * @since 4.0.7
+     */
+    public function handle_shipping_status_automation_webhook() {
+        try{
+
+            $data = stripslashes_deep( $_POST );
+
+            $api = \MakeCommerce::get_api();
+
+            $this->validate_auth($api->getShopId(), $api->getSecretKey());
+
+            if (!$api->verifyMac( $data )){
+                wp_send_json( [
+                    'code' => 'MAC_VALIDATION_ERROR',
+                    'status' => 'error',
+                    'message' => 'Mac validation failed'
+                ], 422 );
+            }
+
+            $json = json_decode($data['json'], true);
+
+            $orderId = $json['order_id'];
+            $trackingId = $json['tracking_id'];
+            $shipment_status = (int) $json['shipment_status'];
+
+            $order = wc_get_order( $orderId );
+
+            if ( !$order || !$order->get_id() ) {
+                wp_send_json([
+                    'code' => 'ORDER_NOT_FOUND',
+                    'status' => 'error',
+                    'message' => 'Order with id: ' . $orderId . ' not found'
+                ], 422 );
+            }
+
+            if ($shipment_status < 200){
+                wp_send_json([
+                    'code' => 'SHIPMENT_STATUS_BELOW_THRESHOLD',
+                    'status' => 'success',
+                    'message' => 'Order with id: ' . $orderId . ' got shipment_status: ' . $shipment_status
+                ], 200 );
+            }
+
+            // Check if our plugin has already moved this order to completed before
+            if ( $order->get_meta( '_mc_has_set_to_completed' ) === 'yes' ) {
+                wp_send_json([
+                    'code' => 'ORDER_ALREADY_COMPLETED_BY_MC',
+                    'status' => 'success',
+                    'message' => 'Order with id: ' . $orderId . ' has already been moved to completed status by MakeCommerce.'
+                ], 200 );
+            }
+
+            // Only move status to completed if order in processing
+            if ($order->get_status() !== 'processing') {
+                wp_send_json([
+                    'code' => 'ORDER_NOT_IN_PROCESSING_STATE',
+                    'status' => 'success',
+                    'message' => 'Order with id: ' . $orderId . ' is not in processing status: ' . $order->get_status()
+                ], 200 );
+            }
+
+
+            // Mark that our plugin was the one who set this order to completed status
+            $order->update_meta_data( '_mc_has_set_to_completed', 'yes' );
+            $order->add_order_note(
+                sprintf(
+                    __( 'Received status %s for shipment %s, marking order as completed', 'wc_makecommerce_domain' ),
+                    $shipment_status,
+                    $trackingId
+                ));
+            $order->update_status( 'completed' );
+
+            $order->save();
+
+            wp_send_json( [
+                'status' => 'success',
+                'message' => 'Order with id: ' . $orderId . ' status set to completed'
+            ], 200 );
+
+        } catch (\Exception $e) {
+            wp_send_json( [
+                'code' => 'WOOCOMMERCE_UNEXPECTED_ERROR',
+                'status' => 'error',
+                'message' => substr($e->getMessage(), 0, 500)
+            ], 500 );
+        }
+    }
+
+    /**
+     * Handles categories webhook callback
+     *
+     * Allows external MakeCommerce service to fetch WooCommerce product categories.
+     *
+     * @since 4.0.7
+     */
+    public function handle_categories_webhook() {
+
+        $api = \MakeCommerce::get_api();
+
+        $this->validate_auth($api->getShopId(), $api->getSecretKey());
+
+        $terms = get_terms(
+            [
+                'taxonomy'   => 'product_cat',
+                'hide_empty' => false,
+            ]
+        );
+
+        if ( is_wp_error( $terms ) ) {
+            wp_send_json(
+                [
+                    'code'    => 'TERM_FETCH_ERROR',
+                    'status'  => 'error',
+                    'message' => $terms->get_error_message(),
+                ],
+                500
+            );
+        }
+
+        $categories = array_map(
+            function ( $term ) {
+                return [
+                    'id'          => (string) $term->term_id,
+                    'name'        => $term->name,
+                    'parent_id'   => (string) $term->parent,
+                    'description' => $term->description,
+                ];
+            },
+            $terms
+        );
+
+        wp_send_json(
+            [
+                'status'     => 'success',
+                'categories' => $categories,
+            ],
+            200
+        );
+    }
+
+    /**
+     * Validate HTTP Basic Auth header for webhook requests.
+     *
+     * Username must match shop ID and password must match secret key.
+     * Responds with 401 JSON error and terminates execution on failure.
+     *
+     * @param string $shop_id
+     * @param string $secret_key
+     *
+     * @since 4.0.7
+     */
+    private function validate_auth(string $shop_id, string $secret_key ) {
+        $authorization = '';
+
+        if ( function_exists( 'getallheaders' ) ) {
+            $headers = getallheaders();
+
+            $authorization = isset( $headers['Authorization'] ) ? $headers['Authorization'] : '';
+        }
+
+        if ( empty( $authorization ) || stripos( $authorization, 'Basic ' ) !== 0 ) {
+            wp_send_json(
+                [
+                    'code'    => 'UNAUTHORIZED',
+                    'status'  => 'error',
+                    'message' => 'Missing or invalid Authorization header',
+                ],
+                401
+            );
+        }
+
+        $encoded_credentials = trim( substr( $authorization, 6 ) ); // Remove 'Basic '
+        $decoded_credentials = base64_decode( $encoded_credentials, true );
+
+        if ( $decoded_credentials === false || strpos( $decoded_credentials, ':' ) === false ) {
+            wp_send_json(
+                [
+                    'code'    => 'UNAUTHORIZED',
+                    'status'  => 'error',
+                    'message' => 'Malformed Authorization header',
+                ],
+                401
+            );
+        }
+
+        list( $username, $password ) = explode( ':', $decoded_credentials, 2 );
+
+        $username_valid = $shop_id === $username;
+        $password_valid = $secret_key === $password;
+
+        if ( ! $username_valid || ! $password_valid ) {
+            wp_send_json(
+                [
+                    'code'    => 'UNAUTHORIZED',
+                    'status'  => 'error',
+                    'message' => 'Invalid Basic Auth credentials',
+                ],
+                401
+            );
+        }
     }
 
     /**

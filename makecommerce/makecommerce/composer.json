@@ -8,7 +8,7 @@
     }
   ],
   "require": {
-    "maksekeskus/php-shipping-sdk": "1.5.1",
+    "maksekeskus/php-shipping-sdk": "1.5.5",
     "twig/twig": "^3.11.0"
   },
   "require-dev": {

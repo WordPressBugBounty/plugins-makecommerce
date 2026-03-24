@@ -3,7 +3,7 @@ Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
 Tested up to: 6.9
-Stable tag: 4.0.6
+Stable tag: 4.0.7
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,13 @@ https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
 35. example order view
 
 == Changelog ==
+
+= 4.0.7 2026-03-24 =
+* Feature - Added order locking to prevent race conditions during payment processing
+* Feature - Improved shipping rate caching for faster responses from the MakeCommerce Shipping API
+* Feature - Added webhook support for automated order status updates
+* Feature - Added webhook support for fetching WooCommerce product categories
+* Fix - Resolved static property issue with DefaultLocale in i18n
 
 = 4.0.6 2026-01-27 =
 * Feature - Enable searching for parcel machines by city name when the city is not included in the machine's title.

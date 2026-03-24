@@ -13,6 +13,7 @@ namespace MakeCommercePrefix\Twig\ExpressionParser\Infix;
 
 use MakeCommercePrefix\Twig\Error\SyntaxError;
 use MakeCommercePrefix\Twig\Node\Expression\ArrayExpression;
+use MakeCommercePrefix\Twig\Node\Expression\Binary\SetBinary;
 use MakeCommercePrefix\Twig\Node\Expression\Unary\SpreadUnary;
 use MakeCommercePrefix\Twig\Node\Expression\Variable\ContextVariable;
 use MakeCommercePrefix\Twig\Node\Expression\Variable\LocalVariable;
@@ -58,7 +59,10 @@ trait ArgumentsTrait
             }
 
             $name = null;
-            if (($token = $stream->nextIf(Token::OPERATOR_TYPE, '=')) || ($token = $stream->nextIf(Token::PUNCTUATION_TYPE, ':'))) {
+            if ($value instanceof SetBinary) {
+                $name = $value->getNode('left')->getAttribute('name');
+                $value = $value->getNode('right');
+            } elseif (($token = $stream->nextIf(Token::OPERATOR_TYPE, '=')) || ($token = $stream->nextIf(Token::PUNCTUATION_TYPE, ':'))) {
                 if (!$value instanceof ContextVariable) {
                     throw new SyntaxError(\sprintf('A parameter name must be a string, "%s" given.', $value::class), $token->getLine(), $stream->getSourceContext());
                 }

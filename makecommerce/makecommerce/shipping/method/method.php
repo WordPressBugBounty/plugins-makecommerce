@@ -103,57 +103,68 @@ class Method extends WC_Shipping_Method
             return;
         }
 
-        $totalWeight = $this->getCartTotalWeight($package['contents']);
-        $dst = $package['destination']['country'];
-        $address = $package['destination']['address'];
-        $city = $package['destination']['city'];
-        $postcode = $package['destination']['postcode'];
-
-        $details = ['package' => $this->filter_package_details($package)];
-        $details = $this->add_woo_conf($details);
+        $request_payload = $this->build_rates_request_payload($package);
 
         $location = [];
+
+        // Build a hash of the full request payload
+        $cache_hash = $this->build_rates_cache_hash($request_payload);
+        $session = null;
+
+        if (function_exists('WC') && WC()->session) {
+            $session = WC()->session;
+            $cached_hash = $session->get('mc_last_rates_hash');
+            $cached_rates = $session->get('mc_last_rates');
+            $cached_ts = (int) $session->get('mc_last_rates_timestamp');
+
+            // Allow sites to change TTL via filter if needed.
+            $cache_ttl = (int) apply_filters('mc_shipping_rates_cache_ttl', 30);
+
+            if (
+                !empty($cached_hash) &&
+                $cached_hash === $cache_hash &&
+                !empty($cached_rates) &&
+                !empty($cached_ts) &&
+                (time() - $cached_ts) < $cache_ttl
+            ) {
+                // Re-use cached rates
+                $this->register_mc_rates($cached_rates, $package);
+                return;
+            }
+        }
+
         try {
             $client = Shipping::init_client();
-            $rates = $client->getRates([
-                'details' => $details,
-                'weight' => $totalWeight,
-                'destination' => $dst,
-                'location' => [
-                    'address' => $address,
-                    'city' => $city,
-                    'zip' => $postcode,
-                ]
-            ], $location);
+            $rates = $client->getRates($request_payload, $location);
+            if (is_object($rates)) {
+                $rates = (array) $rates;
+            }
 
             $decoded_location = is_string($location) ? json_decode($location) : $location;
             if (
                 is_array($decoded_location) &&
                 isset($decoded_location[0]->latitude, $decoded_location[0]->longitude) &&
-                WC()->session
+                $session
             ) {
-                WC()->session->set('mc_coordinates', [
+                $session->set('mc_coordinates', [
                     'lat' => (float) $decoded_location[0]->latitude,
                     'lng' => (float) $decoded_location[0]->longitude,
                 ]);
             }
 
-            foreach ($rates as $method => $carriers) {
-                // If does not fit and is pickuppoint, then do not add shipping rate
-                if ($method === 'pickuppoint' && !$this->fits_parcel_machine($package)) {
-                    continue;
-                }
+            if ($session) {
+                $session->set('mc_last_rates_hash', $cache_hash);
+                $session->set('mc_last_rates', $rates);
+                $session->set('mc_last_rates_timestamp', time());
 
-                foreach ($carriers as $carrier) {
-                    $this->add_rate([
-                        'id'        => 'mc_' . $method . '_' . $carrier->carrier,
-                        'label'     => $carrier->title,
-                        'cost'      => $carrier->price / 100,
-                        'taxes'     => '',
-                        'calc_tax'  => 'per_order',
-                    ]);
+                $session_rates = $session->get('mc_last_rates');
+                if (!empty($session_rates)) {
+                    $this->register_mc_rates($session_rates, $package);
+                } else {
+                    $this->register_mc_rates($rates, $package); // fallback
                 }
-
+            } else {
+                $this->register_mc_rates($rates, $package);
             }
 
         } catch (\Throwable $e) {
@@ -219,6 +230,70 @@ class Method extends WC_Shipping_Method
         return $total_weight;
     }
 
+    /**
+     * Build MakeCommerce rates request payload from WooCommerce package.
+     *
+     * @param array $package
+     * @return array
+     */
+    private function build_rates_request_payload(array $package): array
+    {
+        $totalWeight = $this->getCartTotalWeight($package['contents']);
+        $destination = $package['destination'] ?? [];
+
+        $details = ['package' => $this->filter_package_details($package)];
+        $details = $this->add_woo_conf($details);
+
+        return [
+            'details'     => $details,
+            'weight'      => $totalWeight,
+            'destination' => $destination['country'] ?? '',
+            'location'    => [
+                'address' => $destination['address'] ?? '',
+                'city'    => $destination['city'] ?? '',
+                'zip'     => $destination['postcode'] ?? '',
+            ],
+        ];
+    }
+
+    /**
+     * Build a stable hash for the current request payload
+     * to decide when to reuse cached shipping rates.
+     *
+     * @param array $request_payload
+     * @return string
+     */
+    private function build_rates_cache_hash(array $request_payload): string
+    {
+        return hash('sha256', wp_json_encode($request_payload));
+    }
+
+    /**
+     * Register MakeCommerce shipping rates with WooCommerce.
+     *
+     * @param $rates
+     * @param array $package
+     * @return void
+     */
+    private function register_mc_rates($rates, array $package): void
+    {
+        foreach ($rates as $method => $carriers) {
+            // If does not fit and is pickuppoint, then do not add shipping rate
+            if ($method === 'pickuppoint' && !$this->fits_parcel_machine($package)) {
+                continue;
+            }
+
+            foreach ($carriers as $carrier) {
+                $this->add_rate([
+                    'id'        => 'mc_' . $method . '_' . $carrier->carrier,
+                    'label'     => $carrier->title,
+                    'cost'      => $carrier->price / 100,
+                    'taxes'     => '',
+                    'calc_tax'  => 'per_order',
+                ]);
+            }
+        }
+    }
 
     /**
      * Convert product weight to grams.

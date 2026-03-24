@@ -29,7 +29,7 @@ namespace MakeCommerce;
 class i18n {
 
 	//set default locale when there is nothing specified
-	public $defaultLocale = "en";
+	public static string $defaultLocale = "en";
 
 	/**
 	 * Load the plugin text domain for translation.

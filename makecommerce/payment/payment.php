@@ -287,6 +287,13 @@ class Payment {
 			}
 		}
 
+        // Lock processing for this order+status to avoid race conditions between callback and redirect
+        $lock_key = '_makecommerce_payment_lock_status_' . $paymentStatus;
+        $locked   = add_post_meta( $orderId, $lock_key, time(), true );
+        if ( ! $locked ) {
+            return $returnUrl;
+        }
+
 		//check if we already processed this status in the past.
 		if ( $check_status && $order->get_meta( '_makecommerce_payment_processed_status', true ) == $paymentStatus ) {
 			return $returnUrl;
