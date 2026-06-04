@@ -178,6 +178,7 @@ class Payment {
 
 			$data = $api->extractRequestData( $request );
 			$transactionId = false;
+            $reference = false;
 
 			if ( !empty( $data['error'] ) ) {
 
@@ -192,9 +193,14 @@ class Payment {
 					$transactionId = $data['transaction'];
 					$paymentStatus = $data['status'];
 					$totalAmount = $data['amount'];
+                    $reference = $data['reference'];
 				}
 
 				if ( $data['message_type'] === 'token_return' ) {
+                    if ( !empty( $data['transaction']['reference'] ) ) {
+                        $reference = $data['transaction']['reference'];
+                    }
+
 					$paymentStatus = $data['transaction']['status'];
 					$transactionId = $data['transaction']['id'];
 				}
@@ -208,6 +214,11 @@ class Payment {
 
 		//get the post id using transactionid
 		$orderId = self::get_postid_using_metakey( '_makecommerce_transaction_id', $transactionId );
+
+        //try using reference as orderId
+        if ( !$orderId ) {
+            $orderId = $reference;
+        }
 
 		$order = wc_get_order( $orderId );
 		
@@ -297,44 +308,32 @@ class Payment {
 			return $returnUrl;
 		}
 
-		if ( $paymentStatus === 'COMPLETED' ) {
-			$order->update_meta_data( '_makecommerce_payment_processed_status', $paymentStatus );
-			$order->save();
+		if ( isset( $_GET['lang1'] ) ) {
+			$order->update_meta_data( 'wpml_language', $_GET["lang1"] );
 		}
 
 		switch( $paymentStatus ) {
 
 			case 'CANCELLED':
-                $order->update_status( 'cancelled' );
-                $order->update_meta_data( '_makecommerce_payment_processed_status', $paymentStatus );
+                self::record_payment_status( $order, $paymentStatus, $api, $transactionId );
                 $returnUrl = add_query_arg( 'mc_payment_status', 'cancelled', $returnUrl );
 
 				break;
 			case 'EXPIRED':
 				if ( $order->get_status() == "pending" ) {
-                    $order->update_meta_data( '_makecommerce_payment_processed_status', $paymentStatus );
+                    self::record_payment_status( $order, $paymentStatus, $api, $transactionId );
 					$returnUrl = add_query_arg( 'mc_payment_status', 'expired', $returnUrl );
 				}
 
 				break;
 			case 'COMPLETED':
-				$orderNote = array();
-				$transactionIdText = \MakeCommerce\i18n::get_string_from_mo( 'Transaction ID', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_site_default_language() );
-				$paymentOptionText = \MakeCommerce\i18n::get_string_from_mo( 'Payment option', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_site_default_language() );
-
-				$orderNote[] = $transactionIdText . ': <a target=_blank href="'.$api->getEnvUrls()->merchantUrl.'merchant/shop/deals/detail.html?id='. $transactionId .'">'.$transactionId.'</a>';
-				$orderNote[] = $paymentOptionText . ': ' . $order->get_meta( '_makecommerce_preselected_method', true );
-				$order->add_order_note( implode( "\r\n", $orderNote ) );
+				self::record_payment_status( $order, $paymentStatus, $api, $transactionId );
 
 				if ( !empty( $data['token'] ) && !empty( $data['token']['multiuse'] ) ) {
 					$order->update_meta_data( '_makecommerce_payment_token', $data['token']['id'] );
 					$order->update_meta_data( '_makecommerce_payment_token_valid_until', $data['token']['valid_until'] );
 				}
 				
-				if ( isset( $_GET['lang1'] ) ) {
-					$order->update_meta_data( 'wpml_language', $_GET["lang1"] );
-				}
-
 				$order->payment_complete( $transactionId );
 				$woocommerce->cart->empty_cart();
 
@@ -346,6 +345,18 @@ class Payment {
 
 		return $returnUrl;
 	}
+
+    private static function record_payment_status( $order, $paymentStatus, $api, $transactionId ) {
+        $transactionIdText = \MakeCommerce\i18n::get_string_from_mo( 'Transaction ID', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_site_default_language() );
+        $paymentOptionText = \MakeCommerce\i18n::get_string_from_mo( 'Payment option', 'wc_makecommerce_domain', \MakeCommerce\i18n::get_site_default_language() );
+
+        $orderNote = array();
+        $orderNote[] = $transactionIdText . ': <a target=_blank href="'.$api->getEnvUrls()->merchantUrl.'merchant/shop/deals/detail.html?id='. $transactionId .'">'.$transactionId.'</a>';
+        $orderNote[] = $paymentOptionText . ': ' . $order->get_meta( '_makecommerce_preselected_method', true );
+
+        $order->add_order_note( implode( "\r\n", $orderNote ) );
+        $order->update_meta_data( '_makecommerce_payment_processed_status', $paymentStatus );
+    }
 
     /**
      * Returns post_id using transaction id or false if not found

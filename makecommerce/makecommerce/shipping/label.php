@@ -2,7 +2,7 @@
 
 namespace MakeCommerce\Shipping;
 
-use MakeCommercePrefix\MakeCommerceShipping\SDK\Http\MakeCommerceClient;
+use MakeCommerce\Admin\Dashboard;
 
 /**
  * All functionality that has to do with shipping labels and printing
@@ -96,27 +96,21 @@ class Label extends \MakeCommerce\Shipping {
                 $this->client = self::init_client();
             }
             try {
-                $pdf = $this->client->getLabel( $carrier, $shipment_id, $shipment_type );
+                $label = $this->client->getLabel( $carrier, $shipment_id, $shipment_type );
+                header('Content-Type: application/pdf');
+                header('Content-Disposition: inline; filename="' . $shipment_id . '.pdf"');
+                echo $label;
+                exit;
+
             } catch ( \Throwable $e ) {
-                $error_msg = __('Label fetch failed: ', 'wc_makecommerce_domain' )  . $e->getMessage();
-                $this->render_template('error.twig', [
-                    'mc_error' => $error_msg ] );
+                $init_print_label_via_manager_url = add_query_arg( [
+                    'mc_print_label'  => 1,
+                    'mc_shipment_id'  => $shipment_id,
+                ], admin_url('admin.php?page=' . Dashboard::DASHBOARD_SLUG) );
+
+                wp_redirect( $init_print_label_via_manager_url );
                 exit;
             }
-
-            if (!$pdf) {
-                $error_msg = __('No PDF content received.', 'wc_makecommerce_domain' );
-                $this->render_template('error.twig', [
-                    'mc_error' => $error_msg ] );
-                exit;
-            }
-
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: inline; filename="'.$shipment_id.'.pdf"');
-
-            echo $pdf;
-
-            die();
         }
     }
 }

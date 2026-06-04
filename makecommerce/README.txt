@@ -2,63 +2,177 @@
 Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
-Tested up to: 6.9
-Stable tag: 4.0.7
+Tested up to: 7.0
+Stable tag: 4.0.8
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Payment Gateway for Estonian, Latvian, Lithuanian and Finnish banks and Visa/MasterCard payments with single contract (by Maksekeskus). And more...
 
+Payments and shipping for WooCommerce stores in Estonia, Latvia, Lithuania and Finland. One contract, one bank account, all major banks and cards.
 
 == Description ==
-MakeCommerce is a payment service provider for e-commerce businesses in the Baltics and Finland.
-It is the international brand of Maksekeskus AS.
 
-The MakeCommerce plugin enables to accept Estonian, Latvian, Lithuanian and Finnish bank payments, credit card payments, Revolut and N26 payments, and buy-now-pay-later (BNPL) payment options.
-In addition, it can also be used to send out shipments via the most popular carriers in the Baltics, including Omniva, DPD, SmartPosti, Venipak, Unisend and others.
+### MAKECOMMERCE FOR WOOCOMMERCE
 
-To start using the services, please sign up at https://merchant.maksekeskus.ee/sign-up.html?locale=en and then complete the setup guide in the plugin.
+MakeCommerce is the leading payment and shipping solution for e-commerce businesses in the Baltics and Finland. One plugin, one contract - and you're ready to accept bank payments from all major local banks, Visa and Mastercard card payments, Apple Pay, Google Pay, and ship orders with the most popular carriers in the region.
 
-No multiple bank contracts needed, all you need is one bank account for your regular payouts.
+No complicated setup. No multiple bank contracts. Just install, connect your merchant account, and start selling.
 
-Installing the plugin is free of charge.
-A transaction fee is charged by MakeCommerce separately.
-See our pricing at https://makecommerce.net/pricing/.
+[Sign up for free at MakeCommerce](https://merchant.maksekeskus.ee/sign-up.html?locale=en) - installation is free and a transaction fee is charged separately.
 
-Overview of functionality:
+See pricing at [makecommerce.net/pricing](https://makecommerce.net/pricing/).
 
-* Bank-links of all major banks in Estonia, Latvia, Lithuania, Finland
-* Credit-card payments (Visa, Mastercard, Apple Pay, Google Pay) through MakeCommerce PCI DSS compliant card dialog (removes compliancy requirement from merchant)
-* Pay later payments
-* Recurring payments with credit cards for subscriptions
+
+### WHY MAKECOMMERCE?
+
+#### ONE CONTRACT. FOUR COUNTRIES.
+
+Stop managing separate contracts with every bank. With MakeCommerce you get a single agreement that covers Estonia, Latvia, Lithuania and Finland. Your payouts land in one bank account, the next business day.
+
+85% of buyers in the Baltic region prefer internet banking as their payment method - and MakeCommerce connects you to all of them out of the box.
+
+#### INTERNET BANKING - ALL MAJOR BANKS INCLUDED
+
+Give your customers their preferred way to pay. MakeCommerce supports Payment Initiation Service (PIS) for fast payment confirmation without manual card data entry.
+
+**Latvia:** Swedbank, SEB, Citadele, Luminor
+
+**Lithuania:** Swedbank, SEB, Luminor, Citadele, Siauliu Bankas
+
+**Estonia:** Swedbank, SEB, Luminor, LHV, Coop Pank, Citadele
+
+**Finland:** Nordea, Danske, Pohjola, S-Pankki, Saastopankki, Omasaastopankki, POP Pankki, Alandsbanken
+
+**International:** Revolut, N26, Paysera, Wise
+
+#### CARD PAYMENTS, APPLE PAY, GOOGLE PAY AND CLICK TO PAY
+
+Accept Visa and Mastercard from customers worldwide through MakeCommerce's PCI DSS compliant card dialog - which removes the compliance burden from your store entirely. Transactions are secured with 3D Secure (Smart-ID, PIN, or Face ID) and SSL encryption.
+
+Apple Pay speeds up checkout by up to 3x compared to traditional card entry. Google Pay and Click to Pay are also supported. No separate registration is needed - just enable card payments and these methods activate automatically on supported devices.
+
+#### BUY NOW, PAY LATER
+
+Let customers split their purchase into installments with BNPL payment options available in all supported countries. Ideal for higher-value products - increases conversion and average order value.
+
+### SHIPPING+ - SMART SHIPPING FOR THE BALTICS
+
+Stop switching between carrier portals. MakeCommerce Shipping+ gives you a single dashboard to manage shipments across all major Baltic carriers. Register shipments automatically and print parcel labels directly from the WP admin dashboard.
+
+**Supported Carriers:**
+
+* Omniva - parcel terminals and courier
+* DPD - parcel terminals and courier
+* Venipak - parcel terminals and courier
+* SmartPosti - parcel terminals
+* Unisend / LP Express - parcel terminals
+* ...with more to come
+
+
+### FULL FEATURE LIST
+
+**Payments:**
+
+* Internet banking for Estonia, Latvia, Lithuania and Finland (all major banks)
+* Visa and Mastercard card payments (global cardholders)
+* Apple Pay, Google Pay and Click to Pay
+* Buy now, pay later (BNPL)
 * Payment country selector independent of billing/shipping address
-* Make full or partial refunds right within shop Admin (order view)
-* Omniva, Smartpost, DPD, Venipak & Unisend/LP Express automated parcel terminals as shipment methods
-* Omniva, Smartpost, Venipak & DPD courier service as shipment method
-* Automatic registration of shipments
-* Printing parcel labels right within shop Admin
-* Supports multilingual shops (WPML and Polylang). The plugin is fully translated to English, Estonian, Latvian and Lithuanian
-* Supports WordPress multi-site
+* Webhooks for automated order status updates
+
+**Shipping:**
+
+* Omniva, DPD, SmartPosti, Venipak and Unisend/LP Express parcel terminals
+* Omniva, SmartPosti, Venipak and DPD courier services
+* Automatic shipment registration
+* Parcel label printing from WooCommerce admin
+* Shipment tracking links in order confirmation emails
+
+**Compatibility and Technical:**
+
+* WooCommerce Blocks checkout support
+* WooCommerce HPOS (High Performance Order Storage) support
+* WordPress Multi-Site support
+* WPML and Polylang multilingual support
+* Fully translated to English, Estonian, Latvian and Lithuanian
+
+
+### GETTING STARTED
+
+1. Install and activate the plugin
+2. [Sign up for a MakeCommerce merchant account](https://merchant.maksekeskus.ee/sign-up.html?locale=en)
+3. Enter your Shop ID and API keys in the plugin settings
+4. You are ready to accept payments and ship orders
+
+Need help? Visit [makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce](https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce) or contact our support team at support@maksekeskus.ee.
 
 
 == Installation ==
-1. Install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Navigate to our module and complete setup process
 
-See more on:
-https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce
+1. Install the plugin through the WordPress plugins screen directly, or upload the plugin folder to `/wp-content/plugins/`.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
+3. Navigate to the MakeCommerce settings and complete the setup guide.
+4. Enter your Shop ID, Secret Key and Public Key (available from your MakeCommerce Merchant Portal).
+5. Enable payment methods and/or shipping carriers as needed.
+
+Full setup documentation: [makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce](https://makecommerce.net/integration-modules/makecommerce-plugin-for-woocommerce)
+
+
+== Frequently Asked Questions ==
+
+= Do I need separate contracts with each bank? =
+
+No. One MakeCommerce contract covers all supported banks in Estonia, Latvia, Lithuania and Finland. All your payouts go to a single bank account.
+
+= Is the plugin free to install? =
+
+Yes. Installing and using the plugin is free. MakeCommerce charges a transaction fee per payment processed. See current pricing at [makecommerce.net/pricing](https://makecommerce.net/pricing/).
+
+= Does MakeCommerce handle PCI DSS compliance? =
+
+Yes. Card payments are processed through MakeCommerce's own PCI DSS compliant card dialog. Card data never touches your server, which removes the compliance requirement from your store.
+
+= Do I need to register separately to accept Apple Pay, Google Pay or Click to Pay? =
+
+No. Apple Pay, Google Pay and Click to Pay activate automatically once card payments are enabled in your MakeCommerce settings. No separate provider agreements are needed.
+
+= Which shipping carriers are supported? =
+
+Omniva, DPD, Venipak, SmartPosti, and Unisend/LP Express - with more to come.
+
+= Does it support WooCommerce Blocks checkout? =
+
+Yes. Full WooCommerce Blocks checkout support was added in version 3.5.0, including parcel terminal selection on block themes.
+
+= Is the plugin compatible with WPML and Polylang? =
+
+Yes. The plugin is fully compatible with both WPML and Polylang and is translated into English, Estonian, Latvian and Lithuanian.
+
+= Where do I find my API credentials? =
+
+Log in to your MakeCommerce Merchant Portal at [merchant.maksekeskus.ee](https://merchant.maksekeskus.ee) and find your Shop ID, Secret Key and Public Key under the API settings section.
+
+= How do I get support? =
+
+Find the preferred way to contact us at [makecommerce.net/contact](https://makecommerce.net/contact/).
+
 
 == Screenshots ==
 
-30. plugin setup page
-31. shipping+ plugin view
-32. presentation of payment methods in checkout (block themes)
-33. presentation of payment methods in checkout (classic themes)
-34. example checkout view
-35. example order view
+1. Responsive payment selection screen - fits your theme with no extra customization, Blocks checkout supported, automatic country selection
+2. Optimized pick-up point selection - module auto-selects the closest pick-up point, customer can override
+3. Plugin setup - choose which services to enable: collect payments and/or deliver products
+4. Manage shipments and print labels straight from the WP admin dashboard
+5. Carrier and zone setup is done automatically - configure parcel and courier deliveries
+
 
 == Changelog ==
+
+= 4.0.8 2026-06-04 =
+* Fix - Remove order cancellation on transaction cancel status.
+* Fix - Add order note for cancelled, expired and completed payments via unified status recording.
+* Fix - Fallback to transaction reference to find the related order when transaction ID lookup fails.
+* Fix - Redirect shipping label print requests to manager service as fallback when direct label fetch fails.
 
 = 4.0.7 2026-03-24 =
 * Feature - Added order locking to prevent race conditions during payment processing

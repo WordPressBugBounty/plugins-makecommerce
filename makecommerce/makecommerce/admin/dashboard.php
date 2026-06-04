@@ -220,6 +220,17 @@ class Dashboard
                 }
 
                 echo '<iframe id="mcIframe" src="' . esc_url($url) . '" width="100%"></iframe>';
+
+                // Add postMessage if label print was requested
+                if (isset($_GET['mc_print_label']) && isset($_GET['mc_shipment_id'])) {
+                    $label_data = json_encode([
+                        'type'           => 'print_label',
+                        'mc_shipment_id' => sanitize_text_field($_GET['mc_shipment_id'])
+                    ]);
+                    echo '<script> let labelPrinted = false; document.getElementById("mcIframe").addEventListener("load", function() {
+                        if (labelPrinted) return; labelPrinted = true; this.contentWindow.postMessage( '.$label_data.', "*")});</script>';
+                }
+
                 $this->render_template('credentialsPopup.twig', ['render_footer' => false]);
             } catch (\Throwable $e) {
                 if ( function_exists( 'wc_get_logger' ) ) {

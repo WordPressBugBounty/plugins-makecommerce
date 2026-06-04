@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Start at version 3.0.0 and use SemVer - https://semver.org
  */
-define( 'MAKECOMMERCE_VERSION', '4.0.7' );
+define( 'MAKECOMMERCE_VERSION', '4.0.8' );
 define( 'MAKECOMMERCE_PLUGIN_ID', 'makecommerce' );
 
 //table name for banklinks
