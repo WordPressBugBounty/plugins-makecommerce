@@ -2,8 +2,8 @@
 Contributors: MakeCommerce
 Tags: woocommerce, payment, shipping, banklink, creditcard
 Requires at least: 6.8.1
-Tested up to: 7.0
-Stable tag: 4.0.8
+Tested up to: 7.1
+Stable tag: 4.1.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -167,6 +167,11 @@ Find the preferred way to contact us at [makecommerce.net/contact](https://makec
 
 
 == Changelog ==
+
+= 4.1.0 2026-08-13 =
+* Feature - Automatic session renewal in the MakeCommerce settings view.
+* Tweak - Improved webhook compatibility with Apache CGI/FastCGI setups.
+* Fix - Clear MakeCommerce shipping data when the shipping method changes on the Blocks checkout.
 
 = 4.0.8 2026-06-04 =
 * Fix - Remove order cancellation on transaction cancel status.

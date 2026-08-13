@@ -4,4 +4,8 @@ window.addEventListener('message', function (event) {
             window.location.href = mcApiData.redirect_url;
         }
     }
+
+    if (event.data === 'makecommerce_renew_session') {
+        window.location.reload();
+    }
 }, false);

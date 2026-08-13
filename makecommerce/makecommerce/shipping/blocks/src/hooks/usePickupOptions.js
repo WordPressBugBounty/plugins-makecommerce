@@ -46,6 +46,18 @@ export const usePickupOptions = ({
     const previousRateRef = useRef('');
     const previousCountryRef = useRef('');
 
+    // WooCommerce unmounts this whole block (it's a child of
+    // woocommerce/checkout-shipping-methods-block) the instant the customer
+    // switches to WooCommerce's blocks own local pickup, before the effect below ever
+    // sees the new shippingRates. Clear our extension data on unmount so a
+    // stale MC selection isn't left behind for the order.
+    useEffect(() => {
+        return () => {
+            setExtensionData('makecommerce', 'shipping_method', '');
+            setExtensionData('makecommerce', 'machine_id', '');
+        };
+    }, [setExtensionData]);
+
     useEffect(() => {
         const currentPackage = shippingRates?.[0];
         if (!currentPackage) return;
@@ -58,6 +70,8 @@ export const usePickupOptions = ({
 
         if (rateId?.startsWith('mc_courier_')) {
             setPickupPointOptions([]);
+            setSelectedPickupPoint(null);
+            setExtensionData('makecommerce', 'machine_id', '');
             previousRateRef.current = rateId;
             previousCountryRef.current = selectedCountry;
             return;
@@ -65,6 +79,11 @@ export const usePickupOptions = ({
 
         if (!rateId?.startsWith('mc_pickuppoint_')) {
             setIsMcShipping(false);
+            setPickupPointOptions([]);
+            setSelectedPickupPoint(null);
+            setExtensionData('makecommerce', 'machine_id', '');
+            previousRateRef.current = rateId;
+            previousCountryRef.current = selectedCountry;
             return;
         }
 

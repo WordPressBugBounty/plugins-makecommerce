@@ -12,7 +12,7 @@ class WooCommerce extends Gateway {
 
     public $id = MAKECOMMERCE_PLUGIN_ID;
 
-    public $version = '4.0.8';
+    public $version = '4.1.0';
     
     public $payment_return_url;
     public $payment_return_url_m2m;

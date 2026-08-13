@@ -90,10 +90,18 @@ final class MakeCommerceShippingBlocks {
             $carrier = str_replace( [ 'mc_courier_', 'mc_pickuppoint_' ], '', $shipping_method );
             $order->update_meta_data( '_mc_shipping_method', str_replace( 'mc_', '', $shipping_method ) );
             $order->update_meta_data( '_mc_shipping_carrier', $carrier );
+        } else {
+            // Customer switched away from a MakeCommerce method (e.g. to WooCommerce's own local pickup).
+            // Clear any stale meta a previous draft-order sync may have written, otherwise register_shipment()
+            // will still treat this order as eligible for a MakeCommerce shipment.
+            $order->delete_meta_data( '_mc_shipping_method' );
+            $order->delete_meta_data( '_mc_shipping_carrier' );
         }
 
         if ( $machine_id && (stripos($shipping_method, 'pickuppoint') !== false) ) {
             $order->update_meta_data( '_mc_machine_id', $machine_id );
+        } else {
+            $order->delete_meta_data( '_mc_machine_id' );
         }
 
         $order->save();

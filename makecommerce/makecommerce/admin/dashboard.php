@@ -16,6 +16,11 @@ class Dashboard
     public const PAYMENTS_ONLY_SLUG = 'makecommerce_payments_only';
     public const CONF_SLUG = 'makecommerce_configure';
 
+    public const SETTINGS_CAPABILITY = 'manage_options';
+
+    public const NONCE_ACTION = 'mc_save_settings';
+    public const NONCE_FIELD = 'mc_settings_nonce';
+
     private string $api_mode;
     private string $shop_id;
     private string $secret_key;
@@ -183,6 +188,8 @@ class Dashboard
             'apiMode' => $this->api_mode,
             'instanceId' => $this->instance_id,
             'shopException' => get_option('mc_credentials_error'),
+            'nonceField' => self::NONCE_FIELD,
+            'nonce' => wp_create_nonce(self::NONCE_ACTION),
         ];
 
         echo $twig->render($template, array_merge($baseData, $data));
@@ -249,7 +256,7 @@ class Dashboard
     }
 
     public function save_settings(): void {
-        $current_page = $_GET['page'] ?? '';
+        $current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
 
         // if not our page
         if (
@@ -259,6 +266,20 @@ class Dashboard
         ) {
             return;
         }
+
+        if (!$this->is_settings_submission()) {
+            return;
+        }
+
+        if (!current_user_can(self::SETTINGS_CAPABILITY)) {
+            wp_die(
+                esc_html__('You do not have permission to change MakeCommerce settings.', 'wc_makecommerce_domain'),
+                esc_html__('Forbidden', 'wc_makecommerce_domain'),
+                ['response' => 403]
+            );
+        }
+
+        check_admin_referer(self::NONCE_ACTION, self::NONCE_FIELD);
 
         // Switch back to old module
         if(isset($_POST['switch']) && $_POST['switch'] === 'switch_to_old') {
@@ -279,6 +300,23 @@ class Dashboard
         if (isset($_POST['save_credentials']) && $_POST['save_credentials'] === 'mc_credentials'){
             $this->save_credentials_settings();
         }
+    }
+
+    /**
+     * Whether this request submits one of our settings forms.
+     *
+     * @return bool
+     */
+    private function is_settings_submission(): bool
+    {
+        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+            return false;
+        }
+
+        return isset($_POST['switch'])
+            || isset($_POST['setup_selection'])
+            || isset($_POST['product_selection'])
+            || isset($_POST['save_credentials']);
     }
 
     private function switch_to_old_plugin(){
@@ -316,8 +354,8 @@ class Dashboard
     }
 
     private function save_product_selection_settings($setupSelection = false){
-        $this->payments = $_POST['payments'] ?? 'off';
-        $this->shipping = $_POST['shipping'] ?? 'off';
+        $this->payments = isset($_POST['payments']) ? 'on' : 'off';
+        $this->shipping = isset($_POST['shipping']) ? 'on' : 'off';
 
         update_option('mc_payments', $this->payments);
         update_option('mc_shipping', $this->shipping);
@@ -339,9 +377,9 @@ class Dashboard
         update_option('mc_api_mode', $api_mode);
         $this->api_mode = $api_mode;
 
-        $shop_id     = $_POST['shopId'] ?? '';
-        $secret_key  = $_POST['secretKey'] ?? '';
-        $public_key  = $_POST['publicKey'] ?? '';
+        $shop_id     = trim(wp_unslash($_POST['shopId'] ?? ''));
+        $secret_key  = trim(wp_unslash($_POST['secretKey'] ?? ''));
+        $public_key  = trim(wp_unslash($_POST['publicKey'] ?? ''));
 
         $prefix = $api_mode === 'test' ? 'mc_test_' : 'mc_';
 

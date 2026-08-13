@@ -353,13 +353,7 @@ class Shipping {
      * @since 4.0.7
      */
     private function validate_auth(string $shop_id, string $secret_key ) {
-        $authorization = '';
-
-        if ( function_exists( 'getallheaders' ) ) {
-            $headers = getallheaders();
-
-            $authorization = isset( $headers['Authorization'] ) ? $headers['Authorization'] : '';
-        }
+        $authorization = $this->get_authorization_header();
 
         if ( empty( $authorization ) || stripos( $authorization, 'Basic ' ) !== 0 ) {
             wp_send_json(
@@ -388,8 +382,8 @@ class Shipping {
 
         list( $username, $password ) = explode( ':', $decoded_credentials, 2 );
 
-        $username_valid = $shop_id === $username;
-        $password_valid = $secret_key === $password;
+        $username_valid = hash_equals( $shop_id, $username );
+        $password_valid = hash_equals( $secret_key, $password );
 
         if ( ! $username_valid || ! $password_valid ) {
             wp_send_json(
@@ -401,6 +395,39 @@ class Shipping {
                 401
             );
         }
+    }
+
+    /**
+     * Read the Authorization header of the current request.
+     *
+     * Header names are case insensitive and some setups (Apache CGI/FastCGI) do not
+     * expose Authorization to PHP at all, so look it up case insensitively and fall
+     * back to the $_SERVER variants.
+     *
+     * @return string Header value, or an empty string when it is not present.
+     *
+     * @since 4.0.7
+     */
+    private function get_authorization_header(): string {
+        if ( function_exists( 'getallheaders' ) ) {
+            foreach ( getallheaders() as $name => $value ) {
+                if ( strtolower( $name ) === 'authorization' ) {
+                    return $value;
+                }
+            }
+        }
+
+        foreach ( [ 'HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION' ] as $key ) {
+            if ( ! empty( $_SERVER[ $key ] ) ) {
+                return $_SERVER[ $key ];
+            }
+        }
+
+        if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
+            return 'Basic ' . base64_encode( $_SERVER['PHP_AUTH_USER'] . ':' . ( $_SERVER['PHP_AUTH_PW'] ?? '' ) );
+        }
+
+        return '';
     }
 
     /**

@@ -8,7 +8,7 @@
  * Plugin Name: 	      MakeCommerce
  * Plugin URI:      	  https://makecommerce.net/
  * Description:	    	  Adds MakeCommerce payment gateway and shipping methods to WooCommerce checkout
- * Version:     	      4.0.8
+ * Version:     	      4.1.0
  * Author:        		  Maksekeskus AS
  * Author URI:        	  https://makecommerce.net/
  * License:               GPL-2.0+
@@ -19,7 +19,7 @@
  * Requires at least:	  6.8.1
  * Requires PHP: 		  8.1
  * WC requires at least:  9.9.3
- * WC tested up to:       10.4.3
+ * WC tested up to:       11.0.1
  * WC HPOS compatibility: yes
  * WC Legacy Order Table Compatibility: yes
  */

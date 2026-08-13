@@ -103,6 +103,7 @@
 
 
                 <form method="post">
+                    <?php wp_nonce_field( \MakeCommerce\API::SHIPPING_PLUS_NONCE_ACTION, \MakeCommerce\API::SHIPPING_PLUS_NONCE_FIELD ); ?>
                     <div class="mc-list-agreement-check">
                         <input class="" type="checkbox" id="agree_terms" name="agree_terms" required>
                         <label class="" for="agree_terms">

@@ -25,6 +25,14 @@ namespace MakeCommerce;
 class API {
 
 	/**
+	 * Shipping+ confirmation page and the authorization data guarding its form.
+	 */
+	public const SHIPPING_PLUS_SLUG = 'makecommerce_shipping_plus';
+	public const SHIPPING_PLUS_CAPABILITY = 'manage_options';
+	public const SHIPPING_PLUS_NONCE_ACTION = 'mc_shipping_plus_confirm';
+	public const SHIPPING_PLUS_NONCE_FIELD = 'mc_shipping_plus_nonce';
+
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    3.0.0
@@ -502,14 +510,14 @@ class API {
             'shipping_plus',
             'Shipping+ Confirmation',
             'Shipping+ Confirmation',
-            'manage_options',
-            'makecommerce_shipping_plus',
+            self::SHIPPING_PLUS_CAPABILITY,
+            self::SHIPPING_PLUS_SLUG,
             [$this, 'render_shipping_plus_page']
         );
     }
 
     public function remove_shipping_confirm_menu(): void {
-        remove_submenu_page( 'shipping_plus', 'makecommerce_shipping_plus' );
+        remove_submenu_page( 'shipping_plus', self::SHIPPING_PLUS_SLUG );
     }
 
     public function render_shipping_plus_page()
@@ -535,10 +543,23 @@ class API {
 
     public function save_shipping_plus_confirmation(): void
     {
+        $current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
+
         if (
             isset($_POST['accept_shipping']) &&
-            $_GET['page'] === 'makecommerce_shipping_plus'
+            $current_page === self::SHIPPING_PLUS_SLUG
         ) {
+            // Only users who are allowed to see this page may confirm the migration
+            if (!current_user_can(self::SHIPPING_PLUS_CAPABILITY)) {
+                wp_die(
+                    esc_html__('You do not have permission to change MakeCommerce settings.', 'wc_makecommerce_domain'),
+                    esc_html__('Forbidden', 'wc_makecommerce_domain'),
+                    ['response' => 403]
+                );
+            }
+
+            check_admin_referer(self::SHIPPING_PLUS_NONCE_ACTION, self::SHIPPING_PLUS_NONCE_FIELD);
+
             update_option('mc_shipping_plus_confirmed', 'yes');
             update_option('mc_shipping_plus', 'yes');
             update_option('makecommerce_install_status', 'upgrade');

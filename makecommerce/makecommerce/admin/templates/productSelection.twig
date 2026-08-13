@@ -21,6 +21,7 @@
     </div>
 
     <form method="post" novalidate>
+        <input type="hidden" name="{{ nonceField }}" value="{{ nonce }}">
         <div class="row">
             <div class="col-8 offset-2">
                 <div class="card mb-3">
@@ -110,6 +111,7 @@
     {% if not newInstall %}
         <div class="col-8 offset-2 text-center mt-3">
             <form method="post" novalidate>
+                <input type="hidden" name="{{ nonceField }}" value="{{ nonce }}">
                 <button type="submit" name="switch" value="switch_to_old"
                         class="btn btn-link p-0 m-0 align-baseline" style="font-size: 0.9rem; text-decoration: underline;">
                     {{ __('Switch back to old module', 'wc_makecommerce_domain') }}
